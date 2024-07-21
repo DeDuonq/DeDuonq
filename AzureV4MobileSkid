@@ -1,0 +1,538 @@
+
+-- Azure V4 Mobile Working Version
+-- Bir Turk Tarafindan YapÄ±ldÄ±
+-- modified by $hit Talker
+    
+if (not LPH_OBFUSCATED) then
+    LPH_NO_VIRTUALIZE = function(...) return (...) end;
+    LPH_JIT_MAX = function(...) return (...) end;
+    LPH_JIT_ULTRA = function(...) return (...) end;
+end
+
+
+
+  -- Serv
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
+    local Workspace = game:GetService("Workspace")
+    local Lighting = game:GetService("Lighting")
+    local RunService = game:GetService("RunService")
+    local TweenService = game:GetService("TweenService")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+    --// Variables
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = Workspace:FindFirstChildWhichIsA("Camera")
+    local Hitsounds = {}
+
+    --// Script Table
+    local Script = {
+        Functions = {},
+        Locals = {
+            Target = nil,
+            IsTargetting = false,
+            Resolver = {
+                OldTick = tick(),
+                OldPos = Vector3.new(0, 0, 0),
+                ResolvedVelocity = Vector3.new(0, 0, 0)
+            },
+            AutoSelectTick = tick(),
+            AntiAimViewer = {
+                MouseRemoteFound = false,
+                MouseRemote = nil,
+                MouseRemoteArgs = nil,
+                MouseRemotePositionIndex = nil
+            },
+            HitEffect = nil,
+            Gun = {
+                PreviousGun = nil,
+                PreviousAmmo = 999,
+                Shotguns = {"[Double-Barrel SG]", "[TacticalShotgun]", "[Shotgun]"}
+            },
+            PlayerHealth = {},
+            JumpOffset = 0,
+            BulletPath = {
+                [4312377180] = Workspace:FindFirstChild("MAP") and Workspace.MAP:FindFirstChild("Ignored") or nil,
+                [1008451066] = Workspace:FindFirstChild("Ignored") and Workspace.Ignored:FindFirstChild("Siren") and Workspace.Ignored.Siren:FindFirstChild("Radius") or nil,
+                [3985694250] = Workspace and Workspace:FindFirstChild("Ignored") or nil,
+                [5106782457] = Workspace and Workspace:FindFirstChild("Ignored") or nil,
+                [4937639028] = Workspace and Workspace:FindFirstChild("Ignored") or nil,
+                [1958807588] = Workspace and Workspace:FindFirstChild("Ignored") or nil
+            },
+            World = {
+                FogColor = Lighting.FogColor,
+                FogStart = Lighting.FogStart,
+                FogEnd = Lighting.FogEnd,
+                Ambient = Lighting.Ambient,
+                Brightness = Lighting.Brightness,
+                ClockTime = Lighting.ClockTime,
+                ExposureCompensation = Lighting.ExposureCompensation
+            },
+            SavedCFrame = nil,
+            NetworkPreviousTick = tick(),
+            NetworkShouldSleep = false,
+            FFlags = {
+                ["DataSenderMaxJoinBandwidthBps"] = getfflag("DataSenderMaxJoinBandwidthBps"),
+                ["PhysicsSenderMaxBandwidthBps"] = getfflag("PhysicsSenderMaxBandwidthBps"),
+                ["S2PhysicsSenderRate"] = getfflag("S2PhysicsSenderRate")
+            },
+            OriginalVelocity = {},
+            RotationAngle = 0
+        },
+        Utility = {
+            Drawings = {},
+            EspCache = {}
+        },
+        Connections = {
+            GunConnections = {}
+        },
+        AzureIgnoreFolder = Instance.new("Folder", game:GetService("Workspace"))
+    }
+
+    --// Settings Table
+    local Settings = {
+        Combat = {
+            Enabled = false,
+            AimPart = "UpperTorso",
+            Silent = false,
+            Mouse = false,
+            Alerts = false,
+            LookAt = false,
+            Spectate = false,
+            AntiAimViewer = false,
+            AutoSelect = {
+                Enabled = false,
+                Cooldown = {
+                    Enabled = false,
+                    Amount = 0.5
+                }
+            },
+            Checks = {
+                Enabled = false,
+                Knocked = false,
+                Crew = false,
+                Wall = false,
+                Grabbed = false,
+                Vehicle = false
+            },
+            Smoothing = {
+                Horizontal = 1,
+                Vertical = 1
+            },
+            Prediction = {
+                Horizontal = 0,
+                Vertical = 0.160126357
+            },
+            Resolver = {
+                Enabled = false,
+                RefreshRate = 100
+            },
+            Fov = {
+                Enabled = false,
+                Visualize = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 1)
+                },
+                Radius = 80
+            },
+            Visuals = {
+                Enabled = false,
+                Tracer = {
+                    Enabled = false,
+                    Color = Color3.new(255, 255, 15),
+                    Thickness = 2
+                },
+                Dot = {
+                    Enabled = false,
+                    Color = Color3.new(255, 255, 255),
+                    Filled = false,
+                    Size = 5
+                },
+                Chams = {
+                    Enabled = false,
+                    Fill = {
+                        Color = Color3.new(255, 154, 244),
+                        Transparency = 0.5
+                    },
+                    Outline = {
+                        Color = Color3.new(255, 154, 244),
+                        Transparency = 0.5
+                    }
+                }
+            },
+            Air = {
+                Enabled = false,
+                AirAimPart = {
+                    Enabled = false,
+                    HitPart = "LowerTorso"
+                },
+                JumpOffset = {
+                    Enabled = false,
+                    Offset = 0.09
+                }
+            }
+        },
+        Visuals = {
+            Esp = {
+                Enabled = false,
+                Boxes = {
+                    Enabled = false,
+                    Filled = {
+                        Enabled = false,
+                        Color = Color3.new(1, 1, 255),
+                        Transparency = 0.3
+                    },
+                    Color = Color3.new(1, 1, 255)
+                }
+            },
+            BulletTracers = {
+                Enabled = false,
+                Color = {
+                    Gradient1 = Color3.new(255, 255, 255),
+                    Gradient2 = Color3.new(255, 154, 244)
+                },
+                Duration = 1,
+                Fade = {
+                    Enabled = false,
+                    Duration = 0.2
+                }
+            },
+            BulletImpacts = {
+                Enabled = false,
+                Color = Color3.new(1, 1, 255),
+                Duration = 1,
+                Size = 1,
+                Material = "SmoothPlastic",
+                Fade = {
+                    Enabled = false,
+                    Duration = 0.5
+                }
+            },
+            OnHit = {
+                Enabled = false,
+                Effect = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255)
+                },
+                Sound = {
+                    Enabled = false,
+                    Volume = 5,
+                    Value = "Skeet"
+                },
+                Chams = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255),
+                    Material = "ForceField",
+                    Duration = 1
+                }
+            },
+            World = {
+                Enabled = false,
+                Fog = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255),
+                    End = 1000,
+                    Start = 10000
+                },
+                Ambient = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255)
+                },
+                Brightness = {
+                    Enabled = false,
+                    Value = 0
+                },
+                ClockTime = {
+                    Enabled = false,
+                    Value = 24
+                },
+                WorldExposure = {
+                    Enabled = false,
+                    Value = -0.1
+                }
+            },
+            Crosshair = {
+                Enabled = false,
+                Color = Color3.new(1, 1, 255),
+                Size = 10,
+                Gap = 2,
+                Rotation = {
+                    Enabled = false,
+                    Speed = 1
+                }
+            }
+        },
+        AntiAim = {
+            VelocitySpoofer = {
+                Enabled = false,
+                Visualize = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255),
+                    Prediction = 0.134
+                },
+                Type = "Underground",
+                Roll = 0,
+                Pitch = 0,
+                Yaw = 0
+            },
+            CSync = {
+                Enabled = false,
+                Type = "TargetStrafe",
+                Visualize = {
+                    Enabled = false,
+                    Color = Color3.new(1, 1, 255)
+                },
+                RandomDistance = 0,
+                Custom = {
+                    X = 0,
+                    Y = 0,
+                    Z = 0
+                },
+                TargetStrafe = {
+                    Speed = 20,
+                    Distance = 13,
+                    Height = 5
+                }
+            },
+            Network = {
+                Enabled = false,
+                WalkingCheck = false,
+                Amount = 0.1
+            },
+            VelocityDesync = {
+                Enabled = false,
+                Range = 5
+            },
+            FFlagDesync = {
+                Enabled = false,
+                SetNew = false,
+                FFlags = {"S2PhysicsSenderRate"},
+                SetNewAmount = 15,
+                Amount = 2
+            },
+        },
+        Misc = {
+            Movement = {
+                Speed = {
+                    Enabled = false,
+                    Amount = 1
+                },
+            },
+            Exploits = {
+                Enabled = false,
+                NoRecoil = false,
+                NoJumpCooldown = false,
+                NoSlowDown = false
+            }
+        }
+    }
+
+    --// Functions
+    do
+        --// Utility Functions
+        do
+            Script.Functions.WorldToScreen = function(Position: Vector3)
+                if not Position then return end
+
+                local ViewportPointPosition, OnScreen = Camera:WorldToViewportPoint(Position)
+                local ScreenPosition = Vector2.new(ViewportPointPosition.X, ViewportPointPosition.Y)
+                return {
+                    Position = ScreenPosition,
+                    OnScreen = OnScreen
+                }
+            end
+
+            Script.Functions.Connection = function(ConnectionType: any, Function: any)
+                local Connection = ConnectionType:Connect(Function)
+                return Connection
+            end
+
+            Script.Functions.MoveMouse = function(Position: Vector2, SmoothingX: number, SmoothingY: number)
+                local MousePosition = UserInputService:GetMouseLocation()
+
+                mousemoverel((Position.X - MousePosition.X) / SmoothingX, (Position.Y - MousePosition.Y) / SmoothingY)
+            end
+
+            Script.Functions.CreateDrawing = function(DrawingType: string, Properties: any)
+                local DrawingObject = Drawing.new(DrawingType)
+
+                for Property, Value in pairs(Properties) do
+                    DrawingObject[Property] = Value
+                end
+                return DrawingObject
+            end
+
+            Script.Functions.WallCheck = function(Part: any)
+                local RayCastParams = RaycastParams.new()
+                RayCastParams.FilterType = Enum.RaycastFilterType.Exclude
+                RayCastParams.IgnoreWater = true
+                RayCastParams.FilterDescendantsInstances = Script.AzureIgnoreFolder:GetChildren()
+
+                local CameraPosition = Camera.CFrame.Position
+                local Direction = (Part.Position - CameraPosition).Unit
+                local RayCastResult = workspace:Raycast(CameraPosition, Direction * 10000, RayCastParams)
+
+                return RayCastResult.Instance and RayCastResult.Instance == Part
+            end
+
+            Script.Functions.Create = function(ObjectType: string, Properties: any)
+                local Object = Instance.new(ObjectType)
+
+                for Property, Value in pairs(Properties) do
+                    Object[Property] = Value
+                end
+                return Object
+            end
+
+            Script.Functions.GetGun = function(Player: any)
+                local Info = {
+                    Tool = nil,
+                    Ammo = nil,
+                    IsGunEquipped = false
+                }
+
+                local Tool = Player.Character:FindFirstChildWhichIsA("Tool")
+
+                if not Tool then return end
+
+                if game.GameId == 1958807588 then
+                    local ArmoryGun = Player.Information.Armory:FindFirstChild(Tool.Name)
+                    if ArmoryGun then
+                        Info.Tool = Tool
+                        Info.Ammo = ArmoryGun.Ammo.Normal
+                        Info.IsGunEquipped = true
+                    else
+                        for _, Object in pairs(Tool:GetChildren()) do
+                            if Object.Name:lower():find("ammo") and not Object.Name:lower():find("max") then
+                                Info.Tool = Tool
+                                Info.IsGunEquipped = true
+                                Info.Ammo = Object
+                            end
+                        end
+                    end
+                elseif game.GameId == 3634139746 then
+                    for _, Object in pairs(Tool:getdescendants()) do
+                        if Object.Name:lower():find("ammo") and not Object.Name:lower():find("max") and not Object.Name:lower():find("no") then
+                            Info.Tool = Tool
+                            Info.Ammo = Object
+                            Info.IsGunEquipped = true
+                        end
+                    end
+                else
+                    for _, Object in pairs(Tool:GetChildren()) do
+                        if Object.Name:lower():find("ammo") and not Object.Name:lower():find("max") then
+                            Info.Tool = Tool
+                            Info.IsGunEquipped = true
+                            Info.Ammo = Object
+                        end
+                    end
+                end
+
+
+                return Info
+            end
+
+            Script.Functions.Beam = function(StartPos: Vector3, EndPos: Vector3)
+                local ColorSequence = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Settings.Visuals.BulletTracers.Color.Gradient1),
+                    ColorSequenceKeypoint.new(1, Settings.Visuals.BulletTracers.Color.Gradient2),
+                })
+                local Part = Instance.new("Part", Script.AzureIgnoreFolder)
+                Part.Size = Vector3.new(0, 0, 0)
+                Part.Massless = true
+                Part.Transparency = 1
+                Part.CanCollide = false
+                Part.Position = StartPos
+                Part.Anchored = true
+                local Attachment = Instance.new("Attachment", Part)
+                local Part2 = Instance.new("Part", Script.AzureIgnoreFolder)
+                Part2.Size = Vector3.new(0, 0, 0)
+                Part2.Transparency = 0
+                Part2.CanCollide = false
+                Part2.Position = EndPos
+                Part2.Anchored = true
+                Part2.Material = Enum.Material.ForceField
+                Part2.Color = Color3.fromRGB(255, 0, 212)
+                Part2.Massless = true
+                local Attachment2 = Instance.new("Attachment", Part2)
+                local Beam = Instance.new("Beam", Part)
+                Beam.FaceCamera = true
+                Beam.Color = ColorSequence
+                Beam.Attachment0 = Attachment
+                Beam.Attachment1 = Attachment2
+                Beam.LightEmission = 6
+                Beam.LightInfluence = 1
+                Beam.Width0 = 1.5
+                Beam.Width1 = 1.5
+                Beam.Texture = "http://www.roblox.com/asset/?id=446111271"
+                Beam.TextureSpeed = 2
+                Beam.TextureLength = 1
+                task.delay(Settings.Visuals.BulletTracers.Duration, function()
+                    if Settings.Visuals.BulletTracers.Fade.Enabled then
+                        local TweenValue = Instance.new("NumberValue")
+                        TweenValue.Parent = Beam
+                        local Tween = TweenService:Create(TweenValue, TweenInfo.new(Settings.Visuals.BulletTracers.Fade.Duration), {Value = 1})
+                        Tween:Play()
+
+                        local Connection
+                        Connection = Script.Functions.Connection(TweenValue:GetPropertyChangedSignal("Value"), function()
+                            Beam.Transparency = NumberSequence.new(TweenValue.Value, TweenValue.Value)
+                        end)
+
+                        Script.Functions.Connection(Tween.Completed, function()
+                            Connection:Disconnect()
+                            Part:Destroy()
+                            Part2:Destroy()
+                        end)
+                    else
+                        Part:Destroy()
+                        Part2:Destroy()
+                    end
+                end)
+            end
+
+            Script.Functions.Impact = function(Pos: Vector3)
+                local Part = Script.Functions.Create("Part", {
+                    Parent = Script.AzureIgnoreFolder,
+                    Color = Settings.Visuals.BulletImpacts.Color,
+                    Size = Vector3.new(Settings.Visuals.BulletImpacts.Size, Settings.Visuals.BulletImpacts.Size, Settings.Visuals.BulletImpacts.Size),
+                    Position = Pos,
+                    Anchored = true,
+                    Material = Enum.Material[Settings.Visuals.BulletImpacts.Material]
+                })
+
+                task.delay(Settings.Visuals.BulletImpacts.Duration, function()
+                    if Settings.Visuals.BulletImpacts.Fade.Enabled then
+                        local Tween = TweenService:Create(Part, TweenInfo.new(Settings.Visuals.BulletImpacts.Fade.Duration), {Transparency = 1})
+                        Tween:Play()
+
+                        Script.Functions.Connection(Tween.Completed, function()
+                            Part:Destroy()
+                        end)
+                    else
+                        Part:Destroy()
+                    end
+                end)
+            end
+
+            Script.Functions.GetClosestPlayerDamage = function(Position: Vector3, MaxRadius: number)
+                local Radius = MaxRadius
+                local ClosestPlayer
+
+                for PlayerName, Health in pairs(Script.Locals.PlayerHealth) do
+                    local Player = Players:FindFirstChild(PlayerName)
+                    if Player and Player.Character then
+                        local PlayerPosition = Player.Character.PrimaryPart.Position
+                        local Distance = (Position - PlayerPosition).Magnitude
+                        local CurrentHealth = Player.Character.Humanoid.Health
+                        if (Distance < Radius) and (CurrentHealth < Health) then
+                            Radius = Distance
+                            ClosestPlayer = Player
+                        end
+                    end
+                end
+                return ClosestPlayer
+            end
+
+
+            Script.Functions.Effect = 
