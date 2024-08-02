@@ -1,6464 +1,2640 @@
---credits to finobe
-
-if isfile("menu_plex.font") then
-	delfile("menu_plex.font")
-end
-
-writefile("ProggyClean.ttf", game:HttpGet("https://github.com/f1nobe7650/other/raw/main/ProggyClean.ttf"))
-
--- // Custom Font
-do
-	getsynasset = getcustomasset or getsynasset
-	Font = setreadonly(Font, false);
-	function Font:Register(Name, Weight, Style, Asset)
-		if not isfile(Name .. ".font") then
-			if not isfile(Asset.Id) then
-				writefile(Asset.Id, Asset.Font);
-			end;
-			--
-			local Data = {
-				name = Name,
-				faces = {{
-					name = "Regular",
-					weight = Weight,
-					style = Style,
-					assetId = getsynasset(Asset.Id);
-				}}
-			};
-			--
-			writefile(Name .. ".font", game:GetService("HttpService"):JSONEncode(Data));
-			return getsynasset(Name .. ".font");
-		else 
-			warn("Font already registered");
-		end;
-	end;
-	--
-	function Font:GetRegistry(Name)
-		if isfile(Name .. ".font") then
-			return getsynasset(Name .. ".font");
-		end;
-	end;
-
-	Font:Register("menu_plex", 400, "normal", {Id = "ProggyClean.ttf", Font = ""});
-end
-
-if not LPH_OBFUSCATED then
-    getfenv().LPH_NO_VIRTUALIZE = function(...) return (...) end;
-end
-
-local font = Enum.Font.Ubuntu;
-local Library = {};
-local Library = {
-	Open = true;
-	Folders = {
-		main = "test";
-		configs = "test/Configs";
-	};
-	Accent = Color3.fromRGB(132,108,188);
-	Pages = {};
-	Sections = {};
-	Flags = {};
-	UnNamedFlags = 0;
-	ThemeObjects = {};
-	Instances = {};
-	Holder = nil;
-	PageHolder = nil;
-	Gradient = nil;
-	UIGradient = nil;
-	CopiedColor = Color3.new(1,1,1);
-	CopiedAlpha = 0;
-	AllowedCharacters = {
-		[1] = ' ',
-		[2] = '!',
-		[3] = '"',
-		[4] = '#',
-		[5] = '$',
-		[6] = '%',
-		[7] = '&',
-		[8] = "'",
-		[9] = '(',
-		[10] = ')',
-		[11] = '*',
-		[12] = '+',
-		[13] = ',',
-		[14] = '-',
-		[15] = '.',
-		[16] = '/',
-		[17] = '0',
-		[18] = '1',
-		[19] = '2',
-		[20] = '3',
-		[21] = '4',
-		[22] = '5',
-		[23] = '6',
-		[24] = '7',
-		[25] = '8',
-		[26] = '9',
-		[27] = ':',
-		[28] = ';',
-		[29] = '<',
-		[30] = '=',
-		[31] = '>',
-		[32] = '?',
-		[33] = '@',
-		[34] = 'A',
-		[35] = 'B',
-		[36] = 'C',
-		[37] = 'D',
-		[38] = 'E',
-		[39] = 'F',
-		[40] = 'G',
-		[41] = 'H',
-		[42] = 'I',
-		[43] = 'J',
-		[44] = 'K',
-		[45] = 'L',
-		[46] = 'M',
-		[47] = 'N',
-		[48] = 'O',
-		[49] = 'P',
-		[50] = 'Q',
-		[51] = 'R',
-		[52] = 'S',
-		[53] = 'T',
-		[54] = 'U',
-		[55] = 'V',
-		[56] = 'W',
-		[57] = 'X',
-		[58] = 'Y',
-		[59] = 'Z',
-		[60] = '[',
-		[61] = "\\",
-		[62] = ']',
-		[63] = '^',
-		[64] = '_',
-		[65] = '`',
-		[66] = 'a',
-		[67] = 'b',
-		[68] = 'c',
-		[69] = 'd',
-		[70] = 'e',
-		[71] = 'f',
-		[72] = 'g',
-		[73] = 'h',
-		[74] = 'i',
-		[75] = 'j',
-		[76] = 'k',
-		[77] = 'l',
-		[78] = 'm',
-		[79] = 'n',
-		[80] = 'o',
-		[81] = 'p',
-		[82] = 'q',
-		[83] = 'r',
-		[84] = 's',
-		[85] = 't',
-		[86] = 'u',
-		[87] = 'v',
-		[88] = 'w',
-		[89] = 'x',
-		[90] = 'y',
-		[91] = 'z',
-		[92] = '{',
-		[93] = '|',
-		[94] = '}',
-		[95] = '~'
-	};
-	ShiftCharacters = {
-		["1"] = "!",
-		["2"] = "@",
-		["3"] = "#",
-		["4"] = "$",
-		["5"] = "%",
-		["6"] = "^",
-		["7"] = "&",
-		["8"] = "*",
-		["9"] = "(",
-		["0"] = ")",
-		["-"] = "_",
-		["="] = "+",
-		["["] = "{",
-		["\\"] = "|",
-		[";"] = ":",
-		["'"] = "\"",
-		[","] = "<",
-		["."] = ">",
-		["/"] = "?",
-		["`"] = "~"
-	};
-	Keys = {
-		[Enum.KeyCode.LeftShift] = "LShift",
-		[Enum.KeyCode.RightShift] = "RShift",
-		[Enum.KeyCode.LeftControl] = "LCtrl",
-		[Enum.KeyCode.RightControl] = "RCtrl",
-		[Enum.KeyCode.LeftAlt] = "LAlt",
-		[Enum.KeyCode.RightAlt] = "RAlt",
-		[Enum.KeyCode.CapsLock] = "Caps",
-		[Enum.KeyCode.One] = "1",
-		[Enum.KeyCode.Two] = "2",
-		[Enum.KeyCode.Three] = "3",
-		[Enum.KeyCode.Four] = "4",
-		[Enum.KeyCode.Five] = "5",
-		[Enum.KeyCode.Six] = "6",
-		[Enum.KeyCode.Seven] = "7",
-		[Enum.KeyCode.Eight] = "8",
-		[Enum.KeyCode.Nine] = "9",
-		[Enum.KeyCode.Zero] = "0",
-		[Enum.KeyCode.KeypadOne] = "Num1",
-		[Enum.KeyCode.KeypadTwo] = "Num2",
-		[Enum.KeyCode.KeypadThree] = "Num3",
-		[Enum.KeyCode.KeypadFour] = "Num4",
-		[Enum.KeyCode.KeypadFive] = "Num5",
-		[Enum.KeyCode.KeypadSix] = "Num6",
-		[Enum.KeyCode.KeypadSeven] = "Num7",
-		[Enum.KeyCode.KeypadEight] = "Num8",
-		[Enum.KeyCode.KeypadNine] = "Num9",
-		[Enum.KeyCode.KeypadZero] = "Num0",
-		[Enum.KeyCode.Minus] = "-",
-		[Enum.KeyCode.Equals] = "=",
-		[Enum.KeyCode.Tilde] = "~",
-		[Enum.KeyCode.LeftBracket] = "[",
-		[Enum.KeyCode.RightBracket] = "]",
-		[Enum.KeyCode.RightParenthesis] = ")",
-		[Enum.KeyCode.LeftParenthesis] = "(",
-		[Enum.KeyCode.Semicolon] = ",",
-		[Enum.KeyCode.Quote] = "'",
-		[Enum.KeyCode.BackSlash] = "\\",
-		[Enum.KeyCode.Comma] = ",",
-		[Enum.KeyCode.Period] = ".",
-		[Enum.KeyCode.Slash] = "/",
-		[Enum.KeyCode.Asterisk] = "*",
-		[Enum.KeyCode.Plus] = "+",
-		[Enum.KeyCode.Period] = ".",
-		[Enum.KeyCode.Backquote] = "`",
-		[Enum.UserInputType.MouseButton1] = "MB1",
-		[Enum.UserInputType.MouseButton2] = "MB2",
-		[Enum.UserInputType.MouseButton3] = "MB3"
-	};
-	Connections = {};
-	Font = Enum.Font.Ubuntu;
-	FontSize = 12;
-	Notifs = {};
-	KeyList = nil;
-	UIKey = Enum.KeyCode.End;
-	ScreenGUI = nil;
-}
-
-local InputService = game:GetService("UserInputService");
-local TeleportService = game:GetService("TeleportService");
-local RunService = game:GetService("RunService");
-local Workspace = game:GetService("Workspace");
-local Lighting = game:GetService("Lighting");
-local Players = game:GetService("Players");
-local HttpService = game:GetService("HttpService");
-local StarterGui = game:GetService("StarterGui");
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
-local TweenService = game:GetService("TweenService");
-local VirtualUser = game:GetService("VirtualUser");
-local PathFindingService = game:GetService("PathfindingService");
-
-local utility = {
-	Circle = nil, 
-	bodyParts = {}, 
-	target = nil, 
-	angle = 0, 
-	drawings = {}, 
-	folders = {}
-};
-local framework = {connections = {}};
-local Flags = {}; 
-local flags = Library.Flags;
-local ESP = {};
-local IgnoreList = {};
-local HitReg = {};
-local loadingTime = tick() 
-local Visuals = {   
-    ["Drawings"] = {},
-	["Bases"] = {},
-	["Base"] = {},
-	["Settings"] = { 
-		["Line"] = {
-		    Thickness = 1,
-		    Color = Color3.fromRGB(0, 255, 0)
-	    },
-		["Text"] = {
-			Size = 13,
-			Center = true,
-			Outline = true,
-			Font = Drawing.Fonts.Plex,
-			Color = Color3.fromRGB(255, 255, 255)
-		},
-		["Square"] = {
-			Thickness = 1,
-			Color = Color3.fromRGB(255, 255, 255),
-			Filled = false,
-		},
-		["Triangle"] = {
-			Color = Color3.fromRGB(255, 255, 255),
-			Filled = true,
-			Visible = false,
-			Thickness = 1,
-		},
-		["Image"] = {
-			Transparency = 1,
-			Data = game:HttpGet("https://raw.githubusercontent.com/portallol/luna/main/Gradient.png")
-		}
-	},
-}
-local NovaPart = game:GetObjects("rbxassetid://14745759584")[1]; NovaPart.Parent = ReplicatedStorage;
-local Nova = NovaPart.Attachment;
-local Sparkles = game:GetObjects("rbxassetid://16883621036")[1]; Sparkles.Parent = ReplicatedStorage;
-local SparklesEffect = Sparkles.LevelParticle;
-local sfx = {["Bameware"] = "16910460773",["Skeet"] = "4753603610",["Bonk"] = "3765689841",["Lazer Beam"] = "130791043",["Windows XP Error"] = "160715357",["TF2 Hitsound"] = "3455144981",["TF2 Critical"] = "296102734",["TF2 Bat"] = "3333907347",['Bow Hit'] = "1053296915",['Bow'] = "3442683707",['OSU'] = "7147454322",['Minecraft Hit'] = "4018616850",['Steve'] = "5869422451",['1nn'] = "7349055654",['Rust'] = "3744371091",["TF2 Pan"] = "3431749479",["Neverlose"] = "8679627751",["Mario"] = "5709456554",};
-local sfx_names = {"Bameware", "Skeet", "Bonk", "Lazer Beam", "Windows XP Error", "TF2 Hitsound", "TF2 Critical", "TF2 Bat", "Bow Hit", "Bow", "OSU", "Minecraft Hit", "Steve", "1nn", "Rust", "TF2 Pan", "Neverlose", "Mario"};
-local LocalPlayer = Players.LocalPlayer; 
-local Mouse = LocalPlayer:GetMouse();
-local Camera = Workspace.Camera;
-local viewportSize = game.Workspace.Camera.ViewportSize;
-local hitmodule = game:GetObjects("rbxassetid://7255773215")[1]; hitmodule.Parent = ReplicatedStorage;
-local Offset = game:GetService("GuiService"):GetGuiInset().Y;
-local Math = loadstring(game:HttpGet("https://raw.githubusercontent.com/f1nobe7650/Lynx/main/Math.lua"))(); 
-local NotifiactionSGui = Instance.new("ScreenGui", game.CoreGui); NotifiactionSGui.Enabled = true
-local Remote = ReplicatedStorage.MainEvent
-local NewVector2 = Vector2.new;
-local NewVector3 = Vector3.new;
-local NewCFrame = CFrame.new; 
-local Angle = CFrame.Angles; 
-local NewHex = Color3.fromHex;
-local Floor = math.floor;
-local Random = math.random; 
-local Find = table.find;
-local Round = math.round;
-local Cos = math.cos;
-local Sin = math.sin;
-local Rad = math.rad; 
-local Clamp = math.clamp; 
-local Ceil = math.ceil; 
-local Pi = math.pi;
-local Sqrt = math.sqrt;
-local Lighting_Save = {["ColorShift_Bottom"] = Lighting.ColorShift_Bottom, ["Ambient"]=Lighting.Ambient, ["OutdoorAmbient"]=Lighting.OutdoorAmbient, ["ColorShift_Top"]=Lighting.ColorShift_Top, ["FogColor"]=Lighting.FogColor, ["FogEnd"]=Lighting.FogEnd, ["FogStart"]=Lighting.FogStart, ["ClockTime"]=Lighting.ClockTime, ["Brightness"]=Lighting.Brightness}
-local bodyClone = game:GetObjects("rbxassetid://8246626421")[1]; bodyClone.Humanoid:Destroy(); bodyClone.Head.Face:Destroy(); bodyClone.Parent = game.Workspace; bodyClone.HumanoidRootPart.Velocity = Vector3.new(); bodyClone.HumanoidRootPart.CFrame = NewCFrame(9999,9999,9999); bodyClone.HumanoidRootPart.Transparency = 1; bodyClone.HumanoidRootPart.CanCollide = false 
-local visualizeChams = Instance.new("Highlight"); visualizeChams.Enabled = true; visualizeChams.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop; visualizeChams.FillColor = Color3.fromRGB(102, 60, 153); visualizeChams.OutlineColor =  Color3.fromRGB(0, 0, 0); visualizeChams.Adornee = bodyClone; visualizeChams.OutlineTransparency = 0.2; visualizeChams.FillTransparency = 0.5; visualizeChams.Parent = game.CoreGui
-local targetHighlight = Instance.new("Highlight", game.CoreGui); targetHighlight.Enabled = true; targetHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop; targetHighlight.FillColor = Color3.fromRGB(0,0,0); targetHighlight.OutlineColor = Color3.fromRGB(255,255,255); targetHighlight.OutlineTransparency = 0.5; targetHighlight.FillTransparency = 0;
-local IgnoreList = {};
-local Tween = {};
-local crosshair_Lines = {}; 
-local crosshair_Outlines = {}; 
-local C_Desync = {Enabled = false, OldPosition = nil, PredictedPosition = nil};
-local connections = {};
-local highlights = {};
-local Dropdowns = {}; 
-local Pickers = {}; 
-local VisValues = {}; 
-local Typing = false; 
-local aimAssistTarget; 
-local checks; 
-local prediction; 
-local partClosest; 
-local antiCheattick = 0; 
-local CursorSize = 0; 
-local statsTick = 0;
-local crosshair_LineAmount = 4;
-local crosshair_SpinAngle = 0; 
-local crosshair_tick = 0;
-local buying = false; 
-local PlaceHolderUI = Instance.new("ScreenGui", game.CoreGui);
-PlaceHolderUI.Enabled = false
-local Path = 
-	"https://raw.githubusercontent.com/fortniteisveryepic/assets/main/"
-local images = {
-	["[AK47]"] = game:HttpGet(Path.. "ak.png"),
-	["[AR]"] = game:HttpGet(Path.. "ar.png"),
-	["[AUG]"] = game:HttpGet(Path.. "aug.png"),
-	["[Double-Barrel SG]"] = game:HttpGet(Path.. "db.png"),
-	["[DrumGun]"] = game:HttpGet(Path.. "drumgun.png"),
-	["[Flamethrower]"] = game:HttpGet(Path.. "flame.png"),
-	["[Glock]"] = game:HttpGet(Path.. "glock.png"),
-	["[LMG]"] = game:HttpGet(Path.. "lmg.png"),
-	["[P90]"]= game:HttpGet(Path.. "p90.png"),
-	["[Revolver]"] = game:HttpGet(Path.. "rev.png"),
-	["[SMG]"] = game:HttpGet(Path.. "smg.png"),
-	["[Shotgun]"] = game:HttpGet(Path.. "shotgun.png"),
-	["[SilencerAR]"] = game:HttpGet(Path.. "ar.png"),
-	["[TacticalShotgun]"] = game:HttpGet(Path.. "tac.png"),
-	["[Knife]"] = game:HttpGet(Path.. "knife.png"),
-	["[Rifle]"] = game:HttpGet(Path.. "rifle.png")
-} 
-local Languages = {
-    A = {English = "A", Arabic = "Ø£", Albanian = "A", Japanese = "ă‚", Spanish = "A", Russian = "Đ", Chinese = "é˜¿", Urdu = "Ø§", French = "A", Portuguese = "A", Hindi = "à¤…"},
-    B = {English = "B", Arabic = "Ø¨", Albanian = "B", Japanese = "ă„", Spanish = "B", Russian = "Đ‘", Chinese = "æ³¢", Urdu = "Ø¨", French = "B", Portuguese = "B", Hindi = "à¤¬"},
-    C = {English = "C", Arabic = "Øª", Albanian = "C", Japanese = "ă†", Spanish = "C", Russian = "Đ¦", Chinese = "è¥¿", Urdu = "Ø³", French = "C", Portuguese = "C", Hindi = "à¤¸"},
-    D = {English = "D", Arabic = "Ø¯", Albanian = "D", Japanese = "ăˆ", Spanish = "D", Russian = "Đ”", Chinese = "å¾·", Urdu = "Úˆ", French = "D", Portuguese = "D", Hindi = "à¤¡"},
-    E = {English = "E", Arabic = "Ø¥", Albanian = "E", Japanese = "ă", Spanish = "E", Russian = "Đ•", Chinese = "ä¿„", Urdu = "Ø§Û’", French = "E", Portuguese = "E", Hindi = "à¤"},
-    F = {English = "F", Arabic = "Ù", Albanian = "F", Japanese = "ă‹", Spanish = "F", Russian = "Đ¤", Chinese = "å¤«", Urdu = "Ù", French = "F", Portuguese = "F", Hindi = "à¤«"},
-    G = {English = "G", Arabic = "Ø¬", Albanian = "G", Japanese = "ă", Spanish = "G", Russian = "Đ“", Chinese = "å‰", Urdu = "Ø¬", French = "G", Portuguese = "G", Hindi = "à¤—"},
-    H = {English = "H", Arabic = "Ø­", Albanian = "H", Japanese = "ă", Spanish = "H", Russian = "Đ¥", Chinese = "è‰¾å°º", Urdu = "Ø­", French = "H", Portuguese = "H", Hindi = "à¤¹"},
-    I = {English = "I", Arabic = "Ù", Albanian = "I", Japanese = "ă‘", Spanish = "I", Russian = "Đ˜", Chinese = "ä¼", Urdu = "Ø¢Ø¦ÛŒ", French = "I", Portuguese = "I", Hindi = "à¤‡"},
-    J = {English = "J", Arabic = "Ø¬", Albanian = "J", Japanese = "ă“", Spanish = "J", Russian = "Đ™", Chinese = "æ°", Urdu = "Ø¬Û’", French = "J", Portuguese = "J", Hindi = "à¤œ"},
-    K = {English = "K", Arabic = "Ùƒ", Albanian = "K", Japanese = "ă•", Spanish = "K", Russian = "Đ", Chinese = "å¼€", Urdu = "Ú©Û’", French = "K", Portuguese = "K", Hindi = "à¤•"},
-    L = {English = "L", Arabic = "Ù„", Albanian = "L", Japanese = "ă—", Spanish = "L", Russian = "Đ›", Chinese = "è‰¾å‹’", Urdu = "Ù„", French = "L", Portuguese = "L", Hindi = "à¤²"},
-    M = {English = "M", Arabic = "Ù…", Albanian = "M", Japanese = "ă™", Spanish = "M", Russian = "Đœ", Chinese = "è‰¾é©¬", Urdu = "Ù…", French = "M", Portuguese = "M", Hindi = "à¤®"},
-    N = {English = "N", Arabic = "Ù†", Albanian = "N", Japanese = "ă›", Spanish = "N", Russian = "Đ", Chinese = "è‰¾å¨œ", Urdu = "Ù†", French = "N", Portuguese = "N", Hindi = "à¤¨"},
-    O = {English = "O", Arabic = "Ø£Ùˆ", Albanian = "O", Japanese = "ă", Spanish = "O", Russian = "Đ", Chinese = "å“¦", Urdu = "Ø§Ùˆ", French = "O", Portuguese = "O", Hindi = "à¤“"},
-    P = {English = "P", Arabic = "Ø¨", Albanian = "P", Japanese = "ăŸ", Spanish = "P", Russian = "ĐŸ", Chinese = "å±", Urdu = "Ù¾", French = "P", Portuguese = "P", Hindi = "à¤ª"},
-    Q = {English = "Q", Arabic = "Ù‚", Albanian = "Q", Japanese = "ă¡", Spanish = "Q", Russian = "Đ", Chinese = "ä¸˜", Urdu = "Ù‚", French = "Q", Portuguese = "Q", Hindi = "à¤•à¥à¤¯à¥‚"},
-    R = {English = "R", Arabic = "Ø±", Albanian = "R", Japanese = "ă¤", Spanish = "R", Russian = "Đ ", Chinese = "è‰¾å„¿", Urdu = "Ø±", French = "R", Portuguese = "R", Hindi = "à¤°"},
-    S = {English = "S", Arabic = "Ø³", Albanian = "S", Japanese = "ă¦", Spanish = "S", Russian = "Đ¡", Chinese = "è‰¾ä¸", Urdu = "Ø³", French = "S", Portuguese = "S", Hindi = "à¤à¤¸"},
-    T = {English = "T", Arabic = "Øª", Albanian = "T", Japanese = "ă¨", Spanish = "T", Russian = "Đ¢", Chinese = "æ", Urdu = "Ù¹", French = "T", Portuguese = "T", Hindi = "à¤Ÿ"},
-    U = {English = "U", Arabic = "Ø£Ùˆ", Albanian = "U", Japanese = "ăª", Spanish = "U", Russian = "Đ£", Chinese = "ä¼˜", Urdu = "ÛŒÙˆ", French = "U", Portuguese = "U", Hindi = "à¤¯à¥‚"},
-    V = {English = "V", Arabic = "Ù", Albanian = "V", Japanese = "ă«", Spanish = "V", Russian = "Đ’", Chinese = "ç»´", Urdu = "ÙˆÛŒ", French = "V", Portuguese = "V", Hindi = "à¤µ"},
-    W = {English = "W", Arabic = "Ùˆ", Albanian = "W", Japanese = "ă¬", Spanish = "W", Russian = "Đ’", Chinese = "è±†è´å°”ç»´", Urdu = "ÚˆØ¨Ù„ÛŒÙˆ", French = "W", Portuguese = "W", Hindi = "à¤¡à¤¬à¥à¤²à¥à¤¯à¥‚"},
-    X = {English = "X", Arabic = "Ø¥ÙƒØ³", Albanian = "X", Japanese = "ă­", Spanish = "X", Russian = "Đ¥", Chinese = "è‰¾å…‹æ–¯", Urdu = "Ø§Ú©Ø³", French = "X", Portuguese = "X", Hindi = "à¤à¤•à¥à¤¸"},
-    Y = {English = "Y", Arabic = "Ù", Albanian = "Y", Japanese = "ă®", Spanish = "Y", Russian = "Đ£", Chinese = "ä¼å„¿", Urdu = "ÙˆØ§Ø¦ÛŒ", French = "Y", Portuguese = "Y", Hindi = "à¤µà¤¾à¤ˆ"},
-    Z = {English = "Z", Arabic = "Ø²", Albanian = "Z", Japanese = "ă¯", Spanish = "Z", Russian = "Đ—", Chinese = "è´¼å¾·", Urdu = "Ø²ÛŒÚˆ", French = "Z", Portuguese = "Z", Hindi = "à¤œà¥‡à¤¡"}
-}
-local utx = {} 
-local Messages = {}
-local drawingCache = {} 
-
-utility.folders["Part Chams"] = Instance.new("Folder", Workspace);
-utility.folders["Hit Chams"] = Instance.new("Folder", Workspace);
-Library.__index = Library;
-Library.Pages.__index = Library.Pages;
-Library.Sections.__index = Library.Sections;
-
--- // Functions
-do 
-	-- // Library Functions
-	do
-		function Library:Connection(Signal, Callback)
-			local Con = Signal:Connect(Callback)
-			return Con
-		end
-		--  
-		function Library:updateNotifsPositions(position)
-			for i, v in pairs(Library.Notifs) do 
-				local Position = position == "Middle" and NewVector2(viewportSize.X/2 - (v["Objects"][3].TextBounds.X + 4)/2,600) or NewVector2(20, 20)
-				game:GetService("TweenService"):Create(v.Container, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0,Position.X,0,Position.Y + (i * 25))}):Play()
-			end 
-		end
-		-- 
-		function Library:Notification(message, duration, color, position)
-			local notification = {Container = nil, Objects = {}}
-			-- 
-			local NotifContainer = Instance.new('Frame', NotifiactionSGui)
-			local Background = Instance.new('Frame', NotifContainer)
-			local Outline = Instance.new('Frame', Background)
-			local UIStroke = Instance.new('UIStroke', Outline)
-			local TextLabel = Instance.new('TextLabel', Background)
-			local Accemt = Instance.new('Frame', Background)
-			local Progress = Instance.new('Frame', Background)
-			--
-			local Position = position == "Middle" and NewVector2(viewportSize.X/2 - (TextLabel.TextBounds.X + 4)/2, 600) or NewVector2(20, 20)
-			--
-			NotifContainer.Name = "NotifContainer"
-			NotifContainer.Position = UDim2.new(0,Position.X, 0, Position.Y)
-			NotifContainer.Size = UDim2.new(0,TextLabel.TextBounds.X + 4,0,20)
-			NotifContainer.BackgroundColor3 = Color3.new(1,1,1)
-			NotifContainer.BackgroundTransparency = 1
-			NotifContainer.BorderSizePixel = 0
-			NotifContainer.BorderColor3 = Color3.new(0,0,0)
-			NotifContainer.ZIndex = 99999999
-			notification.Container = NotifContainer
-			--
-			Background.Name = "Background"
-			Background.Size = UDim2.new(1,0,1,0)
-			Background.BackgroundColor3 = Color3.new(0.0588,0.0588,0.0784)
-			Background.BorderColor3 = Color3.new(0.1373,0.1373,0.1569)
-			table.insert(notification.Objects, Background)
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0,-1,0,-1)
-			Outline.Size = UDim2.new(1,2,1,2)
-			Outline.BackgroundColor3 = Color3.new(1,1,1)
-			Outline.BackgroundTransparency = 1
-			Outline.BorderSizePixel = 0
-			Outline.BorderColor3 = Color3.new(0,0,0)
-			table.insert(notification.Objects, Outline)
-			--
-			TextLabel.Name = "TextLabel"
-			TextLabel.Position = UDim2.new(0,1,0,0)
-			TextLabel.Size = UDim2.new(1,0,1,0)
-			TextLabel.BackgroundColor3 = Color3.new(1,1,1)
-			TextLabel.BackgroundTransparency = 1
-			TextLabel.BorderSizePixel = 0
-			TextLabel.BorderColor3 = Color3.new(0,0,0)
-			TextLabel.Text = message
-			TextLabel.TextColor3 = Color3.new(0.9216,0.9216,0.9216)
-			TextLabel.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			TextLabel.TextSize = Library.FontSize
-			TextLabel.AutomaticSize = Enum.AutomaticSize.X
-			TextLabel.TextXAlignment = Enum.TextXAlignment.Left
-			table.insert(notification.Objects, TextLabel)
-			--
-			Accemt.Name = "Accemt"
-			Accemt.Size = UDim2.new(1,0,0,1)
-			Accemt.BackgroundColor3 = Library.Accent
-			Accemt.BorderSizePixel = 0
-			Accemt.BorderColor3 = Color3.new(0,0,0)
-			table.insert(notification.Objects, Accemt)
-			--
-			Progress.Name = "Progress"
-			Progress.Position = UDim2.new(0,0,1,-1)
-			Progress.Size = UDim2.new(0,0,0,1)
-			Progress.BackgroundColor3 = Color3.new(1,0,0)
-			Progress.BorderSizePixel = 0
-			Progress.BorderColor3 = Color3.new(0,0,0)
-			table.insert(notification.Objects, Progress)
-		
-			if color ~= nil then
-				Progress.BackgroundColor3 = color
-				Accemt.BackgroundColor3 = color
-			end
-		
-			function notification:remove()
-				table.remove(Library.Notifs, table.find(Library.Notifs, notification))
-				Library:updateNotifsPositions(position)
-				notification.Container:Destroy()
-			end
-		
-			task.spawn(function()
-				Background.AnchorPoint = NewVector2(1,0)
-				local Tween1 = game:GetService("TweenService"):Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {AnchorPoint = NewVector2(0,0)}):Play()
-				local Tween2 = game:GetService("TweenService"):Create(Progress, TweenInfo.new(duration or 5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {Size = UDim2.new(1,0,0,1)}):Play()
-				game:GetService("TweenService"):Create(Progress, TweenInfo.new(duration or 5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.new(0,1,0)}):Play()
-				task.wait(duration)
-				game:GetService("TweenService"):Create(Background, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {AnchorPoint = NewVector2(1,0)}):Play()
-				for i,v in next, notification.Objects do
-					game:GetService("TweenService"):Create(v, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
-				end
-				game:GetService("TweenService"):Create(TextLabel, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
-				game:GetService("TweenService"):Create(UIStroke, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency = 1}):Play()
-			end)
-		
-			task.delay(0.25 + duration + 0.25, function()
-				notification:remove()
-			end)
-		
-			table.insert(Library.Notifs, notification)
-			NotifContainer.Position = UDim2.new(0,Position.X,0,Position.Y + (table.find(Library.Notifs, notification) * 25))
-			NotifContainer.Size = UDim2.new(0,TextLabel.TextBounds.X + 4,0,18)
-			Library:updateNotifsPositions(position)
-
-			return notification
-		end
-		--
-		function Library:Disconnect(Connection)
-			Connection:Disconnect()
-		end
-		--
-		function Library:Round(Number, Float)
-			return Float * math.floor(Number / Float)
-		end
-		--
-		function Library.NextFlag()
-			Library.UnNamedFlags = Library.UnNamedFlags + 1
-			return string.format("%.14g", Library.UnNamedFlags)
-		end
-		--
-		function Library:GetConfig()
-			local Config = ""
-			for Index, Value in pairs(self.Flags) do
-				if
-					Index ~= "ConfigConfig_List"
-					and Index ~= "ConfigConfig_Load"
-					and Index ~= "ConfigConfig_Save"
-				then
-					local Value2 = Value
-					local Final = ""
-					--
-					if typeof(Value2) == "Color3" then
-						local hue, sat, val = Value2:ToHSV()
-						--
-						Final = ("rgb(%s,%s,%s,%s)"):format(hue, sat, val, 1)
-					elseif typeof(Value2) == "table" and Value2.Color and Value2.Transparency then
-						local hue, sat, val = Value2.Color:ToHSV()
-						--
-						Final = ("rgb(%s,%s,%s,%s)"):format(hue, sat, val, Value2.Transparency)
-					elseif typeof(Value2) == "table" and Value.Mode then
-						local Values = Value.current
-						--
-						Final = ("key(%s,%s,%s)"):format(Values[1] or "nil", Values[2] or "nil", Value.Mode)
-					elseif Value2 ~= nil then
-						if typeof(Value2) == "boolean" then
-							Value2 = ("bool(%s)"):format(tostring(Value2))
-						elseif typeof(Value2) == "table" then
-							local New = "table("
-							--
-							for Index2, Value3 in pairs(Value2) do
-								New = New .. Value3 .. ","
-							end
-							--
-							if New:sub(#New) == "," then
-								New = New:sub(0, #New - 1)
-							end
-							--
-							Value2 = New .. ")"
-						elseif typeof(Value2) == "string" then
-							Value2 = ("string(%s)"):format(Value2)
-						elseif typeof(Value2) == "number" then
-							Value2 = ("number(%s)"):format(Value2)
-						end
-						--
-						Final = Value2
-					end
-					--
-					Config = Config .. Index .. ": " .. tostring(Final) .. "\n"
-				end
-			end
-			--
-			return Config
-		end
-		--
-		function Library:LoadConfig(Config)
-			for i = 1, 10 do 
-				local Table = string.split(Config, "\n")
-				local Table2 = {}
-				for Index, Value in pairs(Table) do
-					local Table3 = string.split(Value, ":")
-					--
-					if Table3[1] ~= "ConfigConfig_List" and #Table3 >= 2 then
-						local Value = Table3[2]:sub(2, #Table3[2])
-						--
-						if Value:sub(1, 3) == "rgb" then
-							local Table4 = string.split(Value:sub(5, #Value - 1), ",")
-							--
-							Value = Table4
-						elseif Value:sub(1, 3) == "key" then
-							local Table4 = string.split(Value:sub(5, #Value - 1), ",")
-							--
-							if Table4[1] == "nil" and Table4[2] == "nil" then
-								Table4[1] = nil
-								Table4[2] = nil
-							end
-							--
-							Value = Table4
-						elseif Value:sub(1, 4) == "bool" then
-							local Bool = Value:sub(6, #Value - 1)
-							--
-							Value = Bool == "true"
-						elseif Value:sub(1, 5) == "table" then
-							local Table4 = string.split(Value:sub(7, #Value - 1), ",")
-							--
-							Value = Table4
-						elseif Value:sub(1, 6) == "string" then
-							local String = Value:sub(8, #Value - 1)
-							--
-							Value = String
-						elseif Value:sub(1, 6) == "number" then
-							local Number = tonumber(Value:sub(8, #Value - 1))
-							--
-							Value = Number
-						end
-						--
-						Table2[Table3[1]] = Value
-					end
-				end 
-				--
-				for i, v in pairs(Table2) do
-					if Flags[i] then
-						if typeof(Flags[i]) == "table" then
-							Flags[i]:Set(v)
-						else
-							Flags[i](v)
-						end
-					end
-				end
-			end
-		end
-		--
-		function Library:SetOpen(bool)
-			if typeof(bool) == 'boolean' then
-				Library.Open = bool;
-				Library.Holder.Visible = bool;
-			end
-		end;
-		--
-		function Library:ChangeAccent(Color)
-			Library.Accent = Color
-
-			for obj, theme in next, Library.ThemeObjects do
-				if theme:IsA("Frame") or theme:IsA("TextButton") then
-					theme.BackgroundColor3 = Color
-				elseif theme:IsA("TextLabel") then
-					theme.TextColor3 = Color
-				elseif theme:IsA("TextButton") and theme.BackgroundTransparency == 1 then
-					theme.TextColor3 = Color
-				end
-			end
-		end
-		--
-		function Library:IsMouseOverFrame(Frame)
-			local AbsPos, AbsSize = Frame.AbsolutePosition, Frame.AbsoluteSize;
-
-			if Mouse.X >= AbsPos.X and Mouse.X <= AbsPos.X + AbsSize.X
-				and Mouse.Y >= AbsPos.Y and Mouse.Y <= AbsPos.Y + AbsSize.Y then
-
-				return true;
-			end;
-		end;
-		-- 
-		function Library:KeybindList()
-			local KeyList = {Keybinds = {}};
-			Library.KeyList = KeyList
-			--
-			local KeyOutline = Instance.new('Frame', PlaceHolderUI)
-			local KeyInline = Instance.new('Frame', KeyOutline)
-			local KeyAccent = Instance.new('Frame', KeyInline)
-			local KeyHolder = Instance.new('Frame', KeyInline)
-			local UIListLayout = Instance.new('UIListLayout', KeyHolder)
-			local KeyTitle = Instance.new('TextLabel', KeyInline)
-			local LineThing = Instance.new('Frame', KeyInline)
-			--
-			KeyOutline.Name = "KeyOutline"
-			KeyOutline.Position = UDim2.new(0.01,0,0.5,0)
-			KeyOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			KeyOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			KeyOutline.AnchorPoint = NewVector2(0.009999999776482582,0.5)
-			KeyOutline.AutomaticSize = Enum.AutomaticSize.XY
-			--
-			KeyInline.Name = "KeyInline"
-			KeyInline.Position = UDim2.new(0,1,0,1)
-			KeyInline.Size = UDim2.new(0,-2,0,-2)
-			KeyInline.BackgroundColor3 = Color3.new(0.0745,0.0745,0.0745)
-			KeyInline.BorderSizePixel = 0
-			KeyInline.BorderColor3 = Color3.new(0,0,0)
-			KeyInline.AutomaticSize = Enum.AutomaticSize.XY
-			--
-			KeyAccent.Name = "KeyAccent"
-			KeyAccent.Size = UDim2.new(1,0,0,1)
-			KeyAccent.BackgroundColor3 = Library.Accent
-			KeyAccent.BorderSizePixel = 0
-			KeyAccent.BorderColor3 = Color3.new(0,0,0)
-			--
-			KeyHolder.Name = "KeyHolder"
-			KeyHolder.Position = UDim2.new(0,0,0,22)
-			KeyHolder.BackgroundColor3 = Color3.new(1,1,1)
-			KeyHolder.BackgroundTransparency = 1
-			KeyHolder.BorderSizePixel = 0
-			KeyHolder.BorderColor3 = Color3.new(0,0,0)
-			KeyHolder.AutomaticSize = Enum.AutomaticSize.XY
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			--
-			KeyTitle.Name = "KeyTitle"
-			KeyTitle.Size = UDim2.new(1,0,0,20)
-			KeyTitle.BackgroundColor3 = Color3.new(1,1,1)
-			KeyTitle.BackgroundTransparency = 1
-			KeyTitle.BorderSizePixel = 0
-			KeyTitle.BorderColor3 = Color3.new(0,0,0)
-			KeyTitle.Text = "Keybinds"
-			KeyTitle.TextColor3 = Color3.new(1,1,1)
-			KeyTitle.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			KeyTitle.TextSize = 12
-			KeyTitle.TextStrokeTransparency = 0
-			--
-			LineThing.Name = "LineThing"
-			LineThing.Position = UDim2.new(0,0,0,20)
-			LineThing.Size = UDim2.new(1,0,0,1)
-			LineThing.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			LineThing.BorderSizePixel = 0
-			LineThing.BorderColor3 = Color3.new(0,0,0)
-			-- Functions
-			function KeyList:SetVisible(State)
-				KeyOutline.Visible = State;
-			end;
-			--
-			function KeyList:NewKey(Name, Key, Mode)
-				local KeyValue = {}
-				--
-				local NewValue = Instance.new('TextLabel', KeyHolder)
-				--
-				NewValue.Name = "NewValue"
-				NewValue.Size = UDim2.new(0,0,0,15)
-				NewValue.BackgroundColor3 = Color3.new(1,1,1)
-				NewValue.BackgroundTransparency = 1
-				NewValue.BorderSizePixel = 0
-				NewValue.BorderColor3 = Color3.new(0,0,0)
-				NewValue.Text = tostring(" ["..Key.."] " .. Name .. " (" .. Mode ..") ")
-				NewValue.TextColor3 = Color3.new(1,1,1)
-				NewValue.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-				NewValue.TextSize = 12
-				NewValue.AutomaticSize = Enum.AutomaticSize.X
-				NewValue.TextXAlignment = Enum.TextXAlignment.Left
-				NewValue.Visible = false
-				--
-				function KeyValue:SetVisible(State)
-					NewValue.Visible = State;
-				end;
-				--
-				function KeyValue:Update(NewName, NewKey, NewMode)
-					NewValue.Text = tostring(" ["..NewName.."] " .. NewKey .. " (" .. NewMode ..") ")
-				end;
-				return KeyValue
-			end;
-			return KeyList
-		end
-	end
-	-- // Color Picker Functions
-	do
-		function Library:NewPicker(name, default, defaultalpha, parent, count, flag, callback)
-			-- // Instances
-			local Icon = Instance.new('TextButton', parent)
-			local IconInline = Instance.new('Frame', Icon)
-			local ColorWindow = Instance.new('Frame', parent)
-			local WindowInline = Instance.new('Frame', ColorWindow)
-			local Color = Instance.new('TextButton', WindowInline)
-			local Sat = Instance.new('ImageLabel', Color)
-			local Val = Instance.new('ImageLabel', Color)
-			local Pointer = Instance.new('Frame', Color)
-			local Container = Instance.new('Frame', Color)
-			local ColorOutline = Instance.new('Frame', Color)
-			local UIStroke = Instance.new('UIStroke', ColorOutline)
-			local Hue = Instance.new('ImageButton', Color)
-			local HueOutline = Instance.new('Frame', Hue)
-			local UIStroke2 = Instance.new('UIStroke', HueOutline)
-			local Alpha = Instance.new('ImageButton', Color)
-			local AlphaOutline = Instance.new('Frame', Alpha)
-			local UIStroke3 = Instance.new('UIStroke', AlphaOutline)
-			local HueSlide = Instance.new('Frame', Hue)
-			local AlphaSlide = Instance.new('Frame', Alpha)
-			local ModeOutline = Instance.new('Frame', parent)
-			local ModeInline = Instance.new('Frame', ModeOutline)
-			local UIListLayout = Instance.new('UIListLayout', ModeInline)
-			local Hold = Instance.new('TextButton', ModeInline)
-			local Toggle = Instance.new('TextButton', ModeInline)
-			--
-			Icon.Name = "Icon"
-			Icon.Position = UDim2.new(1, - (count * 20) - (count * 6),0.5,0)
-			Icon.Size = UDim2.new(0,20,0,10)
-			Icon.BackgroundColor3 = Color3.fromRGB(45,45,45)
-			Icon.BorderColor3 = Color3.fromRGB(10,10,10)
-			Icon.AnchorPoint = NewVector2(1,0.5)
-			Icon.AutoButtonColor = false
-			Icon.Text = ""
-			--
-			IconInline.Name = "IconInline"
-			IconInline.Position = UDim2.new(0,1,0,1)
-			IconInline.Size = UDim2.new(1,-2,1,-2)
-			IconInline.BackgroundColor3 = default
-			IconInline.BorderSizePixel = 0
-			--
-			ColorWindow.Name = "ColorWindow"
-			ColorWindow.Position = UDim2.new(1,-2,1,2)
-			ColorWindow.Size = UDim2.new(0,206,0,170)
-			ColorWindow.BackgroundColor3 = Color3.fromRGB(45,45,45)
-			ColorWindow.BorderColor3 = Color3.fromRGB(10,10,10)
-			ColorWindow.AnchorPoint = NewVector2(1,0)
-			ColorWindow.ZIndex = 100
-			ColorWindow.Visible = false
-			--
-			WindowInline.Name = "WindowInline"
-			WindowInline.Position = UDim2.new(0,1,0,1)
-			WindowInline.Size = UDim2.new(1,-2,1,-2)
-			WindowInline.BackgroundColor3 = Color3.fromRGB(20,20,20)
-			WindowInline.BorderSizePixel = 0;
-			WindowInline.ZIndex = 100
-			--
-			Color.Name = "Color"
-			Color.Position = UDim2.new(0,8,0,10)
-			Color.Size = UDim2.new(0,150,0,150)
-			Color.BackgroundColor3 = default
-			Color.BorderColor3 = Color3.new(0,0,0)
-			Color.Text = ""
-			Color.TextColor3 = Color3.new(0,0,0)
-			Color.AutoButtonColor = false
-			Color.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Color.TextSize = 14
-			Color.ZIndex = 100
-			--
-			Sat.Name = "Sat"
-			Sat.Size = UDim2.new(1,0,1,0)
-			Sat.BackgroundColor3 = Color3.new(1,1,1)
-			Sat.BackgroundTransparency = 1
-			Sat.BorderSizePixel = 0
-			Sat.BorderColor3 = Color3.new(0,0,0)
-			Sat.Image = "http://www.roblox.com/asset/?id=14684562507"
-			Sat.ZIndex = 100
-			--
-			Val.Name = "Val"
-			Val.Size = UDim2.new(1,0,1,0)
-			Val.BackgroundColor3 = Color3.new(1,1,1)
-			Val.BackgroundTransparency = 1
-			Val.BorderSizePixel = 0
-			Val.BorderColor3 = Color3.new(0,0,0)
-			Val.Image = "http://www.roblox.com/asset/?id=14684563800"
-			Val.ZIndex = 100
-			--
-			Pointer.Name = "Pointer"
-			Pointer.Position = UDim2.new(1,0,1,0)
-			Pointer.Size = UDim2.new(0,1,0,1)
-			Pointer.BackgroundColor3 = Color3.new(1,1,1)
-			Pointer.BorderColor3 = Color3.new(0,0,0)
-			Pointer.ZIndex = 100
-			--
-			Container.Name = "Container"
-			Container.Position = UDim2.new(0,-2,1,5)
-			Container.Size = UDim2.new(0,189,0,55)
-			Container.BackgroundColor3 = Color3.new(1,1,1)
-			Container.BackgroundTransparency = 1
-			Container.BorderColor3 = Color3.new(0,0,0)
-			Container.ZIndex = 100
-			--
-			ColorOutline.Name = "ColorOutline"
-			ColorOutline.Position = UDim2.new(0,-1,0,-1)
-			ColorOutline.Size = UDim2.new(1,2,1,2)
-			ColorOutline.BackgroundColor3 = Color3.new(1,1,1)
-			ColorOutline.BackgroundTransparency = 1
-			ColorOutline.BorderSizePixel = 0
-			ColorOutline.BorderColor3 = Color3.new(0,0,0)
-			ColorOutline.ZIndex = 100
-			--
-			UIStroke.Color = Color3.fromRGB(45,45,45)
-			--
-			Hue.Name = "Hue"
-			Hue.Position = UDim2.new(1,10,0,0)
-			Hue.Size = UDim2.new(0,10,1,0)
-			Hue.BackgroundColor3 = Color3.new(1,1,1)
-			Hue.BorderColor3 = Color3.new(0,0,0)
-			Hue.Image = "http://www.roblox.com/asset/?id=14684557999"
-			Hue.AutoButtonColor = false
-			Hue.ZIndex = 100
-			--
-			HueOutline.Name = "HueOutline"
-			HueOutline.Position = UDim2.new(0,-1,0,-1)
-			HueOutline.Size = UDim2.new(1,2,1,2)
-			HueOutline.BackgroundColor3 = Color3.new(1,1,1)
-			HueOutline.BackgroundTransparency = 1
-			HueOutline.BorderSizePixel = 0
-			HueOutline.BorderColor3 = Color3.new(0,0,0)
-			HueOutline.ZIndex = 100
-			--
-			UIStroke2.Color = Color3.fromRGB(45,45,45)
-			--
-			Alpha.Name = "Alpha"
-			Alpha.Position = UDim2.new(1,30,0,0)
-			Alpha.Size = UDim2.new(0,10,1,0)
-			Alpha.BackgroundColor3 = Color3.new(1,1,1)
-			Alpha.BorderColor3 = Color3.new(0,0,0)
-			Alpha.Image = "http://www.roblox.com/asset/?id=14684560169"
-			Alpha.AutoButtonColor = false
-			Alpha.ZIndex = 100
-			--
-			AlphaOutline.Name = "AlphaOutline"
-			AlphaOutline.Position = UDim2.new(0,-1,0,-1)
-			AlphaOutline.Size = UDim2.new(1,2,1,2)
-			AlphaOutline.BackgroundColor3 = Color3.new(1,1,1)
-			AlphaOutline.BackgroundTransparency = 1
-			AlphaOutline.BorderSizePixel = 0
-			AlphaOutline.BorderColor3 = Color3.new(0,0,0)
-			AlphaOutline.ZIndex = 100
-			--
-			UIStroke3.Color = Color3.fromRGB(45,45,45)
-			--
-			HueSlide.Name = "HueSlide"
-			HueSlide.Size = UDim2.new(1,0,0,3)
-			HueSlide.BackgroundColor3 = Color3.new(1,1,1)
-			HueSlide.BorderColor3 = Color3.new(0,0,0)
-			--
-			AlphaSlide.Name = "AlphaSlide"
-			AlphaSlide.Size = UDim2.new(1,0,0,3)
-			AlphaSlide.BackgroundColor3 = Color3.new(1,1,1)
-			AlphaSlide.BorderColor3 = Color3.new(0,0,0)
-			AlphaSlide.ZIndex = 100
-			--
-			ModeOutline.Name = "ModeOutline"
-			ModeOutline.Position = UDim2.new(1,65,0.5,0)
-			ModeOutline.Size = UDim2.new(0,60,0,12)
-			ModeOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			ModeOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			ModeOutline.AnchorPoint = NewVector2(1,0.5)
-			ModeOutline.AutomaticSize = Enum.AutomaticSize.Y
-			ModeOutline.Visible = false
-			ModeOutline.ZIndex = 1020000010
-			--
-			ModeInline.Name = "ModeInline"
-			ModeInline.Position = UDim2.new(0,1,0,1)
-			ModeInline.Size = UDim2.new(1,-2,1,-2)
-			ModeInline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			ModeInline.BorderSizePixel = 0
-			ModeInline.BorderColor3 = Color3.new(0,0,0)
-			ModeInline.ZIndex = 100
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			--
-			Hold.Name = "Hold"
-			Hold.Size = UDim2.new(1,0,0,15)
-			Hold.BackgroundColor3 = Color3.new(1,1,1)
-			Hold.BackgroundTransparency = 1
-			Hold.BorderSizePixel = 0
-			Hold.BorderColor3 = Color3.new(0,0,0)
-			Hold.Text = "Copy"
-			Hold.TextColor3 = Color3.fromRGB(145,145,145)
-			Hold.AutoButtonColor = false
-			Hold.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Hold.TextSize = Library.FontSize
-			Hold.TextStrokeTransparency = 0
-			Hold.ZIndex = 100
-			--
-			Toggle.Name = "Toggle"
-			Toggle.Size = UDim2.new(1,0,0,15)
-			Toggle.BackgroundColor3 = Color3.new(1,1,1)
-			Toggle.BackgroundTransparency = 1
-			Toggle.BorderSizePixel = 0
-			Toggle.BorderColor3 = Color3.new(0,0,0)
-			Toggle.Text = "Paste"
-			Toggle.TextColor3 = Color3.fromRGB(145,145,145)
-			Toggle.AutoButtonColor = false
-			Toggle.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Toggle.TextSize = Library.FontSize
-			Toggle.TextStrokeTransparency = 0
-			Toggle.ZIndex = 100
-
-			Library:Connection(Icon.MouseEnter, function()
-				Icon.BorderColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(Icon.MouseLeave, function()
-				Icon.BorderColor3 = Color3.fromRGB(10,10,10)
-			end)
-
-			-- // Connections
-			local mouseover = false
-			local hue, sat, val = default:ToHSV()
-			local hsv = default:ToHSV()
-			local alpha = defaultalpha
-			local oldcolor = hsv
-			local slidingsaturation = false
-			local slidinghue = false
-			local slidingalpha = false
-
-			local function update()
-				local real_pos = game:GetService("UserInputService"):GetMouseLocation()
-				local mouse_position = NewVector2(real_pos.X, real_pos.Y - 40)
-				local relative_palette = (mouse_position - Color.AbsolutePosition)
-				local relative_hue     = (mouse_position - Hue.AbsolutePosition)
-				local relative_opacity = (mouse_position - Alpha.AbsolutePosition)
-				--
-				if slidingsaturation then
-					sat = math.clamp(1 - relative_palette.X / Color.AbsoluteSize.X, 0, 1)
-					val = math.clamp(1 - relative_palette.Y / Color.AbsoluteSize.Y, 0, 1)
-				end 
-				--  
-				if slidinghue then
-					hue = math.clamp(relative_hue.Y / Hue.AbsoluteSize.Y, 0, 1)
-				end  
-				-- 
-				if slidingalpha then
-					alpha = math.clamp(relative_opacity.Y / Alpha.AbsoluteSize.Y, 0, 1)
-				end
-				-- edited by finobe (yes these fucking alphas crash on roexec? nice executor for $8 a week :[ )
-				hsv = Color3.fromHSV(hue, sat, val)
-				Pointer.Position = UDim2.new(math.clamp(1 - sat, 0.005, 0.995), 0, math.clamp(1 - val, 0.005, 0.995), 0)
-				Color.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-				Alpha.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-				IconInline.BackgroundColor3 = hsv
-
-				HueSlide.Position = UDim2.new(0,0,math.clamp(hue, 0.005, 0.995),0)
-				AlphaSlide.Position = UDim2.new(0,0,math.clamp(alpha, 0.005, 0.995),0)
-
-				if flag then
-					Library.Flags[flag] = {} 
-					Library.Flags[flag]["Color"] = Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255)
-					Library.Flags[flag]["Transparency"] = alpha
-				end
-
-				callback(Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255), alpha)
-			end
-
-			local function set(color, a)
-				if type(color) == "table" then
-					a = color[4]
-					color = Color3.fromHSV(color[1], color[2], color[3])
-				end
-				if type(color) == "string" then
-					color = Color3.fromHex(color)
-				end
-
-				local oldcolor = hsv
-				local oldalpha = alpha
-
-				hue, sat, val = color:ToHSV()
-				alpha = a or 1
-				hsv = Color3.fromHSV(hue, sat, val)
-
-				if hsv ~= oldcolor then
-					IconInline.BackgroundColor3 = hsv
-					Color.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-					Pointer.Position = UDim2.new(math.clamp(1 - sat, 0.005, 0.995), 0, math.clamp(1 - val, 0.005, 0.995), 0)
-					Alpha.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
-					HueSlide.Position = UDim2.new(0,0,math.clamp(hue, 0.005, 0.995),0)
-					AlphaSlide.Position = UDim2.new(0,0,math.clamp(alpha, 0.005, 0.995),0)
-
-					if flag then
-						Library.Flags[flag] = {} 
-						Library.Flags[flag]["Color"] = Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255)
-						Library.Flags[flag]["Transparency"] = alpha
-					end
-
-					callback(Color3.fromRGB(hsv.r * 255, hsv.g * 255, hsv.b * 255), alpha)
-				end
-			end
-
-			Flags[flag] = set
-
-			set(default, defaultalpha)
-
-			Sat.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidingsaturation = true
-					update()
-				end
-			end)
-
-			Sat.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidingsaturation = false
-					update()
-				end
-			end)
-
-			Hue.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidinghue = true
-					update()
-				end
-			end)
-
-			Hue.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidinghue = false
-					update()
-				end
-			end)
-
-			Alpha.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidingalpha = true
-					update()
-				end
-			end)
-
-			Alpha.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					slidingalpha = false
-					update()
-				end
-			end)
-
-			Library:Connection(game:GetService("UserInputService").InputChanged, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseMovement then
-					if slidingalpha then
-						update()
-					end
-
-					if slidinghue then
-						update()
-					end
-
-					if slidingsaturation then
-						update()
-					end
-				end
-			end)
-
-			Icon.MouseButton1Down:Connect(function()
-				ColorWindow.Visible = not ColorWindow.Visible
-				parent.ZIndex = ColorWindow.Visible and 5 or 1
-
-				if slidinghue then
-					slidinghue = false
-				end
-
-				if slidingsaturation then
-					slidingsaturation = false
-				end
-
-				if slidingalpha then
-					slidingalpha = false
-				end
-			end)
-			
-			Library:Connection(Icon.MouseButton2Down, function()
-				ModeOutline.Visible = not ModeOutline.Visible
-			end)
-			--
-			Library:Connection(Hold.MouseButton1Down, function()
-				Library.CopiedColor = hsv
-				Library.CopiedAlpha = alpha
-			end)
-			--
-			Library:Connection(Toggle.MouseButton1Down, function()
-				set(Library.CopiedColor or Color3.new(1,1,1), Library.CopiedAlpha or 0)
-			end)
-			--
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(Input)
-				if ModeOutline.Visible and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					if not Library:IsMouseOverFrame(Icon) then
-						ModeOutline.Visible = false
-					end
-				end
-			end)
-
-			local colorpickertypes = {}
-
-			function colorpickertypes:Set(color, newalpha)
-				set(color, newalpha)
-			end
-
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(Input)
-				if ColorWindow.Visible and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					if not Library:IsMouseOverFrame(ColorWindow) and not Library:IsMouseOverFrame(Icon) then
-						ColorWindow.Visible = false
-						parent.ZIndex = 1
-					end
-				end
-			end)
-
-			return colorpickertypes, ColorWindow
-		end
-	end
-	-- // Doc Functions
-	do
-		local Pages = Library.Pages;
-		local Sections = Library.Sections;
-		function Library:Window(Options)
-			local Window = {
-				Pages = {};
-				Sections = {};
-				Elements = {};
-				Dragging = { false, UDim2.new(0, 0, 0, 0) };
-				Size = Options.Size or Options.size or UDim2.new(0, 550,0, 600);
-			};
-			--
-			local ScreenGui = Instance.new('ScreenGui', game.CoreGui)
-			local Outline = Instance.new('Frame', ScreenGui)
-			local Inline = Instance.new('Frame', Outline)
-			local Accent = Instance.new('Frame', Inline)
-			local HolderOutline = Instance.new('Frame', Inline)
-			local HolderInline = Instance.new('Frame', HolderOutline)
-			local Tabs = Instance.new('Frame', HolderInline)
-			local UIListLayout = Instance.new('UIListLayout', Tabs)
-			local DragButton = Instance.new('TextButton', Outline)
-			local KeybindList = Library:KeybindList()
-			--
-			ScreenGui.DisplayOrder = 2
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0.5,0,0.5,0)
-			Outline.Size = Window.Size
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = Vector2.new(0.5,0.5)
-			Library.Holder = Outline
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.0784,0.0784,0.0784)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Accent.Name = "Accent"
-			Accent.Size = UDim2.new(1,0,0,1)
-			Accent.BackgroundColor3 = Library.Accent
-			Accent.BorderSizePixel = 0
-			Accent.BorderColor3 = Color3.new(0,0,0)
-			table.insert(Library.ThemeObjects, Accent)
-			--
-			HolderOutline.Name = "HolderOutline"
-			HolderOutline.Position = UDim2.new(0,7,0,11)
-			HolderOutline.Size = UDim2.new(1,-14,1,-18)
-			HolderOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			HolderOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			--
-			HolderInline.Name = "HolderInline"
-			HolderInline.Position = UDim2.new(0,1,0,1)
-			HolderInline.Size = UDim2.new(1,-2,1,-2)
-			HolderInline.BackgroundColor3 = Color3.new(0.0784,0.0784,0.0784)
-			HolderInline.BorderSizePixel = 0
-			HolderInline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Tabs.Name = "Tabs"
-			Tabs.Size = UDim2.new(1,0,0,22)
-			Tabs.BackgroundColor3 = Color3.new(1,1,1)
-			Tabs.BackgroundTransparency = 1
-			Tabs.BorderSizePixel = 0
-			Tabs.BorderColor3 = Color3.new(0,0,0)
-			--
-			UIListLayout.FillDirection = Enum.FillDirection.Horizontal
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			--
-			DragButton.Name = "DragButton"
-			DragButton.Size = UDim2.new(1,0,0,10)
-			DragButton.BackgroundColor3 = Color3.new(1,1,1)
-			DragButton.BackgroundTransparency = 1
-			DragButton.BorderSizePixel = 0
-			DragButton.BorderColor3 = Color3.new(0,0,0)
-			DragButton.Text = ""
-			DragButton.TextColor3 = Color3.new(0,0,0)
-			DragButton.AutoButtonColor = false
-			DragButton.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			DragButton.TextSize = 14
-			
-            
-			
-			-- // Elements
-			Window.Elements = {
-				TabHolder = Tabs,
-				Holder = HolderInline
-			}
-
-			-- // Dragging
-			Library:Connection(DragButton.MouseButton1Down, function()
-				local Location = game:GetService("UserInputService"):GetMouseLocation()
-				Window.Dragging[1] = true
-				Window.Dragging[2] = UDim2.new(0, Location.X - Outline.AbsolutePosition.X, 0, Location.Y - Outline.AbsolutePosition.Y)
-			end)
-			Library:Connection(game:GetService("UserInputService").InputEnded, function(Input)
-				if Input.UserInputType == Enum.UserInputType.MouseButton1 and Window.Dragging[1] then
-					local Location = game:GetService("UserInputService"):GetMouseLocation()
-					Window.Dragging[1] = false
-					Window.Dragging[2] = UDim2.new(0, 0, 0, 0)
-				end
-			end)
-			Library:Connection(game:GetService("UserInputService").InputChanged, function(Input)
-				local Location = game:GetService("UserInputService"):GetMouseLocation()
-				local ActualLocation = nil
-
-				-- Dragging
-				if Window.Dragging[1] then
-					Outline.Position = UDim2.new(
-						0,
-						Location.X - Window.Dragging[2].X.Offset + (Outline.Size.X.Offset * Outline.AnchorPoint.X),
-						0,
-						Location.Y - Window.Dragging[2].Y.Offset + (Outline.Size.Y.Offset * Outline.AnchorPoint.Y)
-					)
-				end
-			end)
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(Input)
-				if Input.KeyCode == Library.UIKey then
-					Library:SetOpen(not Library.Open)
-				end
-			end)
-
-			-- // Functions
-			function Window:UpdateTabs()
-				for Index, Page in pairs(Window.Pages) do
-					Page.Elements.Button.Size = UDim2.new(1/#Window.Pages,0,1,0)
-					Page:Turn(Page.Open)
-				end
-			end
-
-			-- // Returns
-			Library.Holder = Outline
-			return setmetatable(Window, Library)
-		end
-		--
-		function Library:Page(Properties)
-			if not Properties then
-				Properties = {}
-			end
-			--
-			local Page = {
-				Name = Properties.Name or "Page",
-				Window = self,
-				Open = false,
-				Sections = {},
-				Elements = {},
-                Weapons = {},
-                Icons = Properties.Weapons or Properties.weapons or false,
-			}
-			--
-			local TabButton = Instance.new('TextButton', Page.Window.Elements.TabHolder)
-			local TabAccent = Instance.new('Frame', TabButton)
-			local TabLine = Instance.new('Frame', TabButton)
-            local WeaponOutline = Instance.new("Frame", Page.Window.Elements.Holder)
-            local WeaponInline = Instance.new("Frame", WeaponOutline)
-            local UIListLayout3 = Instance.new("UIListLayout", WeaponInline)
-            local Left = Instance.new('Frame', Page.Window.Elements.Holder)
-            local Right = Instance.new('Frame', Page.Window.Elements.Holder)
-            local UIListLayout = Instance.new('UIListLayout', Left)
-            local UIListLayout_2 = Instance.new('UIListLayout', Right)
-            Left.Name = "Left"
-            Left.Position = UDim2.new(0,5,0,35)
-            Left.Size = UDim2.new(0.485,-3,1,-40)
-            Left.BackgroundColor3 = Color3.new(1,1,1)
-            Left.BorderSizePixel = 0
-            Left.BackgroundTransparency = 1
-            Left.BorderColor3 = Color3.new(0,0,0)
-            Left.Visible = false
-            Left.ZIndex = 3
-            --
-            Right.Name = "Right"
-            Right.Position = UDim2.new(1,-5,0,35)
-            Right.Size = UDim2.new(0.485,-3,1,-40)
-            Right.BackgroundColor3 = Color3.new(1,1,1)
-            Right.BorderSizePixel = 0
-            Right.BorderColor3 = Color3.new(0,0,0)
-            Right.AnchorPoint = Vector2.new(1,0)
-            Right.Visible = false
-            Right.BackgroundTransparency = 1
-            --
-            UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            UIListLayout.Padding = UDim.new(0,12)
-            --
-            UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-            UIListLayout_2.Padding = UDim.new(0,12)
-			--
-			TabButton.Name = "TabButton"
-			TabButton.Size = UDim2.new(0.25,0,1,0)
-			TabButton.BackgroundColor3 = Color3.new(1,1,1)
-			TabButton.BackgroundTransparency = 1
-			TabButton.BorderSizePixel = 0
-			TabButton.BorderColor3 = Color3.new(0,0,0)
-			TabButton.Text = Page.Name
-			TabButton.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			TabButton.AutoButtonColor = false
-			TabButton.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			TabButton.TextSize = Library.FontSize
-			TabButton.TextStrokeTransparency = 0
-			TabButton.LineHeight = 1.1
-			--
-			TabAccent.Name = "TabAccent"
-			TabAccent.Size = UDim2.new(1,0,0,1)
-			TabAccent.BackgroundColor3 = Library.Accent
-			TabAccent.BorderSizePixel = 0
-			TabAccent.BorderColor3 = Color3.new(0,0,0)
-			TabAccent.Visible = false
-			table.insert(Library.ThemeObjects, TabAccent)
-			--
-			TabLine.Name = "TabLine"
-			TabLine.Position = UDim2.new(0,0,1,-1)
-			TabLine.Size = UDim2.new(1,0,0,1)
-			TabLine.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			TabLine.BorderSizePixel = 0
-			TabLine.BorderColor3 = Color3.new(0,0,0)
-
-            WeaponOutline.Name = "WeaponOutline"
-            WeaponOutline.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-            WeaponOutline.BorderColor3 = Color3.fromRGB(10, 10, 10)
-            WeaponOutline.Position = UDim2.new(0, 5, 0, 25)
-            WeaponOutline.Size = UDim2.new(1, -10, 0, 40)
-            WeaponOutline.Visible = false
-            
-            WeaponInline.Name = "WeaponInline"
-            WeaponInline.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-            WeaponInline.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            WeaponInline.BorderSizePixel = 0
-            WeaponInline.Position = UDim2.new(0, 1, 0, 1)
-            WeaponInline.Size = UDim2.new(1, -2, 1, -2)
-            
-            UIListLayout3.FillDirection = Enum.FillDirection.Horizontal
-            UIListLayout3.SortOrder = Enum.SortOrder.LayoutOrder
-			
-			function Page:Turn(bool)
-				Page.Open = bool
-				if not Page.Icons then
-                    Left.Visible = Page.Open
-				    Right.Visible = Page.Open
-                else
-                    WeaponOutline.Visible = Page.Open
-                    for Index, Weapon in pairs(Page.Weapons) do
-                        Weapon:Turn(Weapon.Open)
-                    end
-                end
-				TabAccent.Visible = Page.Open
-				TabLine.Visible = not Page.Open
-				TabButton.TextColor3 = Page.Open and Color3.fromRGB(255,255,255) or Color3.fromRGB(145,145,145)
-			end
-			--
-			Library:Connection(TabButton.MouseButton1Down, function()
-				if not Page.Open then
-					Page:Turn(true)
-					for _, Pages in pairs(Page.Window.Pages) do
-						if Pages.Open and Pages ~= Page then
-							Pages:Turn(false)
-						end
-					end
-				end
-			end)
-			--
-			Library:Connection(TabButton.MouseEnter, function() 
-				if not Page.Open then
-					TabButton.TextColor3 = Library.Accent
-				end
-			end)
-			--
-			Library:Connection(TabButton.MouseLeave, function() 
-				if not Page.Open then
-					TabButton.TextColor3 = Color3.fromRGB(145,145,145)
-				end
-			end)
-
-            -- // Functions
-			function Page:UpdateWeapons()
-				for Index, Weapon in pairs(Page.Weapons) do
-					Weapon.Elements.Button.Size = UDim2.new(1/#Page.Weapons,0,1,0)
-					Weapon:Turn(Weapon.Open)
-				end
-			end
-
-			-- // Elements
-			Page.Elements = {
-                Left = Page.Icons and nil or Left,
-				Right = Page.Icons and nil or Right,
-				Button = TabButton,
-                WeaponOutline = WeaponOutline,
-                WeaponInline = WeaponInline,
-			}
-
-			-- // Drawings
-			if #Page.Window.Pages == 0 then
-				Page:Turn(true)
-			end
-			Page.Window.Pages[#Page.Window.Pages + 1] = Page
-			Page.Window:UpdateTabs()
-			return setmetatable(Page, Library.Pages)
-		end
-        --
-        function Pages:Weapon(Properties)
-            if not Properties then
-				Properties = {}
-			end
-			--
-			local Weapon = {
-				Icon = Properties.Icon or Properties.icon or "rbxassetid://11127408662",
-				Window = self,
-				Open = false,
-				Sections = {},
-				Elements = {},
-			}
-			--
-            --Weapon.Window.Elements.WeaponOutline.Visible = true
-
-			local Left = Instance.new('Frame', Weapon.Window.Window.Elements.Holder)
-			local Right = Instance.new('Frame', Weapon.Window.Window.Elements.Holder)
-			local UIListLayout = Instance.new('UIListLayout', Left)
-			local UIListLayout_2 = Instance.new('UIListLayout', Right)
-            local New = Instance.new("ImageButton")
-			--
-			New.Name = "New"
-            New.Parent = Weapon.Window.Elements.WeaponInline
-            New.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            New.BackgroundTransparency = 1.000
-            New.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            New.BorderSizePixel = 0
-            New.Size = UDim2.new(0.200000003, 0, 1, 0)
-            New.Image = Weapon.Icon
-            New.ScaleType = Enum.ScaleType.Fit
-			--
-			Left.Name = "Left"
-			Left.Position = UDim2.new(0,5,0,75)
-			Left.Size = UDim2.new(0.485,-3,1, -80)
-			Left.BackgroundColor3 = Color3.new(1,1,1)
-			Left.BorderSizePixel = 0
-			Left.BackgroundTransparency = 1
-			Left.BorderColor3 = Color3.new(0,0,0)
-			Left.Visible = false
-			Left.ZIndex = 3
-			--
-			Right.Name = "Right"
-			Right.Position = UDim2.new(1,-5,0,75)
-			Right.Size = UDim2.new(0.485,-3,1, -80)
-			Right.BackgroundColor3 = Color3.new(1,1,1)
-			Right.BorderSizePixel = 0
-			Right.BorderColor3 = Color3.new(0,0,0)
-			Right.AnchorPoint = Vector2.new(1,0)
-			Right.Visible = false
-			Right.BackgroundTransparency = 1
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			UIListLayout.Padding = UDim.new(0,12)
-			--
-			UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
-			UIListLayout_2.Padding = UDim.new(0,12)
-			
-			function Weapon:Turn(bool)
-				Weapon.Open = bool
-				Left.Visible = Weapon.Open and Weapon.Window.Open
-				Right.Visible = Weapon.Open and Weapon.Window.Open
-				New.ImageColor3 = Weapon.Open and Color3.new(1,1,1) or Color3.fromRGB(145,145,145)
-			end
-			--
-			Library:Connection(New.MouseButton1Down, function()
-				if not Weapon.Open then
-					Weapon:Turn(true)
-					for _, Weapons in pairs(Weapon.Window.Weapons) do
-						if Weapons.Open and Weapons ~= Weapon then
-							Weapons:Turn(false)
-						end
-					end
-				end
-			end)
-			--
-
-			-- // Elements
-			Weapon.Elements = {
-				Left = Left,
-				Right = Right,
-				Button = New
-			}
-
-			-- // Drawings
-			if #Weapon.Window.Weapons == 0 then
-				Weapon:Turn(true)
-			end
-			Weapon.Window.Weapons[#Weapon.Window.Weapons + 1] = Weapon
-			Weapon.Window:UpdateWeapons()
-			return setmetatable(Weapon, Library.Pages)
-        end
-		--
-		function Pages:Section(Properties)
-			if not Properties then
-				Properties = {}
-			end
-			--
-			local Section = {
-				Name = Properties.Name or "Section",
-				Page = self,
-				Side = (Properties.side or Properties.Side or "left"):lower(),
-				ZIndex = Properties.ZIndex or 1, -- Idfk why
-				Elements = {},
-				Content = {},
-			}
-			--
-			local SectionOutline = Instance.new('Frame', Section.Side == "left" and Section.Page.Elements.Left or Section.Side == "right" and Section.Page.Elements.Right)
-			local SectionInline = Instance.new('Frame', SectionOutline)
-			local Container = Instance.new('Frame', SectionInline)
-			local UIListLayout = Instance.new('UIListLayout', Container)
-			local Space = Instance.new('Frame', Container)
-			local SectionAccent = Instance.new('Frame', SectionInline)
-			local Title = Instance.new('TextLabel', SectionOutline)
-			local TextBorder = Instance.new('Frame', SectionOutline)	
-			--
-			SectionOutline.Name = "SectionOutline"
-			SectionOutline.Size = UDim2.new(1,0,0,20)
-			SectionOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			SectionOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			SectionOutline.AutomaticSize = Enum.AutomaticSize.Y
-			SectionOutline.ZIndex = Section.ZIndex
-			--
-			
-			--
-			SectionInline.Name = "SectionInline"
-			SectionInline.Position = UDim2.new(0,1,0,1)
-			SectionInline.Size = UDim2.new(1,-2,1,-2)
-			SectionInline.BackgroundColor3 = Color3.new(0.0784,0.0784,0.0784)
-			SectionInline.BorderSizePixel = 0
-			SectionInline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Container.Name = "Container"
-			Container.Position = UDim2.new(0,7,0,10)
-			Container.Size = UDim2.new(1,-14,1,-10)
-			Container.BackgroundColor3 = Color3.new(1,1,1)
-			Container.BackgroundTransparency = 1
-			Container.BorderSizePixel = 0
-			Container.BorderColor3 = Color3.new(0,0,0)
-			Container.AutomaticSize = Enum.AutomaticSize.Y
-			--
-			Space.Name = "Space"
-			Space.Position = UDim2.new(0,0,1,0)
-			Space.Size = UDim2.new(1,0,0,1)
-			Space.BackgroundColor3 = Color3.new(1,1,1)
-			Space.BackgroundTransparency = 1
-			Space.BorderSizePixel = 0
-			Space.BorderColor3 = Color3.new(0,0,0)
-			Space.LayoutOrder = 1000
-			--
-			SectionAccent.Name = "SectionAccent"
-			SectionAccent.Size = UDim2.new(1,0,0,1)
-			SectionAccent.BackgroundColor3 = Library.Accent
-			SectionAccent.BorderSizePixel = 0
-			SectionAccent.BorderColor3 = Color3.new(0,0,0)
-			table.insert(Library.ThemeObjects, SectionAccent)
-			table.insert(Library.ThemeObjects, SectionAccent)
-			--
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,10,0,-8)
-			Title.Size = UDim2.new(0,100,0,16)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Color3.new(1,1,1)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.ZIndex = 3
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.Text = Section.Name
-			Title.TextStrokeTransparency = 0
-			--
-			TextBorder.Name = "TextBorder"
-			TextBorder.Position = UDim2.new(0,6,0,-2)
-			TextBorder.Size = UDim2.new(0,Title.TextBounds.X + 8,0,4)
-			TextBorder.BackgroundColor3 = Color3.new(0.0784,0.0784,0.0784)
-			TextBorder.BorderSizePixel = 0
-			TextBorder.BorderColor3 = Color3.new(0,0,0)
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			UIListLayout.Padding = UDim.new(0,10)
-			
-			-- // Elements
-			Section.Elements = {
-				SectionContent = Container;
-				SectionHolder = SectionOutline;
-			}
-
-			-- // Returning
-			Section.Page.Sections[#Section.Page.Sections + 1] = Section
-			wait(0.01)
-			TextBorder.Size = UDim2.new(0,Title.TextBounds.X + 8,0,4)
-			return setmetatable(Section, Library.Sections)
-		end
-		--
-		function Sections:Toggle(Properties)
-			if not Properties then
-				Properties = {}
-			end
-			--
-			local Toggle = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Risk = Properties.Risk or false,
-				Name = Properties.Name or "Toggle",
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or false
-				),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-				Toggled = false,
-				Colorpickers = 0,
-			}
-			--
-			local NewToggle = Instance.new('TextButton', Toggle.Section.Elements.SectionContent)
-			local Outline = Instance.new('Frame', NewToggle)
-			local Inline = Instance.new('Frame', Outline)
-			local Title = Instance.new('TextLabel', NewToggle)
-			--
-			NewToggle.Name = "NewToggle"
-			NewToggle.Size = UDim2.new(1,0,0,10)
-			NewToggle.BackgroundColor3 = Color3.new(1,1,1)
-			NewToggle.BackgroundTransparency = 1
-			NewToggle.BorderSizePixel = 0
-			NewToggle.BorderColor3 = Color3.new(0,0,0)
-			NewToggle.Text = ""
-			NewToggle.TextColor3 = Color3.new(0,0,0)
-			NewToggle.AutoButtonColor = false
-			NewToggle.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			NewToggle.TextSize = 14
-			--
-			Outline.Name = "Outline"
-			Outline.Size = UDim2.new(0,10,0,10)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			--[[local inputText = string.upper(Toggle.Name)
-			local targetLanguage = "Chinese" -- // English, Arabic, Albanian, Japanese, Spanish, Russian, Chinese, Urdu, French, Portuguese, Hindi
-			local translatedText = utility:TranslateString(inputText, targetLanguage)]] 
-			-- 
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,15,0,0)
-			Title.Size = UDim2.new(1,0,0,10)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Toggle.Risk and Color3.fromRGB(158, 158, 24) or Color3.new(0.5686,0.5686,0.5686)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.Text = Toggle.Name
-			Title.TextStrokeTransparency = 0
-			
-			-- // Functions
-			local function SetState()
-				Toggle.Toggled = not Toggle.Toggled
-				if Toggle.Toggled then
-					table.insert(Library.ThemeObjects, Inline)
-					Inline.BackgroundColor3 = Library.Accent
-					if Toggle.Risk then
-						Title.TextColor3 = Color3.fromRGB(227, 227, 34)
-					else
-						Title.TextColor3 = Color3.fromRGB(255,255,255)
-					end
-				else
-					table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Inline))
-					Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-					if Toggle.Risk then
-						Title.TextColor3 = Color3.fromRGB(158, 158, 24)
-					else
-						Title.TextColor3 = Color3.fromRGB(145,145,145)
-					end
-				end
-				Library.Flags[Toggle.Flag] = Toggle.Toggled
-				Toggle.Callback(Toggle.Toggled)
-			end
-			--
-			Library:Connection(NewToggle.MouseButton1Down, SetState)
-			Library:Connection(NewToggle.MouseEnter, function()
-				if not Toggle.Toggled then
-					table.insert(Library.ThemeObjects, Title)
-					Title.TextColor3 = Library.Accent
-				end
-			end)
-			--
-			Library:Connection(NewToggle.MouseLeave, function()
-				if not Toggle.Toggled then
-					table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-					if Toggle.Risk then
-						Title.TextColor3 = Color3.fromRGB(158, 158, 24)
-					else
-						Title.TextColor3 = Color3.fromRGB(145,145,145)
-					end
-				else
-					table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-				end
-			end)
-			
-			function Toggle:Keybind(Properties)
-				local Properties = Properties or {}
-				local Keybind = {
-					Section = self,
-					State = (
-						Properties.state
-							or Properties.State
-							or Properties.def
-							or Properties.Def
-							or Properties.default
-							or Properties.Default
-							or nil
-					),
-					Mode = (Properties.mode or Properties.Mode or "Toggle"),
-					Callback = (
-						Properties.callback
-							or Properties.Callback
-							or Properties.callBack
-							or Properties.CallBack
-							or function() end
-					),
-					Flag = (
-						Properties.flag
-							or Properties.Flag
-							or Properties.pointer
-							or Properties.Pointer
-							or Library.NextFlag()
-					),
-					Name = Properties.name or Properties.Name or "Keybind",
-					Binding = nil,
-				}
-				local Key
-				local State = false
-				--
-				local Outline = Instance.new('TextButton', NewToggle)
-				local Inline = Instance.new('Frame', Outline)
-				local Value = Instance.new('TextLabel', Inline)
-				local ModeOutline = Instance.new('Frame', NewToggle)
-				local ModeInline = Instance.new('Frame', ModeOutline)
-				local UIListLayout = Instance.new('UIListLayout', ModeInline)
-				local Hold = Instance.new('TextButton', ModeInline)
-				local Toggle = Instance.new('TextButton', ModeInline)
-				local Always = Instance.new('TextButton', ModeInline)
-				local ListValue = Library.KeyList:NewKey(tostring(Keybind.State):gsub("Enum.KeyCode.", ""), Title.Text, Keybind.Mode)
-				--
-				Outline.Name = "Outline"
-				Outline.Position = UDim2.new(1,0,0.5,0)
-				Outline.Size = UDim2.new(0,40,0,12)
-				Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-				Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-				Outline.AnchorPoint = NewVector2(1,0.5)
-				Outline.Text = ""
-				Outline.AutoButtonColor = false
-				--
-				Inline.Name = "Inline"
-				Inline.Position = UDim2.new(0,1,0,1)
-				Inline.Size = UDim2.new(1,-2,1,-2)
-				Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-				Inline.BorderSizePixel = 0
-				Inline.BorderColor3 = Color3.new(0,0,0)
-				--
-				Value.Name = "Value"
-				Value.Size = UDim2.new(1,0,1,0)
-				Value.BackgroundColor3 = Color3.new(1,1,1)
-				Value.BackgroundTransparency = 1
-				Value.BorderSizePixel = 0
-				Value.BorderColor3 = Color3.new(0,0,0)
-				Value.Text = "MB2"
-				Value.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-				Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-				Value.TextSize = Library.FontSize
-				Value.TextStrokeTransparency = 0
-				--
-				ModeOutline.Name = "ModeOutline"
-				ModeOutline.Position = UDim2.new(1,65,0.5,0)
-				ModeOutline.Size = UDim2.new(0,60,0,12)
-				ModeOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-				ModeOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-				ModeOutline.AnchorPoint = NewVector2(1,0.5)
-				ModeOutline.AutomaticSize = Enum.AutomaticSize.Y
-				ModeOutline.Visible = false
-				--
-				ModeInline.Name = "ModeInline"
-				ModeInline.Position = UDim2.new(0,1,0,1)
-				ModeInline.Size = UDim2.new(1,-2,1,-2)
-				ModeInline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-				ModeInline.BorderSizePixel = 0
-				ModeInline.BorderColor3 = Color3.new(0,0,0)
-				--
-				UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-				--
-				Hold.Name = "Hold"
-				Hold.Size = UDim2.new(1,0,0,15)
-				Hold.BackgroundColor3 = Color3.new(1,1,1)
-				Hold.BackgroundTransparency = 1
-				Hold.BorderSizePixel = 0
-				Hold.BorderColor3 = Color3.new(0,0,0)
-				Hold.Text = "Hold"
-				Hold.TextColor3 = Keybind.Mode == "Hold" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-				Hold.AutoButtonColor = false
-				Hold.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-				Hold.TextSize = Library.FontSize
-				Hold.TextStrokeTransparency = 0
-				--
-				Toggle.Name = "Toggle"
-				Toggle.Size = UDim2.new(1,0,0,15)
-				Toggle.BackgroundColor3 = Color3.new(1,1,1)
-				Toggle.BackgroundTransparency = 1
-				Toggle.BorderSizePixel = 0
-				Toggle.BorderColor3 = Color3.new(0,0,0)
-				Toggle.Text = "Toggle"
-				Toggle.TextColor3 = Keybind.Mode == "Toggle" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-				Toggle.AutoButtonColor = false
-				Toggle.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-				Toggle.TextSize = Library.FontSize
-				Toggle.TextStrokeTransparency = 0
-				--
-				Always.Name = "Always"
-				Always.Size = UDim2.new(1,0,0,15)
-				Always.BackgroundColor3 = Color3.new(1,1,1)
-				Always.BackgroundTransparency = 1
-				Always.BorderSizePixel = 0
-				Always.BorderColor3 = Color3.new(0,0,0)
-				Always.Text = "Always"
-				Always.TextColor3 = Keybind.Mode == "Always" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-				Always.AutoButtonColor = false
-				Always.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-				Always.TextSize = Library.FontSize
-				Always.TextStrokeTransparency = 0
-
-				-- // Functions
-				local function set(newkey)
-					if string.find(tostring(newkey), "Enum") then
-						if c then
-							c:Disconnect()
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = false
-							end
-							Keybind.Callback(false)
-						end
-						if tostring(newkey):find("Enum.KeyCode.") then
-							newkey = Enum.KeyCode[tostring(newkey):gsub("Enum.KeyCode.", "")]
-						elseif tostring(newkey):find("Enum.UserInputType.") then
-							newkey = Enum.UserInputType[tostring(newkey):gsub("Enum.UserInputType.", "")]
-						end
-						if newkey == Enum.KeyCode.Backspace then
-							Key = nil
-
-							local text = "None"
-
-							Value.Text = text
-							ListValue:Update(text, Keybind.Name, Keybind.Mode)
-						elseif newkey ~= nil then
-							Key = newkey
-
-							local text = (Library.Keys[newkey] or tostring(newkey):gsub("Enum.KeyCode.", ""))
-
-							Value.Text = text
-							ListValue:Update(text, Keybind.Name, Keybind.Mode)
-						end
-
-						Library.Flags[Keybind.Flag .. "_KEY"] = newkey
-					elseif table.find({ "Always", "Toggle", "Hold" }, newkey) then
-						Library.Flags[Keybind.Flag .. "_KEY STATE"] = newkey
-						Keybind.Mode = newkey
-						ListValue:Update((Library.Keys[Key] or tostring(Key):gsub("Enum.KeyCode.", "")), Keybind.Name, Keybind.Mode)
-						if Keybind.Mode == "Always" then
-							State = true
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = State
-							end
-							Keybind.Callback(true)
-							ListValue:SetVisible(true)
-						end
-					else
-						State = newkey
-						if Keybind.Flag then
-							Library.Flags[Keybind.Flag] = newkey
-						end
-						Keybind.Callback(newkey)
-					end
-				end
-				--
-				set(Keybind.State)
-				set(Keybind.Mode)
-				Outline.MouseButton1Click:Connect(function()
-					if not Keybind.Binding then
-
-						Value.Text = "..."
-
-						Keybind.Binding = Library:Connection(
-							game:GetService("UserInputService").InputBegan,
-							function(input, gpe)
-								set(
-									input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode
-										or input.UserInputType
-								)
-								Library:Disconnect(Keybind.Binding)
-								task.wait()
-								Keybind.Binding = nil
-							end
-						)
-					end
-				end)
-				--
-				local HoldLoop; 
-				Library:Connection(game:GetService("UserInputService").InputBegan, function(inp, Typing)
-					if Typing then return end 
-
-					if HoldLoop then 
-						HoldLoop:Disconnect() 
-					end 
-					-- 
-					if (inp.KeyCode == Key or inp.UserInputType == Key) and not Keybind.Binding then
-						if Keybind.Mode == "Hold" then
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = true
-							end
-							HoldLoop = Library:Connection(game:GetService("RunService").RenderStepped, function()
-								if Keybind.Callback then
-									Keybind.Callback(true)
-								end
-							end)
-							ListValue:SetVisible(true)
-						elseif Keybind.Mode == "Toggle" then
-							State = not State
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = State
-							end
-							Keybind.Callback(State)
-							ListValue:SetVisible(State)
-						end
-					end
-				end)
-				--
-				Library:Connection(game:GetService("UserInputService").InputEnded, function(inp, Typing)
-					if Typing then return end 
-					if Keybind.Mode == "Hold" then
-						if Key ~= "" or Key ~= nil then
-							if inp.KeyCode == Key or inp.UserInputType == Key then
-								if c then
-									c:Disconnect()
-									if Keybind.Flag then
-										Library.Flags[Keybind.Flag] = false
-									end
-									if Keybind.Callback then
-										Keybind.Callback(false)
-									end
-									ListValue:SetVisible(false)
-								end
-							end
-						end
-					end
-				end)
-				Library:Connection(Outline.MouseEnter, function()
-					Outline.BorderColor3 = Library.Accent
-				end)
-				--
-				Library:Connection(Outline.MouseLeave, function()
-					Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-				end)
-				--
-				Library:Connection(Outline.MouseButton2Down, function()
-					ModeOutline.Visible = not ModeOutline.Visible
-				end)
-				--
-				Library:Connection(Hold.MouseButton1Down, function()
-					set("Hold")
-					Hold.TextColor3 = Color3.new(1,1,1)
-					Toggle.TextColor3 = Color3.fromRGB(145,145,145)
-					Always.TextColor3 = Color3.fromRGB(145,145,145)
-				end)
-				--
-				Library:Connection(Toggle.MouseButton1Down, function()
-					set("Toggle")
-					Hold.TextColor3 = Color3.fromRGB(145,145,145)
-					Toggle.TextColor3 = Color3.new(1,1,1)
-					Always.TextColor3 = Color3.fromRGB(145,145,145)
-				end)
-				--
-				Library:Connection(Always.MouseButton1Down, function()
-					set("Always")
-					Hold.TextColor3 = Color3.fromRGB(145,145,145)
-					Toggle.TextColor3 = Color3.fromRGB(145,145,145)
-					Always.TextColor3 = Color3.new(1,1,1)
-				end)
-				--
-				Library:Connection(game:GetService("UserInputService").InputBegan, function(Input)
-					if ModeOutline.Visible and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if not Library:IsMouseOverFrame(ModeOutline) then
-							ModeOutline.Visible = false
-						end
-					end
-				end)
-				--
-				Library.Flags[Keybind.Flag .. "_KEY"] = Keybind.State
-				Library.Flags[Keybind.Flag .. "_KEY STATE"] = Keybind.Mode
-				Flags[Keybind.Flag] = set
-				Flags[Keybind.Flag .. "_KEY"] = set
-				Flags[Keybind.Flag .. "_KEY STATE"] = set
-				--
-				function Keybind:Set(key)
-					set(key)
-				end
-
-				-- // Returning
-				return Keybind
-			end
-			
-			function Toggle:Colorpicker(Properties)
-				local Properties = Properties or {}
-				local Colorpicker = {
-					State = (
-						Properties.state
-							or Properties.State
-							or Properties.def
-							or Properties.Def
-							or Properties.default
-							or Properties.Default
-							or Color3.fromRGB(255, 0, 0)
-					),
-					Alpha = (
-						Properties.alpha
-							or Properties.Alpha
-							or Properties.transparency
-							or Properties.Transparency
-							or 1
-					),
-					Callback = (
-						Properties.callback
-							or Properties.Callback
-							or Properties.callBack
-							or Properties.CallBack
-							or function() end
-					),
-					Flag = (
-						Properties.flag
-							or Properties.Flag
-							or Properties.pointer
-							or Properties.Pointer
-							or Library.NextFlag()
-					),
-				}
-				-- // Functions
-				Toggle.Colorpickers = Toggle.Colorpickers + 1
-				local colorpickertypes = Library:NewPicker(
-					"",
-					Colorpicker.State,
-					Colorpicker.Alpha,
-					NewToggle,
-					Toggle.Colorpickers - 1,
-					Colorpicker.Flag,
-					Colorpicker.Callback
-				)
-
-				function Colorpicker:Set(color)
-					colorpickertypes:set(color)
-				end
-
-				-- // Returning
-				return Colorpicker
-			end
-			
-			-- // Misc Functions
-			function Toggle.Set(bool)
-				bool = type(bool) == "boolean" and bool or false
-				if Toggle.Toggled ~= bool then
-					SetState()
-				end
-			end
-			Toggle.Set(Toggle.State)
-			Library.Flags[Toggle.Flag] = Toggle.State
-			Flags[Toggle.Flag] = Toggle.Set
-
-			-- // Returning
-			return Toggle
-		end
-		--
-		function Sections:Slider(Properties)
-			if not Properties then
-				Properties = {}
-			end
-			--
-			local Slider = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Name = Properties.Name or nil,
-				Min = (Properties.min or Properties.Min or Properties.minimum or Properties.Minimum or 0),
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or 10
-				),
-				Max = (Properties.max or Properties.Max or Properties.maximum or Properties.Maximum or 100),
-				Sub = (
-					Properties.suffix
-						or Properties.Suffix
-						or Properties.ending
-						or Properties.Ending
-						or Properties.prefix
-						or Properties.Prefix
-						or Properties.measurement
-						or Properties.Measurement
-						or ""
-				),
-				Decimals = (Properties.decimals or Properties.Decimals or 1),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-				Disabled = (Properties.Disabled or Properties.disable or nil),
-			}
-			local TextValue = ("[value]" .. Slider.Sub)
-			--
-			local NewSlider = Instance.new('TextButton', Slider.Section.Elements.SectionContent)
-			local Outline = Instance.new('Frame', NewSlider)
-			local Inline = Instance.new('Frame', Outline)
-			local Accent = Instance.new('TextButton', Inline)
-			local Add = Instance.new('TextButton', Outline)
-			local Subtract = Instance.new('TextButton', Outline)
-			local Title = Instance.new('TextLabel', NewSlider)
-			local Value = Instance.new('TextLabel', NewSlider)
-			--
-			NewSlider.Name = "NewSlider"
-			NewSlider.Size = UDim2.new(1,0,0,22)
-			NewSlider.BackgroundColor3 = Color3.new(1,1,1)
-			NewSlider.BackgroundTransparency = 1
-			NewSlider.BorderSizePixel = 0
-			NewSlider.BorderColor3 = Color3.new(0,0,0)
-			NewSlider.Text = ""
-			NewSlider.TextColor3 = Color3.new(0,0,0)
-			NewSlider.AutoButtonColor = false
-			NewSlider.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			NewSlider.TextSize = 14
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0,15,1,0)
-			Outline.Size = UDim2.new(1,-30,0,7)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = NewVector2(0,1)
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Accent.Name = "Accent"
-			Accent.Size = UDim2.new(0,0,1,0)
-			Accent.BackgroundColor3 = Library.Accent
-			Accent.BorderSizePixel = 0
-			Accent.BorderColor3 = Color3.new(0,0,0)
-			Accent.Text = ""
-			Accent.TextColor3 = Color3.new(0,0,0)
-			Accent.AutoButtonColor = false
-			Accent.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Accent.TextSize = 14
-			table.insert(Library.ThemeObjects, Accent)
-			table.insert(Library.ThemeObjects, Accent)
-			--
-			Add.Name = "Add"
-			Add.Position = UDim2.new(1,5,0.5,0)
-			Add.Size = UDim2.new(0,10,0,10)
-			Add.BackgroundColor3 = Color3.new(1,1,1)
-			Add.BackgroundTransparency = 1
-			Add.BorderSizePixel = 0
-			Add.BorderColor3 = Color3.new(0,0,0)
-			Add.AnchorPoint = NewVector2(0,0.5)
-			Add.Text = "+"
-			Add.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Add.AutoButtonColor = false
-			Add.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Add.TextSize = Library.FontSize
-			Add.TextStrokeTransparency = 0
-			--
-			Subtract.Name = "Subtract"
-			Subtract.Position = UDim2.new(0,-15,0.5,0)
-			Subtract.Size = UDim2.new(0,10,0,10)
-			Subtract.BackgroundColor3 = Color3.new(1,1,1)
-			Subtract.BackgroundTransparency = 1
-			Subtract.BorderSizePixel = 0
-			Subtract.BorderColor3 = Color3.new(0,0,0)
-			Subtract.AnchorPoint = NewVector2(0,0.5)
-			Subtract.Text = "-"
-			Subtract.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Subtract.AutoButtonColor = false
-			Subtract.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Subtract.TextSize = Library.FontSize
-			Subtract.TextStrokeTransparency = 0
-			--
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,15,0,0)
-			Title.Size = UDim2.new(1,0,0,10)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.Text = Slider.Name
-			Title.TextStrokeTransparency = 0
-			--
-			Value.Name = "Value"
-			Value.Position = UDim2.new(0,15,0,0)
-			Value.Size = UDim2.new(1,-30,0,10)
-			Value.BackgroundColor3 = Color3.new(1,1,1)
-			Value.BackgroundTransparency = 1
-			Value.BorderSizePixel = 0
-			Value.BorderColor3 = Color3.new(0,0,0)
-			Value.TextColor3 = Color3.new(1,1,1)
-			Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Value.TextSize = Library.FontSize
-			Value.TextXAlignment = Enum.TextXAlignment.Right
-			Value.TextStrokeTransparency = 0
-			
-			-- // Functions
-			local Sliding = false
-			local Val = Slider.State
-			local function Set(value)
-				value = math.clamp(Library:Round(value, Slider.Decimals), Slider.Min, Slider.Max)
-
-				local sizeX = ((value - Slider.Min) / (Slider.Max - Slider.Min))
-				Accent.Size = UDim2.new(sizeX, 0, 1, 0)
-				--Value.Text = TextValue:gsub("%[value%]", string.format("%.14g", value))
-				if Slider.Disabled and value == Slider.Min then
-					Value.Text = Slider.Disabled
-				else
-					Value.Text = TextValue:gsub("%[value%]", string.format("%.14g", value))
-				end
-				Val = value
-
-				Library.Flags[Slider.Flag] = value
-				Slider.Callback(value)
-			end				
-			--
-			local function Slide(input)
-				local sizeX = (input.Position.X - Outline.AbsolutePosition.X) / Outline.AbsoluteSize.X
-				local value = ((Slider.Max - Slider.Min) * sizeX) + Slider.Min
-				Set(value)
-			end
-			--
-			Library:Connection(NewSlider.InputBegan, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Sliding = true
-					Slide(input)
-				end
-			end)
-			Library:Connection(NewSlider.InputEnded, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Sliding = false
-				end
-			end)
-			Library:Connection(Accent.InputBegan, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Sliding = true
-					Slide(input)
-				end
-			end)
-			Library:Connection(Accent.InputEnded, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 then
-					Sliding = false
-				end
-			end)
-			Library:Connection(game:GetService("UserInputService").InputChanged, function(input)
-				if input.UserInputType == Enum.UserInputType.MouseMovement then
-					if Sliding then
-						Slide(input)
-					end
-				end
-			end)
-			Library:Connection(NewSlider.MouseEnter, function()
-				table.insert(Library.ThemeObjects, Title)
-				Title.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewSlider.MouseLeave, function()
-				table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-				Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-			--
-			Library:Connection(Add.MouseButton1Down, function()
-				Set(Val + 1)
-			end)
-			--
-			Library:Connection(Subtract.MouseButton1Down, function()
-				Set(Val - 1)
-			end)
-			--
-			function Slider:Set(Value)
-				Set(Value)
-			end
-			-- 
-			function Slider:SetVisible(Bool) 
-				NewSlider.Visible = Bool
-			end 
-			--
-			Flags[Slider.Flag] = Set
-			Library.Flags[Slider.Flag] = Slider.State
-			Set(Slider.State)
-
-			-- // Returning
-			return Slider
-		end
-		--
-		function Sections:Dropdown(Properties)
-			local Properties = Properties or {};
-			local Dropdown = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Open = false,
-				Name = Properties.Name or Properties.name or nil,
-				Options = (Properties.options or Properties.Options or Properties.values or Properties.Values or {
-					"1",
-					"2",
-					"3",
-				}),
-				Max = (Properties.Max or Properties.max or nil),
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or nil
-				),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-				OptionInsts = {},
-			}
-			--
-			local NewDrop = Instance.new('Frame', Dropdown.Section.Elements.SectionContent)
-			local Outline = Instance.new('TextButton', NewDrop)
-			local Inline = Instance.new('Frame', Outline)
-			local Value = Instance.new('TextLabel', Inline)
-			local Icon = Instance.new('TextLabel', Inline)
-			local Title = Instance.new('TextLabel', NewDrop)
-			local ContainerOutline = Instance.new('Frame', NewDrop)
-			local ContainerInline = Instance.new('Frame', ContainerOutline)
-			local UIListLayout = Instance.new('UIListLayout', ContainerInline)
-			--
-			NewDrop.Name = "NewDrop"
-			NewDrop.Size = UDim2.new(1,0,0,30)
-			NewDrop.BackgroundColor3 = Color3.new(1,1,1)
-			NewDrop.BackgroundTransparency = 1
-			NewDrop.BorderSizePixel = 0
-			NewDrop.BorderColor3 = Color3.new(0,0,0)
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0,15,1,0)
-			Outline.Size = UDim2.new(1,-30,0,16)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = NewVector2(0,1)
-			Outline.Text = ""
-			Outline.AutoButtonColor = false
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Value.Name = "Value"
-			Value.Position = UDim2.new(0,2,0,0)
-			Value.Size = UDim2.new(1,-30,1,0)
-			Value.BackgroundColor3 = Color3.new(1,1,1)
-			Value.BackgroundTransparency = 1
-			Value.BorderSizePixel = 0
-			Value.BorderColor3 = Color3.new(0,0,0)
-			Value.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Value.TextSize = Library.FontSize
-			Value.TextXAlignment = Enum.TextXAlignment.Left
-			Value.TextStrokeTransparency = 0
-			Value.TextWrapped = true
-			--
-			Icon.Name = "Icon"
-			Icon.Position = UDim2.new(0,-5,0,0)
-			Icon.Size = UDim2.new(1,0,1,0)
-			Icon.BackgroundColor3 = Color3.new(1,1,1)
-			Icon.BackgroundTransparency = 1
-			Icon.BorderSizePixel = 0
-			Icon.BorderColor3 = Color3.new(0,0,0)
-			Icon.Text = "+"
-			Icon.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Icon.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Icon.TextSize = Library.FontSize
-			Icon.TextXAlignment = Enum.TextXAlignment.Right
-			Icon.TextStrokeTransparency = 0
-			--
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,15,0,0)
-			Title.Size = UDim2.new(1,0,0,10)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.TextStrokeTransparency = 0
-			Title.Text = Dropdown.Name
-			--
-			ContainerOutline.Name = "ContainerOutline"
-			ContainerOutline.Position = UDim2.new(0,15,1,2)
-			ContainerOutline.Size = UDim2.new(1,-30,0,10)
-			ContainerOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			ContainerOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			ContainerOutline.Visible = false
-			ContainerOutline.AutomaticSize = Enum.AutomaticSize.Y
-			ContainerOutline.ZIndex = 5
-			--
-			ContainerInline.Name = "ContainerInline"
-			ContainerInline.Position = UDim2.new(0,1,0,1)
-			ContainerInline.Size = UDim2.new(1,-2,1,-2)
-			ContainerInline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			ContainerInline.BorderSizePixel = 0
-			ContainerInline.BorderColor3 = Color3.new(0,0,0)
-			ContainerInline.ZIndex = 6;
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			
-			-- // Connections
-			Library:Connection(Outline.MouseButton1Down, function()
-				ContainerOutline.Visible = not ContainerOutline.Visible
-				if ContainerOutline.Visible then
-					NewDrop.ZIndex = 2
-					Icon.Text = "-"
-				else
-					NewDrop.ZIndex = 1
-					Icon.Text = "+"
-				end
-			end)
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(Input)
-				if ContainerOutline.Visible and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					if not Library:IsMouseOverFrame(ContainerOutline) and not Library:IsMouseOverFrame(NewDrop) then
-						ContainerOutline.Visible = false
-						NewDrop.ZIndex = 1
-						Icon.Text = "+"
-					end
-				end
-			end)
-			Library:Connection(NewDrop.MouseEnter, function()
-				Outline.BorderColor3 = Library.Accent
-				table.insert(Library.ThemeObjects, Title)
-				Title.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewDrop.MouseLeave, function()
-				Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-				table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-				Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-			--
-			local chosen = Dropdown.Max and {} or nil
-			--
-			local function handleoptionclick(option, button, text)
-				button.MouseButton1Down:Connect(function()
-					if Dropdown.Max then
-						if table.find(chosen, option) then
-							table.remove(chosen, table.find(chosen, option))
-
-							local textchosen = {}
-							local cutobject = false
-
-							for _, opt in next, chosen do
-								table.insert(textchosen, opt)
-							end
-
-							Value.Text = #chosen == 0 and "" or table.concat(textchosen, ",") .. (cutobject and ", ..." or "")
-
-							text.TextColor3 = Color3.fromRGB(145,145,145)
-
-							Library.Flags[Dropdown.Flag] = chosen
-							Dropdown.Callback(chosen)
-						else
-							if #chosen == Dropdown.Max then
-								Dropdown.OptionInsts[chosen[1]].text.TextColor3 = Color3.fromRGB(145,145,145)
-								table.remove(chosen, 1)
-							end
-
-							table.insert(chosen, option)
-
-							local textchosen = {}
-							local cutobject = false
-
-							for _, opt in next, chosen do
-								table.insert(textchosen, opt)
-							end
-
-							Value.Text = #chosen == 0 and "" or table.concat(textchosen, ",") .. (cutobject and ", ..." or "")
-
-							text.TextColor3 = Color3.fromRGB(255,255,255)
-
-							Library.Flags[Dropdown.Flag] = chosen
-							Dropdown.Callback(chosen)
-						end
-					else
-						for opt, tbl in next, Dropdown.OptionInsts do
-							if opt ~= option then
-								tbl.text.TextColor3 = Color3.fromRGB(145,145,145)
-							end
-						end
-						chosen = option
-						Value.Text = option
-						text.TextColor3 = Color3.fromRGB(255,255,255)
-						Library.Flags[Dropdown.Flag] = option
-						Dropdown.Callback(option)
-					end
-				end)
-			end
-			--
-			local function createoptions(tbl)
-				for _, option in next, tbl do
-					Dropdown.OptionInsts[option] = {}
-					local NewOption = Instance.new('TextButton', ContainerInline)
-					local OptionName = Instance.new('TextLabel', NewOption)
-					NewOption.Name = "NewOption"
-					NewOption.Size = UDim2.new(1,0,0,15)
-					NewOption.BackgroundColor3 = Color3.new(1,1,1)
-					NewOption.BackgroundTransparency = 1
-					NewOption.BorderSizePixel = 0
-					NewOption.BorderColor3 = Color3.new(0,0,0)
-					NewOption.Text = ""
-					NewOption.TextColor3 = Color3.new(0,0,0)
-					NewOption.AutoButtonColor = false
-					NewOption.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-					NewOption.TextSize = 14
-					NewOption.ZIndex = 7;
-					Dropdown.OptionInsts[option].button = NewOption
-					--
-					OptionName.Name = "OptionName"
-					OptionName.Position = UDim2.new(0,2,0,0)
-					OptionName.Size = UDim2.new(1,0,1,0)
-					OptionName.BackgroundColor3 = Color3.new(1,1,1)
-					OptionName.BackgroundTransparency = 1
-					OptionName.BorderSizePixel = 0
-					OptionName.BorderColor3 = Color3.new(0,0,0)
-					OptionName.Text = option
-					OptionName.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-					OptionName.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-					OptionName.TextSize = Library.FontSize
-					OptionName.TextXAlignment = Enum.TextXAlignment.Left
-					OptionName.TextStrokeTransparency = 0
-					OptionName.ZIndex = 8;
-					Dropdown.OptionInsts[option].text = OptionName
-
-					handleoptionclick(option, NewOption, OptionName)
-				end
-			end
-			createoptions(Dropdown.Options)
-			--
-			local set
-			set = function(option)
-				if Dropdown.Max then
-					table.clear(chosen)
-					option = type(option) == "table" and option or {}
-
-					for opt, tbl in next, Dropdown.OptionInsts do
-						if not table.find(option, opt) then
-							tbl.text.TextColor3 = Color3.fromRGB(145,145,145)
-						end
-					end
-
-					for i, opt in next, option do
-						if table.find(Dropdown.Options, opt) and #chosen < Dropdown.Max then
-							table.insert(chosen, opt)
-							Dropdown.OptionInsts[opt].text.TextColor3 = Color3.fromRGB(255,255,255)
-						end
-					end
-
-					local textchosen = {}
-					local cutobject = false
-
-					for _, opt in next, chosen do
-						table.insert(textchosen, opt)
-					end
-
-					Value.Text = #chosen == 0 and "" or table.concat(textchosen, ",") .. (cutobject and ", ..." or "")
-
-					Library.Flags[Dropdown.Flag] = chosen
-					Dropdown.Callback(chosen)
-				end
-			end
-			--
-			function Dropdown:Set(option)
-				if Dropdown.Max then
-					set(option)
-				else
-					for opt, tbl in next, Dropdown.OptionInsts do
-						if opt ~= option then
-							tbl.text.TextColor3 = Color3.fromRGB(145,145,145)
-						end
-					end
-					if table.find(Dropdown.Options, option) then
-						chosen = option
-						Value.Text = option
-						Dropdown.OptionInsts[option].text.TextColor3 = Color3.fromRGB(255,255,255)
-						Library.Flags[Dropdown.Flag] = chosen
-						Dropdown.Callback(chosen)
-					else
-						chosen = nil
-						Value.Text = ""
-						Library.Flags[Dropdown.Flag] = chosen
-						Dropdown.Callback(chosen)
-					end
-				end
-			end
-			--
-			function Dropdown:Refresh(tbl)
-				for _, opt in next, Dropdown.OptionInsts do
-					coroutine.wrap(function()
-						opt.button:Destroy()
-					end)()
-				end
-				table.clear(Dropdown.OptionInsts)
-
-				createoptions(tbl)
-
-				if Dropdown.Max then
-					table.clear(chosen)
-				else
-					chosen = nil
-				end
-
-				Library.Flags[Dropdown.Flag] = chosen
-				Dropdown.Callback(chosen)
-			end
-
-			-- // Returning
-			if Dropdown.Max then
-				Flags[Dropdown.Flag] = set
-			else
-				Flags[Dropdown.Flag] = Dropdown
-			end
-			Dropdown:Set(Dropdown.State)
-			function Dropdown:SetVisible(Bool) 
-				NewDrop.Visible = Bool 
-			end 
-			return Dropdown
-		end
-		--
-		function Sections:Keybind(Properties)
-			local Properties = Properties or {}
-			local Keybind = {
-				Section = self,
-				Name = Properties.name or Properties.Name or "Keybind",
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or nil
-				),
-				Mode = (Properties.mode or Properties.Mode or "Toggle"),
-				UseKey = (Properties.UseKey or false),
-				Ignore = (Properties.ignore or Properties.Ignore or false),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-				Binding = nil,
-			}
-			local Key
-			local State = false
-			--
-			local NewKey = Instance.new('Frame', Keybind.Section.Elements.SectionContent)
-			local Outline = Instance.new('TextButton', NewKey)
-			local Inline = Instance.new('Frame', Outline)
-			local Value = Instance.new('TextLabel', Inline)
-			local Title = Instance.new('TextLabel', NewKey)
-			local ModeOutline = Instance.new('Frame', NewKey)
-			local ModeInline = Instance.new('Frame', ModeOutline)
-			local UIListLayout = Instance.new('UIListLayout', ModeInline)
-			local Hold = Instance.new('TextButton', ModeInline)
-			local Toggle = Instance.new('TextButton', ModeInline)
-			local Always = Instance.new('TextButton', ModeInline)
-			local ListValue = Library.KeyList:NewKey(tostring(Keybind.State):gsub("Enum.KeyCode.", ""), Keybind.Name, Keybind.Mode)
-			--
-			NewKey.Name = "NewKey"
-			NewKey.Size = UDim2.new(1,0,0,12)
-			NewKey.BackgroundColor3 = Color3.new(1,1,1)
-			NewKey.BackgroundTransparency = 1
-			NewKey.BorderSizePixel = 0
-			NewKey.BorderColor3 = Color3.new(0,0,0)
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(1,0,0.5,0)
-			Outline.Size = UDim2.new(0,40,0,12)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = NewVector2(1,0.5)
-			Outline.Text = ""
-			Outline.AutoButtonColor = false
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Value.Name = "Value"
-			Value.Size = UDim2.new(1,0,1,0)
-			Value.BackgroundColor3 = Color3.new(1,1,1)
-			Value.BackgroundTransparency = 1
-			Value.BorderSizePixel = 0
-			Value.BorderColor3 = Color3.new(0,0,0)
-			Value.Text = "MB2"
-			Value.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Value.TextSize = Library.FontSize
-			Value.TextStrokeTransparency = 0
-			--
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,15,0,0)
-			Title.Size = UDim2.new(1,0,0,10)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.Text = Keybind.Name
-			Title.TextStrokeTransparency = 0
-			--
-			ModeOutline.Name = "ModeOutline"
-			ModeOutline.Position = UDim2.new(1,65,0.5,0)
-			ModeOutline.Size = UDim2.new(0,60,0,12)
-			ModeOutline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			ModeOutline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			ModeOutline.AnchorPoint = NewVector2(1,0.5)
-			ModeOutline.AutomaticSize = Enum.AutomaticSize.Y
-			ModeOutline.Visible = false
-			--
-			ModeInline.Name = "ModeInline"
-			ModeInline.Position = UDim2.new(0,1,0,1)
-			ModeInline.Size = UDim2.new(1,-2,1,-2)
-			ModeInline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			ModeInline.BorderSizePixel = 0
-			ModeInline.BorderColor3 = Color3.new(0,0,0)
-			--
-			UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-			--
-			Hold.Name = "Hold"
-			Hold.Size = UDim2.new(1,0,0,15)
-			Hold.BackgroundColor3 = Color3.new(1,1,1)
-			Hold.BackgroundTransparency = 1
-			Hold.BorderSizePixel = 0
-			Hold.BorderColor3 = Color3.new(0,0,0)
-			Hold.Text = "Hold"
-			Hold.TextColor3 = Keybind.Mode == "Hold" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-			Hold.AutoButtonColor = false
-			Hold.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Hold.TextSize = Library.FontSize
-			Hold.TextStrokeTransparency = 0
-			--
-			Toggle.Name = "Toggle"
-			Toggle.Size = UDim2.new(1,0,0,15)
-			Toggle.BackgroundColor3 = Color3.new(1,1,1)
-			Toggle.BackgroundTransparency = 1
-			Toggle.BorderSizePixel = 0
-			Toggle.BorderColor3 = Color3.new(0,0,0)
-			Toggle.Text = "Toggle"
-			Toggle.TextColor3 = Keybind.Mode == "Toggle" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-			Toggle.AutoButtonColor = false
-			Toggle.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Toggle.TextSize = Library.FontSize
-			Toggle.TextStrokeTransparency = 0
-			--
-			Always.Name = "Always"
-			Always.Size = UDim2.new(1,0,0,15)
-			Always.BackgroundColor3 = Color3.new(1,1,1)
-			Always.BackgroundTransparency = 1
-			Always.BorderSizePixel = 0
-			Always.BorderColor3 = Color3.new(0,0,0)
-			Always.Text = "Always"
-			Always.TextColor3 = Keybind.Mode == "Always" and Color3.new(1,1,1) or Color3.new(0.5686,0.5686,0.5686)
-			Always.AutoButtonColor = false
-			Always.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Always.TextSize = Library.FontSize
-			Always.TextStrokeTransparency = 0
-			
-			-- // Functions
-			local function set(newkey)
-				if string.find(tostring(newkey), "Enum") then
-					if c then
-						c:Disconnect()
-						if Keybind.Flag then
-							Library.Flags[Keybind.Flag] = false
-						end
-						Keybind.Callback(false)
-					end
-					if tostring(newkey):find("Enum.KeyCode.") then
-						newkey = Enum.KeyCode[tostring(newkey):gsub("Enum.KeyCode.", "")]
-					elseif tostring(newkey):find("Enum.UserInputType.") then
-						newkey = Enum.UserInputType[tostring(newkey):gsub("Enum.UserInputType.", "")]
-					end
-					if newkey == Enum.KeyCode.Backspace then
-						Key = nil
-						if Keybind.UseKey then
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = Key
-							end
-							Keybind.Callback(Key)
-						end
-						local text = "None"
-
-						Value.Text = text
-						ListValue:Update(text, Keybind.Name, Keybind.Mode)
-					elseif newkey ~= nil then
-						Key = newkey
-						if Keybind.UseKey then
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = Key
-							end
-							Keybind.Callback(Key)
-						end
-						local text = (Library.Keys[newkey] or tostring(newkey):gsub("Enum.KeyCode.", ""))
-
-						Value.Text = text
-						ListValue:Update(text, Keybind.Name, Keybind.Mode)
-					end
-
-					Library.Flags[Keybind.Flag .. "_KEY"] = newkey
-				elseif table.find({ "Always", "Toggle", "Hold" }, newkey) then
-					if not Keybind.UseKey then
-						Library.Flags[Keybind.Flag .. "_KEY STATE"] = newkey
-						Keybind.Mode = newkey
-						ListValue:Update((Library.Keys[Key] or tostring(Key):gsub("Enum.KeyCode.", "")), Toggle.Name, Keybind.Mode)
-						if Keybind.Mode == "Always" then
-							State = true
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = State
-							end
-							Keybind.Callback(true)
-							ListValue:SetVisible(true)
-						end
-					end
-				else
-					State = newkey
-					if Keybind.Flag then
-						Library.Flags[Keybind.Flag] = newkey
-					end
-					Keybind.Callback(newkey)
-				end
-			end
-			--
-			set(Keybind.State)
-			set(Keybind.Mode)
-			Outline.MouseButton1Click:Connect(function()
-				if not Keybind.Binding then
-
-					Value.Text = "..."
-
-					Keybind.Binding = Library:Connection(
-						game:GetService("UserInputService").InputBegan,
-						function(input, gpe)
-							set(
-								input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode
-									or input.UserInputType
-							)
-							Library:Disconnect(Keybind.Binding)
-							task.wait()
-							Keybind.Binding = nil
-						end
-					)
-				end
-			end)
-			--
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(inp, Chatting)
-				if not Chatting then 
-					if (inp.KeyCode == Key or inp.UserInputType == Key) and not Keybind.Binding and not Keybind.UseKey then
-						if Keybind.Mode == "Hold" then
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = true
-							end
-							c = Library:Connection(game:GetService("RunService").RenderStepped, function()
-								if Keybind.Callback then
-									Keybind.Callback(true)
-								end
-							end)
-							ListValue:SetVisible(true)
-						elseif Keybind.Mode == "Toggle" then
-							State = not State
-							if Keybind.Flag then
-								Library.Flags[Keybind.Flag] = State
-							end
-							Keybind.Callback(State)
-							ListValue:SetVisible(State)
-						end
-					end 
-				end 
-			end)
-			--
-			Library:Connection(game:GetService("UserInputService").InputEnded, function(inp, Chatting)
-				if not Chatting then 
-					if Keybind.Mode == "Hold" and not Keybind.UseKey then
-						if Key ~= "" or Key ~= nil then
-							if inp.KeyCode == Key or inp.UserInputType == Key then
-								if c then
-									c:Disconnect()
-									if Keybind.Flag then
-										Library.Flags[Keybind.Flag] = false
-									end
-									if Keybind.Callback then
-										Keybind.Callback(false)
-									end
-									ListValue:SetVisible(false)
-								end
-							end
-						end
-					end
-				end 
-			end)
-			Library:Connection(Outline.MouseEnter, function()
-				Outline.BorderColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(Outline.MouseLeave, function()
-				Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			end)
-			--
-			Library:Connection(Outline.MouseButton2Down, function()
-				ModeOutline.Visible = not ModeOutline.Visible
-			end)
-			--
-			Library:Connection(NewKey.MouseEnter, function()
-				table.insert(Library.ThemeObjects, Title)
-				Title.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewKey.MouseLeave, function()
-				table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-				Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-			--
-			Library:Connection(Hold.MouseButton1Down, function()
-				set("Hold")
-				Hold.TextColor3 = Color3.new(1,1,1)
-				Toggle.TextColor3 = Color3.fromRGB(145,145,145)
-				Always.TextColor3 = Color3.fromRGB(145,145,145)
-			end)
-			--
-			Library:Connection(Toggle.MouseButton1Down, function()
-				set("Toggle")
-				Hold.TextColor3 = Color3.fromRGB(145,145,145)
-				Toggle.TextColor3 = Color3.new(1,1,1)
-				Always.TextColor3 = Color3.fromRGB(145,145,145)
-			end)
-			--
-			Library:Connection(Always.MouseButton1Down, function()
-				set("Always")
-				Hold.TextColor3 = Color3.fromRGB(145,145,145)
-				Toggle.TextColor3 = Color3.fromRGB(145,145,145)
-				Always.TextColor3 = Color3.new(1,1,1)
-			end)
-			--
-			Library:Connection(game:GetService("UserInputService").InputBegan, function(Input, Chatting)
-				if ModeOutline.Visible and Input.UserInputType == Enum.UserInputType.MouseButton1 then
-					if not Library:IsMouseOverFrame(ModeOutline) then
-						ModeOutline.Visible = false
-					end
-				end
-			end)
-			--
-			Library.Flags[Keybind.Flag .. "_KEY"] = Keybind.State
-			Library.Flags[Keybind.Flag .. "_KEY STATE"] = Keybind.Mode
-			Flags[Keybind.Flag] = set
-			Flags[Keybind.Flag .. "_KEY"] = set
-			Flags[Keybind.Flag .. "_KEY STATE"] = set
-			--
-			function Keybind:Set(key)
-				set(key)
-			end
-
-			-- // Returning
-			return Keybind
-		end
-		--
-		function Sections:Colorpicker(Properties)
-			local Properties = Properties or {}
-			local Colorpicker = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Name = (Properties.Name or "Colorpicker"),
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or Color3.fromRGB(255, 0, 0)
-				),
-				Alpha = (
-					Properties.alpha
-						or Properties.Alpha
-						or Properties.transparency
-						or Properties.Transparency
-						or 1
-				),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-				Colorpickers = 0,
-			}
-			--
-			local NewToggle = Instance.new('Frame', Colorpicker.Section.Elements.SectionContent)
-			local TextLabel = Instance.new('TextLabel', NewToggle)
-			--
-			NewToggle.Name = "NewToggle"
-			NewToggle.Size = UDim2.new(1,0,0,10)
-			NewToggle.BackgroundColor3 = Color3.new(1,1,1)
-			NewToggle.BackgroundTransparency = 1
-			NewToggle.BorderSizePixel = 0
-			NewToggle.BorderColor3 = Color3.new(0,0,0)
-			--
-			TextLabel.Position = UDim2.new(0,15,0,0)
-			TextLabel.Size = UDim2.new(0,100,1,0)
-			TextLabel.BackgroundColor3 = Color3.new(1,1,1)
-			TextLabel.BackgroundTransparency = 1
-			TextLabel.BorderSizePixel = 0
-			TextLabel.BorderColor3 = Color3.new(0,0,0)
-			TextLabel.Text = Colorpicker.Name
-			TextLabel.TextColor3 = Color3.fromRGB(145, 145, 145)
-			TextLabel.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			TextLabel.TextSize = Library.FontSize
-			TextLabel.TextXAlignment = Enum.TextXAlignment.Left
-			TextLabel.TextStrokeTransparency = 0
-			
-			Library:Connection(NewToggle.MouseEnter, function()
-				table.insert(Library.ThemeObjects, TextLabel)
-				TextLabel.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewToggle.MouseLeave, function()
-				table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, TextLabel))
-				TextLabel.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-
-			-- // Functions
-			Colorpicker.Colorpickers = Colorpicker.Colorpickers + 1
-			local colorpickertypes = Library:NewPicker(
-				Colorpicker.Name,
-				Colorpicker.State,
-				Colorpicker.Alpha,
-				NewToggle,
-				Colorpicker.Colorpickers - 1,
-				Colorpicker.Flag,
-				Colorpicker.Callback
-			)
-
-			function Colorpicker:Set(color)
-				colorpickertypes:set(color, false, true)
-			end
-
-			-- // Returning
-			return Colorpicker
-		end
-		--
-		function Sections:Textbox(Properties)
-			local Properties = Properties or {}
-			local Textbox = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Name = (Properties.Name or Properties.name or "textbox"),
-				Placeholder = (
-					Properties.placeholder
-						or Properties.Placeholder
-						or Properties.holder
-						or Properties.Holder
-						or ""
-				),
-				State = (
-					Properties.state
-						or Properties.State
-						or Properties.def
-						or Properties.Def
-						or Properties.default
-						or Properties.Default
-						or ""
-				),
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-				Flag = (
-					Properties.flag
-						or Properties.Flag
-						or Properties.pointer
-						or Properties.Pointer
-						or Library.NextFlag()
-				),
-			}
-			--
-			local NewDrop = Instance.new('Frame', Textbox.Section.Elements.SectionContent)
-			local Outline = Instance.new('TextButton', NewDrop)
-			local Inline = Instance.new('Frame', Outline)
-			local Value = Instance.new('TextBox', Inline)
-			local Title = Instance.new('TextLabel', NewDrop)
-			--
-			NewDrop.Name = "NewDrop"
-			NewDrop.Size = UDim2.new(1,0,0,30)
-			NewDrop.BackgroundColor3 = Color3.new(1,1,1)
-			NewDrop.BackgroundTransparency = 1
-			NewDrop.BorderSizePixel = 0
-			NewDrop.BorderColor3 = Color3.new(0,0,0)
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0,15,1,0)
-			Outline.Size = UDim2.new(1,-30,0,16)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = NewVector2(0,1)
-			Outline.Text = ""
-			Outline.AutoButtonColor = false
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Value.Name = "Value"
-			Value.Position = UDim2.new(0,2,0,0)
-			Value.Size = UDim2.new(1,0,1,0)
-			Value.BackgroundColor3 = Color3.new(1,1,1)
-			Value.BackgroundTransparency = 1
-			Value.BorderSizePixel = 0
-			Value.BorderColor3 = Color3.new(0,0,0)
-			Value.TextColor3 = Color3.fromRGB(145,145,145)
-			Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Value.TextSize = Library.FontSize
-			Value.TextXAlignment = Enum.TextXAlignment.Left
-			Value.TextStrokeTransparency = 0
-			Value.TextWrapped = true
-			Value.Text = Textbox.State
-			Value.ClearTextOnFocus = false
-			--
-			Title.Name = "Title"
-			Title.Position = UDim2.new(0,15,0,0)
-			Title.Size = UDim2.new(1,0,0,10)
-			Title.BackgroundColor3 = Color3.new(1,1,1)
-			Title.BackgroundTransparency = 1
-			Title.BorderSizePixel = 0
-			Title.BorderColor3 = Color3.new(0,0,0)
-			Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Title.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Title.TextSize = Library.FontSize
-			Title.TextXAlignment = Enum.TextXAlignment.Left
-			Title.TextStrokeTransparency = 0
-			Title.Text = Textbox.Name
-			
-			-- // Connections
-			Library:Connection(NewDrop.MouseEnter, function()
-				Outline.BorderColor3 = Library.Accent
-				table.insert(Library.ThemeObjects, Title)
-				Title.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewDrop.MouseLeave, function()
-				Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-				table.remove(Library.ThemeObjects, table.find(Library.ThemeObjects, Title))
-				Title.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-			Value.FocusLost:Connect(function()
-				Textbox.Callback(Value.Text)
-				Library.Flags[Textbox.Flag] = Value.Text
-			end)
-			--
-			local function set(str)
-				Value.Text = str
-				Library.Flags[Textbox.Flag] = str
-				Textbox.Callback(str)
-			end
-
-			-- // Return
-			Flags[Textbox.Flag] = set
-			return Textbox
-		end
-		--
-		function Sections:Button(Properties)
-			local Properties = Properties or {}
-			local Button = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Name = Properties.Name or "button",
-				Callback = (
-					Properties.callback
-						or Properties.Callback
-						or Properties.callBack
-						or Properties.CallBack
-						or function() end
-				),
-			}
-			--
-			local NewButton = Instance.new('TextButton', Button.Section.Elements.SectionContent)
-			local Outline = Instance.new('Frame', NewButton)
-			local Inline = Instance.new('Frame', Outline)
-			local Value = Instance.new('TextLabel', Inline)
-			--
-			NewButton.Name = "NewButton"
-			NewButton.Size = UDim2.new(1,0,0,14)
-			NewButton.BackgroundColor3 = Color3.new(1,1,1)
-			NewButton.BackgroundTransparency = 1
-			NewButton.BorderSizePixel = 0
-			NewButton.BorderColor3 = Color3.new(0,0,0)
-			NewButton.Text = ""
-			NewButton.TextColor3 = Color3.new(0,0,0)
-			NewButton.AutoButtonColor = false
-			NewButton.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			NewButton.TextSize = 14
-			--
-			Outline.Name = "Outline"
-			Outline.Position = UDim2.new(0,15,1,0)
-			Outline.Size = UDim2.new(1,-30,0,14)
-			Outline.BackgroundColor3 = Color3.new(0.1765,0.1765,0.1765)
-			Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			Outline.AnchorPoint = NewVector2(0,1)
-			--
-			Inline.Name = "Inline"
-			Inline.Position = UDim2.new(0,1,0,1)
-			Inline.Size = UDim2.new(1,-2,1,-2)
-			Inline.BackgroundColor3 = Color3.new(0.1294,0.1294,0.1294)
-			Inline.BorderSizePixel = 0
-			Inline.BorderColor3 = Color3.new(0,0,0)
-			--
-			Value.Name = "Value"
-			Value.Size = UDim2.new(1,0,1,0)
-			Value.BackgroundColor3 = Color3.new(1,1,1)
-			Value.BackgroundTransparency = 1
-			Value.BorderSizePixel = 0
-			Value.BorderColor3 = Color3.new(0,0,0)
-			Value.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			Value.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			Value.TextSize = Library.FontSize
-			Value.Text = Button.Name
-			Value.TextStrokeTransparency = 0
-			
-			Library:Connection(NewButton.MouseEnter, function()
-				Outline.BorderColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewButton.MouseLeave, function()
-				Outline.BorderColor3 = Color3.new(0.0392,0.0392,0.0392)
-			end)
-			--
-			Library:Connection(NewButton.MouseButton1Down, function()
-				Button.Callback()
-				Value.TextColor3 = Library.Accent
-			end)
-			--
-			Library:Connection(NewButton.MouseButton1Up, function()
-				Value.TextColor3 = Color3.new(0.5686,0.5686,0.5686)
-			end)
-		end
-		--
-		function Sections:Label(Properties) -- fuck finobe
-			local Properties = Properties or {}
-			local Label = {
-				Window = self.Window,
-				Page = self.Page,
-				Section = self,
-				Name = Properties.Name or "label",
-				Centered = Properties.Centered or false,
-			}
-			local NewButton = Instance.new('TextLabel', Label.Section.Elements.SectionContent) -- ya im lazy
-			--
-			NewButton.Name = "NewButton"
-			NewButton.Size = UDim2.new(1,0,0,12)
-			NewButton.BackgroundColor3 = Color3.new(1,1,1)
-			NewButton.BackgroundTransparency = 1
-			NewButton.BorderSizePixel = 0
-			NewButton.BorderColor3 = Color3.new(0,0,0)
-			NewButton.Text = Label.Name
-			NewButton.TextColor3 = Color3.fromRGB(255,255,255)
-			NewButton.FontFace = Font.new(Font:GetRegistry("menu_plex"))
-			NewButton.TextSize = Library.FontSize
-			NewButton.TextXAlignment = Label.Centered and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
-			NewButton.TextStrokeTransparency = 0
-			NewButton.TextStrokeColor3 = Color3.new(0,0,0)
-		end
-	end
-	-- // Base Functions
-	do 
-		-- // Utility Functions
-		do 
-			function utility:ValidateClient(Player)
-				return Player and Player.Character and Player.Character:FindFirstChild("Humanoid") and true or false 
-			end 
-			-- 
-			function utility:getPlayerInformation(Player)
-				local Object = Player.Character
-				local Humanoid = (Object and Object:FindFirstChildOfClass("Humanoid"))
-				local RootPart = (Humanoid and Humanoid.RootPart)
-				--
-				return Object, Humanoid, RootPart
-			end
-			-- 
-			function utility:safeUnit(unit)
-				if unit.Magnitude > 1e-8 then
-					return unit
-				end
-				-- 
-				return Vector3.zero
-			end
-			--
-			function utility:CreateBeam(Origin, End, Color1, FaceCamera, Width, TextureSpeed, Brightness)
-				local BeamPart = Instance.new("Part", Workspace)
-				BeamPart.Name = "BeamPart"
-				BeamPart.Transparency = 1
-				--
-				local Part = Instance.new("Part", BeamPart)
-				Part.Size = NewVector3(1, 1, 1)
-				Part.Transparency = 1
-				Part.CanCollide = false
-				Part.CFrame = typeof(Origin) == "CFrame" and Origin or NewCFrame(Origin)
-				Part.Anchored = true
-				local Attachment = Instance.new("Attachment", Part)
-				local Part2 = Instance.new("Part", BeamPart)
-				Part2.Size = NewVector3(1, 1, 1)
-				Part2.Transparency = 1
-				Part2.CanCollide = false
-				Part2.CFrame = typeof(End) == "CFrame" and End or NewCFrame(End)
-				Part2.Anchored = true
-				Part2.Color = Color3.fromRGB(255, 255, 255)
-				local Attachment2 = Instance.new("Attachment", Part2)
-				local Beam = Instance.new("Beam", Part)
-				Beam.FaceCamera = FaceCamera
-				Beam.Color = ColorSequence.new{
-					ColorSequenceKeypoint.new(0.00, Color1),
-					ColorSequenceKeypoint.new(1, Color1),
-				}
-				Beam.Attachment0 = Attachment
-				Beam.Attachment1 = Attachment2
-				Beam.Transparency = NumberSequence.new{
-					NumberSequenceKeypoint.new(0, 0),
-					NumberSequenceKeypoint.new(1, 0),
-				}
-				Beam.LightEmission = Brightness
-				Beam.LightInfluence = 1
-				Beam.Width0 = Width
-				Beam.Width1 = Width
-				Beam.Texture = "rbxassetid://7151778302"
-				Beam.LightEmission = 1
-				Beam.LightInfluence = 1
-				Beam.TextureMode = Enum.TextureMode.Wrap 
-				Beam.TextureLength = 3 
-				Beam.TextureSpeed = TextureSpeed
-				delay(flags["Tracers Life Time"], function()
-					task.spawn(function()
-						for i = 0, 100 do 
-							task.wait(0.01)
-							Beam.Transparency = NumberSequence.new{
-								NumberSequenceKeypoint.new(0, i/100),
-								NumberSequenceKeypoint.new(1, i/100),
-							}
-						end 
-						-- 
-						Part:Destroy()
-						Part2:Destroy()
-						BeamPart:Destroy()	
-					end)	
-				end)
-			end  
-			-- 
-			function utility:generateAngles(numLines)
-				local angles = {}
-				local angleIncrement = 2 * math.pi / numLines
-				
-				for i = 1, numLines do
-					local angle = (i - 1) * angleIncrement
-					table.insert(angles, angle)
-				end
-				
-				return angles
-			end
-			-- 
-			function utility:Shift(Number)
-				return math.acos(math.cos(Number * math.pi)) / math.pi
-			end
-			-- 
-			function utility:checkMessage(tbl)
-				local msg = tbl[math.random(1, #tbl)]
-				
-				if msg == oldMsg then
-					return utility:checkMessage(tbl)
-				else
-					oldMsg = msg
-					return msg
-				end
-			end
-			-- 
-			function utility:calculateAimViewerEndPoint()
-				if utility.target and utility.target.Character and flags["Aim Viewer Bypass"] then 
-					local part = (flags["Jump Prediction"] and utility.target.Character.Humanoid.FloorMaterial == Enum.Material.Air and "RightFoot") or (flags["Nearest Part"] and partClosest) or flags["Single Hit Part"]
-					local yOffset = utility.target.Character.Humanoid.FloorMaterial == Enum.Material.Air and flags["Manual Offset Value"] or 0 
-					--
-					if (checks == true) then 
-						if flags["Resolver"] then  
-							local endpoint = utility.target.Character[tostring(part)].Position + offset + NewVector3(0, yOffset, 0)
-							Remote:FireServer("UpdateMousePos", endpoint) 
-						else 
-							local endpoint = utility.target.Character[tostring(part)].Position + (utility.target.Character.HumanoidRootPart.Velocity * prediction) + NewVector3(0, yOffset, 0)
-							Remote:FireServer("UpdateMousePos", endpoint) 
-						end   
-					end   
-				end 
-			end     
-			-- 
-			function utility:getHeld() 
-				if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Tool") and LocalPlayer.Character then 
-					return LocalPlayer.Character:FindFirstChildWhichIsA("Tool") or nil; 
-				end
-			end 
-			-- 
-			function utility:TranslateString(inputString, targetLanguage)
-				local translatedString = ""
-				for i = 1, #inputString do
-					local char = inputString:sub(i, i)
-					local translation = Languages[char] and Languages[char][targetLanguage]
-					translatedString = translatedString .. (translation or char)
-				end
-				return translatedString
-			end
-			--
-			function utility:GetComponents(Player)
-				if utility:ValidateClient(Player) then 
-					return Player.Character, Player.Character:FindFirstChild("HumanoidRootPart"), Player.Character:FindFirstChild("Humanoid")
-				end 
-			end 
-			--
-			function utility:getClosestPlayerToCursor(Radius)
-				local shortestDistance = Radius or math.huge
-
-				local closestPlayer
-				for i, v in pairs(Players:GetPlayers()) do
-					if v ~= LocalPlayer and utility:ValidateClient(v) and v.Character:FindFirstChild("HumanoidRootPart") then
-						local pos, OnScreen = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
-						local magnitude = (NewVector2(pos.X, pos.Y) - NewVector2(Mouse.X, Mouse.Y)).magnitude
-						if magnitude < shortestDistance and OnScreen then
-							closestPlayer = v
-							shortestDistance = magnitude
-						end
-					end
-				end 
-				return closestPlayer
-			end
-			--
-			function utility:RecalculateVelocity(Player)
-				if utility:ValidateClient(Player) then
-					local Character, RootPart, Humanoid = utility:GetComponents(Player)
-
-					local currentPosition = RootPart.Position
-					local currentTime = tick() 
-					
-					task.wait()
-		
-					local newPosition = RootPart.Position
-					local newTime = tick()
-					
-					local distanceTraveled = (newPosition - currentPosition) 
-		
-					local timeInterval = newTime - currentTime
-					local velocity = distanceTraveled / timeInterval
-					currentPosition = newPosition
-					currentTime = newTime
-					return velocity
-				end
-			end
-			--
-			function utility:drawObject(type, prop)
-				local obj = Drawing.new(type)
-				--
-				if prop then
-					for i,v in next, prop do
-						obj[i] = v;
-					end
-				end
-				return obj  
-			end        
-			-- 
-			function utility:characterClone(Player, Color, Material, Transparency, Parent)
-				for i,v in pairs(Player.Character:GetChildren()) do 
-					if table.find(utility.bodyParts, v.Name) and v:IsA("MeshPart") and v.Name ~= "HumanoidRootPart" then 
-						if v.Name == "UpperTorso" or v.Name == "LowerTorso" then 
-							local ClonedPart = Instance.new("Part")
-							ClonedPart.Anchored = true 
-							ClonedPart.CanCollide = false 
-							ClonedPart.Position = v.Position
-							ClonedPart.Parent = Parent
-							ClonedPart.Material = Enum.Material[Material]
-							ClonedPart.Transparency = Transparency 
-							ClonedPart.Color = Color
-							ClonedPart.Size = v.Size + Vector3.new(0.01,0.01,0.01)
-							ClonedPart.Name = v.Name
-							ClonedPart.Rotation = v.Rotation
-							ClonedPart.Shape = "Block"
-						else 
-							local ClonedPart = Instance.new("MeshPart")
-							ClonedPart.Anchored = true 
-							ClonedPart.CanCollide = false 
-							ClonedPart.Position = v.Position
-							ClonedPart.Parent = Parent
-							ClonedPart.Material = Enum.Material[Material]
-							ClonedPart.Transparency = Transparency 
-							ClonedPart.Color = Color
-							ClonedPart.Size = v.Size + Vector3.new(0.01,0.01,0.01)
-							ClonedPart.Name = v.Name
-							ClonedPart.Rotation = v.Rotation
-							ClonedPart.MeshId = v.MeshId
-						end 
-					end 
-				end
-			end 
-			-- 
-			function utility:Remove(Player)
-				if connections[Player] then 
-					connections[Player]:Disconnect();
-				end 
-				-- 
-				if highlights[Player] then 
-					highlights[Player].Parent = nil;
-				end 
-			end 
-			--
-			function utility:AngleToEdge(angle, inset) -- credits to whoever made this Im just porting over my old arrows đŸ˜­
-				local pos
-				local ox = Cos(angle)
-				local oy = Sin(angle)
-				local slope = oy / ox
-				-- 
-				local h_edge = viewportSize.x - inset
-				local v_edge = viewportSize.y - inset
-				if oy < 0 then
-					v_edge = inset
-				end
-				if ox < 0 then
-					h_edge = inset
-				end
-				local y = (slope * h_edge) + (viewportSize.y / 2) - slope * (viewportSize.x / 2)
-				if y > 0 and y < viewportSize.y - inset then
-					pos = NewVector2(h_edge, y)
-				else
-					pos = NewVector2(
-						(v_edge - viewportSize.y / 2 + slope * (viewportSize.x / 2)) / slope,
-						v_edge
-					)
-				end
-				return pos
-			end
-			--
-			function utility:Map(N, OldMin, OldMax, Min, Max) -- I love my 1 line funcs I use once â™¥đŸ˜»
-				return (N - OldMin) / (OldMax - OldMin) * (Max - Min) + Min
-			end
-			--
-			function utility:getRotate(Vec, Rads) -- I didnt make this math credits to whoever can code cool maths!
-				local vec = Vec.Unit
-				local sin = math.sin(Rads)
-				local cos = math.cos(Rads)
-				local x = (cos * vec.x) - (sin * vec.y)
-				local y = (sin * vec.x) + (cos * vec.y)
-				--
-				return NewVector2(x, y).Unit * Vec.Magnitude
-			end
-			--
-			function utility:BoxCalculation(TorsoSize)
-				local UpCalculation = NewCFrame(TorsoSize)
-				local VTop = TorsoSize + (UpCalculation.UpVector * 1.8) + Camera.CFrame.UpVector;
-				local VBottom = TorsoSize - (UpCalculation.UpVector * 2.5) - Camera.CFrame.UpVector;
-			
-				local Top, TopIsRendered = Camera:WorldToViewportPoint(VTop);
-				local Bottom, BottomIsRendered = Camera:WorldToViewportPoint(VBottom);
-			
-				local Width = math.max(math.floor(math.abs(Top.x - Bottom.x)), 3);
-				local Height = math.max(math.floor(math.max(math.abs(Bottom.y - Top.y), Width / 2)), 3);
-				local BoxSize = NewVector2(math.floor(math.max(Height / 1.5, Width)), Height);
-				local BoxPosition = NewVector2(math.floor(Top.x * 0.5 + Bottom.x * 0.5 - BoxSize.x * 0.5), math.floor(math.min(Top.y, Bottom.y)));
-			
-				return BoxSize, BoxPosition;
-			end
-			--
-			local LastRayIgnoreUpdate, RayIgnoreList = 0, {}
-			-- 
-			function utility:checkRay(Instance, Distance, Position, Unit)
-				local Pass = true;
-				local Model = Instance.Character;
-
-				if Distance > 999 then return false; end
-
-				if not Model then return false end
-
-				local _Ray = Ray.new(Position, Unit * Distance)
-				if tick() - LastRayIgnoreUpdate > 3 then
-					LastRayIgnoreUpdate = tick()
-
-					table.clear(RayIgnoreList)
-
-					table.insert(RayIgnoreList, LocalPlayer.Character)
-					if utility:getHeld() then 
-						table.insert(RayIgnoreList, utility:getHeld().Handle)
-					end 
-					table.insert(RayIgnoreList, Camera)
-					
-					if Mouse.TargetFilter then table.insert(RayIgnoreList, Mouse.TargetFilter) end
-
-					if #IgnoreList > 64 then
-						while #IgnoreList > 64 do
-							table.remove(IgnoreList, 1)
-						end
-					end
-
-					for i, v in pairs(IgnoreList) do table.insert(RayIgnoreList, v) end
-				end
-
-				local Hit = workspace:FindPartOnRayWithIgnoreList(_Ray, RayIgnoreList)
-				
-				if Hit and not Hit:IsDescendantOf(Model) then
-					Pass = false;
-					if Hit.Transparency >= .3 or not Hit.CanCollide and Hit.ClassName ~= Terrain then
-						table.insert(IgnoreList, Hit)
-					end
-				end
-
-				return Pass;
-			end
-			--
-			function utility:GetOrigin()
-				local Tool = utility:getHeld()
-				-- 
-				return (Tool ~= "None" and Tool.Handle.Position) or Camera.CFrame.Position
-			end
-			--
-			function utility:Lerp(Value, MinColor, MaxColor)
-				if Value <= 0 then return MaxColor end
-				if Value >= 100 then return MinColor end
-				--
-				return Color3.new(
-					MaxColor.R + (MinColor.R - MaxColor.R) * Value,
-					MaxColor.G + (MinColor.G - MaxColor.G) * Value,
-					MaxColor.B + (MinColor.B - MaxColor.B) * Value
-				)
-			end
-		end 
-		
-		-- // Framework Functions 
-		do 
-			function framework:selectTarget() 
-				local deathLoop; 
-				local deathLoopRestore; 
-				local espTarget = false; 
-				-- 	
-				if flags["Target Auto Select"] then return end 
-				if flags["Silent Enabled"] then 
-					if flags["Silent_Bind"] then 
-						utility.target = utility:getClosestPlayerToCursor(math.huge); 
-						--
-						if (flags["Target Esp"] and flags["PlayerESP_Enabled"] == false) then 
-							Visuals:Create({Player = utility.target})
-							espTarget = true 
-						end 
-						-- 
-						if flags["Notify"] then 
-							Library:Notification("Locked onto: " .. utility.target.Name .. "", 3, Library.Accent, flags["Notification Position"])
-						end 
-						-- 
-						if (flags["Back Track Enabled"] and flags["Back Track Method"] == "Follow") then 
-							utility:characterClone(utility.target, flags["Back Track Settings"].Color, flags["Back Track Material"], flags["Back Track Settings"].Transparency, utility.folders["Part Chams"])
-						end 
-						--
-						if flags["Spectate"] then 
-							Camera.CameraSubject = utility.target.Character.Humanoid
-						end 
-					else 
-						-- What the fuck why does this break? I dont know dont ask me >:(
-						LocalPlayer.Character.Humanoid.AutoRotate = true;
-						Camera.CameraSubject = LocalPlayer.Character.Humanoid;
-						utility.folders["Part Chams"]:ClearAllChildren();
-						-- 
-						if (Visuals.Bases[utility.target] and flags["PlayerESP_Enabled"] == false) then 
-							Visuals.Bases[utility.target]:Remove()
-						end 
-						-- 
-						if utility.target then 
-							utility:Remove(utility.target);
-						end 
-						--
-						utility.drawings["Tracer"].Visible = false;
-						utility.target = nil;
-					end   
-				end 
-			end  
-			-- 
-			function framework:aimAssist() 
-				local Enabled = flags["Aim Assist"] and flags["Aim Assist Bind"]
-				if not Enabled then return end 
-				-- 
-				local endPosition;
-				local fovCheck;  
-				local Resolver, Prediction = flags["Resolver"], flags["Aim Assist Manual Prediction Value"] or 0.1413
-				local Target = utility.target or aimAssistTarget
-				local Part = (flags["Aim Assist Jump Prediction"] and Target.Character.Humanoid.FloorMaterial == Enum.Material.Air and "RightFoot") or flags["Aim Assist Single Hit Part"]
-				local characterOffset = Resolver and framework:calculateResolverOffset(Target) * Prediction or Target.Character.HumanoidRootPart.Velocity * Prediction
-				local yOffset = Target.Character.Humanoid.FloorMaterial == Enum.Material.Air and flags["Aim Assist Manual Offset Value"] or 0 
-				local Checks = framework:getChecks(Target, table.find(flags["Aim Assist Checks"], "Friend Check"), table.find(flags["Aim Assist Checks"], "Wall Check"), table.find(flags["Aim Assist Checks"], "Knocked Check"), table.find(flags["Aim Assist Checks"], "Grabbed Check"));	
-				-- 
-				local characterPosition = Target.Character[Part].Position + characterOffset + NewVector3(0, yOffset, 0)
-				-- 
-				local Position = Camera:WorldToViewportPoint(Target.Character.PrimaryPart.Position)
-				local Magnitude = (NewVector2(Position.X, Position.Y) - NewVector2(Mouse.X, Mouse.Y)).magnitude
-				-- 
-				if utility.drawings["Aim Assist FOV"].Visible then 
-					fovCheck = Magnitude < utility.drawings["Aim Assist FOV"].Radius 
-				else 
-					fovCheck = true 
-				end 
-				-- 
-				if Checks and fovCheck then 
-					fovCheck = Magnitude
-					-- 
-					if flags["Aim Assist Method"] == "Use Mouse" then 
-						endPosition, OnScreen = Camera:WorldToScreenPoint(characterPosition)
-						-- 
-						if OnScreen then 
-							mousemoverel(NewVector2(endPosition.X - Mouse.X, endPosition.Y - Mouse.Y).X / (flags["Horizontal Smoothness"] + 1), NewVector2(endPosition.X - Mouse.X, endPosition.Y - Mouse.Y).Y / (flags["Vertical Smoothness"] + 1))
-						end 
-					else 
-						Camera.CFrame = Camera.CFrame:Lerp(NewCFrame(Camera.CFrame.p, characterPosition), (100 - flags["Smoothness"]) / 100)
-					end 
-				end 
-			end 
-			-- 
-			function framework:desyncInit() -- thanks wendigo for this or whoever made it 
-				local Root = LocalPlayer.Character.HumanoidRootPart
-				local rootVel = Root.Velocity;
-				local rootAng = Random(-180, 180)
-				local rootOffset do
-					local X = Random(-128^2, 128^2);
-					local Y = Random(0, 128^2);
-					local Z = Random(-128^2, 128^2);
-			
-					rootOffset = NewVector3(X, -Y, Z);
-				end;
-				
-				LocalPlayer.Character.HumanoidRootPart.CFrame *= Angle(0, Rad(rootAng), 0);
-				LocalPlayer.Character.HumanoidRootPart.Velocity = rootOffset; 
-			
-				RunService.RenderStepped:Wait();
-				
-				LocalPlayer.Character.HumanoidRootPart.CFrame *= Angle(0, Rad(-rootAng), 0);
-				LocalPlayer.Character.HumanoidRootPart.Velocity = rootVel;
-			end
-			--
-			function framework:autoReload()
-				local Tool = utility:getHeld()
-				if flags["Auto Reload"] then 
-					if Tool.Ammo.Value == 0 then 
-						Remote:FireServer("Reload", Tool)
-					end 
-				end 
-			end 
-			-- 
-			function framework:worldVisuals() 
-				if flags["Master Switch"] then 
-					if flags["Clock Time Enabled"] and Lighting.ClockTime ~= flags["Clock Time"] then 
-						Lighting.ClockTime = flags["Clock Time"]
-					end 
-					-- 
-					if flags["Color Shift Bottom"] and Lighting.ColorShift_Bottom ~= flags["Color Shift Bottom Color"] then 
-						Lighting.ColorShift_Bottom = flags["Color Shift Bottom Color"].Color
-					end 
-
-					if flags["Ambient"] and Lighting.Ambient ~= flags["Ambience Color"] then 
-						Lighting.Ambient = flags["Ambience Color"].Color
-					end 
-					-- 
-					if flags["Outdoor Ambience"] and Lighting.OutdoorAmbient ~= flags["Outdoor Ambience color"] then 
-						Lighting.OutdoorAmbient = flags["Outdoor Ambience color"].Color
-					end 
-					-- 
-					if flags["Brightness Enabled"] and Lighting.Brightness ~= flags["Brightness"] then 
-						Lighting.Brightness = flags["Brightness"]
-					end 
-					-- 
-					if flags["Color Shift Top"] and Lighting.ColorShift_Top ~= flags["Color Shift Top Color"]  then 
-						Lighting.ColorShift_Top = flags["Color Shift Top Color"].Color
-					end 
-					-- 
-					if flags["Fog"] and Lighting.FogColor ~= flags["Fog Color"] then 
-						Lighting.FogColor = flags["Fog Color"].Color
-					end 
-				end 
-			end 
-			--
-			function framework:cframeSpeed()
-				if flags["Speed Enabled"] and flags["Speed Key"] then 
-					local Character = LocalPlayer.Character 
-					local Move_Direction = Character.Humanoid.MoveDirection
-					-- 
-					Character.HumanoidRootPart.CFrame = Character.HumanoidRootPart.CFrame + (Move_Direction * (flags["Speed"] / 25))
-				end 
-			end 
-			-- 
-			function framework:chatSpam(Type, Repeat, Emojis, Symbols)
-				local message = ""
-				-- tp, rp, emojis, symbols
-				for i = 1, Repeat and math.random(2, 5) or 1 do
-					for i = 1, math.random(1, 5) do
-						local index = math.random(0, 1) == 0 and "symbols" or "emojis"
-						
-						if index == "symbols" and Symbols then
-							message ..= tostring(utx[index][math.random(1, #utx[index])])
-						elseif index == "emojis" and Emojis then
-							message ..= tostring(utx[index][math.random(1, #utx[index])])
-						end
-					end
-					
-					message ..= utility:checkMessage(Messages[Type])
-								
-					for i = 1, math.random(1, 5) do
-						local index = math.random(0, 1) == 0 and "symbols" or "emojis"
-						
-						if index == "symbols" and Symbols then
-							message ..= tostring(utx[index][math.random(1, #utx[index])])
-						elseif index == "emojis" and Emojis then
-							message ..= tostring(utx[index][math.random(1, #utx[index])])
-						end
-					end
-					
-					message ..= " "
-				end
-				
-				return message
-			end 
-			-- 
-			function framework:fly(delta) 
-				if flags["Fly Enabled"] and flags["Fly Key"] then 
-					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero; 
-					local x = 0 
-					local y = 0 
-					local z = 0 
-					-- 
-					if not Typing then 
-						if InputService:IsKeyDown(Enum.KeyCode.W) then
-							z -= 1
-						end
-						-- 
-						if InputService:IsKeyDown(Enum.KeyCode.S) then
-							z += 1
-						end
-						-- 
-						if InputService:IsKeyDown(Enum.KeyCode.D) then
-							x += 1
-						end
-						-- 
-						if InputService:IsKeyDown(Enum.KeyCode.A) then
-							x -= 1
-						end
-						-- 
-						if InputService:IsKeyDown(Enum.KeyCode.Space) then
-							y += 1
-						end
-						-- 
-						if InputService:IsKeyDown(Enum.KeyCode.LeftShift) then
-							y -= 1
-						end
-					end 
-					-- 
-					local direction = utility:safeUnit(Camera.CFrame:VectorToWorldSpace(NewVector3(x, 0, z)).Unit)
-					LocalPlayer.Character.HumanoidRootPart.CFrame += (direction + NewVector3(0, y, 0)) * (flags["Fly Speed"] / 10) * (delta * 60)
-				end 
-			end 
-			--
-			function framework:selectPrediction()
-				local Prediction; 
-				
-				local Predictions = {
-					0.113,
-					0.115,
-					0.117,
-					0.11923283912031938191231281632312637123821763333312731833,
-					0.121316378910319876472890149871624,
-					0.124521314351673817351423414,
-					0.131314253678192031927365421456789331,
-					0.1355991245213413214231231123121,
-					0.138312341526738912,
-					0.146432786576847627781237813281381382038198391293,
-					0.1512783311111111111111111111111111111111111,
-					0.15132132132132132555555555555555,
-				}
-
-				if flags["Auto Prediction"] then 
-					for i = 1, #Predictions do 
-						if game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() <= i * 10 then 
-							Prediction = Predictions[i]
-						end 
-					end                 
-				end 
-
-				return Prediction or tonumber(flags["Manual Prediction Value"]) or 0.1413
-			end 
-			--
-			function framework:calculateResolverOffset(player) 
-				local Offset; 
-				local Prediction = framework:selectPrediction() 
-				-- 
-				if flags["Resolver"] then 
-					if flags["Resolver Method"] == "Recalculate Velocity" then 
-						Offset = utility:RecalculateVelocity(player) * Prediction
-					elseif flags["Resolver Method"] == "Suppress Velocity" then 
-						Offset = Vector3.new(player.Character.HumanoidRootPart.Velocity.X, 0, player.Character.HumanoidRootPart.Velocity.Z) * Prediction
-					elseif flags["Resolver Method"] == "Move Direction" then 
-						Offset = player.Character.Humanoid.MoveDirection * 19.64285714289 * Prediction
-					end 
-				end 
-				--  
-				return Offset 
-			end 
-			-- 
-			function framework:calculateNearestPart(Player, List)
-				local shortestDistance = math.huge
-				local closestPart
-				if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") and Player.Character:FindFirstChild("Head") and Player.Character.Humanoid.Health ~= 0 and Player.Character:FindFirstChild("HumanoidRootPart") then
-					for i, v in pairs(Player.Character:GetChildren()) do
-						if v:IsA("BasePart") then 
-							local pos = Camera:WorldToViewportPoint(v.Position)
-							local magnitude = (NewVector2(pos.X, pos.Y) - NewVector2(Mouse.X, Mouse.Y+36)).magnitude
-								if magnitude < shortestDistance and table.find(List, v.Name) then
-									closestPart = v
-									shortestDistance = magnitude
-								end
-							end
-						end 
-					return closestPart
-				end
-			end 
-			--
-			local autoSelectTick = 0; 
-			function framework:autoSelect()
-				if autoSelectTick - tick() < flags["Auto Select Delay"]/1000 then 
-					autoSelectTick = tick()
-					local closestPlayer
-					local shortestDistance = math.huge -- Start with a very large distance
-					for _, player in next, Players:GetPlayers() do
-						if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player ~= game.Players.LocalPlayer and framework:getChecks(player, table.find(flags["Silent Checks"], "Friend Check"), table.find(flags["Silent Checks"], "Wall Check"), table.find(flags["Silent Checks"], "Knocked Check"), table.find(flags["Silent Checks"], "Grabbed Check")) then
-							local distance = (LocalPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
-							if distance < shortestDistance then
-								utility.target = player
-								shortestDistance = distance
-							end
-						end
-					end
-				end 
-			end
-			-- 
-			function framework:getChecks(Player, Friend, Wall, Knocked, Grabbed, ToolHeld)
-				local Checks = true 
-				--  
-				if Friend and LocalPlayer:IsFriendsWith(Player.UserId) then Checks = false end 
-				if Wall then Checks = utility:checkRay(Player, (Camera.CFrame.Position - Player.Character.Head.Position).Magnitude, Camera.CFrame.Position, (Player.Character.Head.Position - Camera.CFrame.Position).unit) end 
-				if Knocked and Player.Character.BodyEffects["K.O"].Value == true then Checks = false end 
-				if Grabbed and Player.Character:FindFirstChild("GRABBING_CONSTRAINT") then Checks = false end 
-				if ToolHeld and not (LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Tool")) then Checks = false end 
-				--
-				return Checks
-			end 
-		end 
-
-		-- // Esp Functions
-		do 
-			-- functions for drawing the mf esp :money_face: 
-			function Visuals:Draw(Type, Properties)
-				local Drawing = Drawing.new(Type)
-				--
-				for Property, Value in pairs(Properties) do
-					Drawing[Property] = Value
-				end
-				--
-				table.insert(Visuals.Drawings, Drawing)
-				-- 
-				return Drawing
-			end
-			-- 
-			function Visuals:Create(Properties)
-				if Properties then
-					if Properties.Player then
-						local Self = setmetatable({
-							Player = Properties.Player,
-							Info = {
-								Tick = tick(),
-								gunTick = tick()
-							},
-							Renders = {
-								Weapon = Visuals:Draw("Text", {Text = "Weapon", Visible = false, Size = 13, Center = true, Color = NewHex("#ffffff"), Outline = true, OutlineColor = NewHex("#000000"), Font = Drawing.Fonts.Plex}),
-								--Distance = Visuals:Draw("Text", {Text = "Distance", Visible = false, Size = 13, Center = true, Color = NewHex("#ffffff"), Outline = true, OutlineColor = NewHex("#000000"), Font = Drawing.Fonts.Plex}),
-								HealthOutline = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = true, Color = NewHex("#000000")}),
-								Health = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = true, Color = NewHex("#09ff00")}),
-								HealthText = Visuals:Draw("Text", {Text = "100", Visible = false, Size = 13, Center = true, Color = NewHex("#09ff00"), Outline = true, OutlineColor = NewHex("#000000"), Font = 2}),
-								Box = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = false, Color = NewHex("#000000")}),
-								BoxFill = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = true, Color = NewHex("#000000")}),
-								BoxOutline = Visuals:Draw("Square", {Thickness = 2, Visible = false, Filled = false, Color = NewHex("#000000")}),
-								BoxInline = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = false, Color = NewHex("#C30B00")}),
-								Name = Visuals:Draw("Text", {Text = "Name", Visible = false, Size = 13, Center = true, Color = NewHex("#ffffff"), Outline = true, OutlineColor = NewHex("#000000"), Font = Drawing.Fonts.Plex}),
-								Flag = Visuals:Draw("Text", {Text = "Flag", Visible = false, Size = 13, Center = false, Color = NewHex("#ffffff"), Outline = true, OutlineColor = NewHex("#000000"), Font = Drawing.Fonts.Plex}),
-								Tool = Visuals:Draw("Text", {Text = "Tool", Visible = false, Size = 13, Center = false, Color = NewHex("#ffffff"), Outline = true, OutlineColor = NewHex("#000000"), Font = Drawing.Fonts.Plex}),
-								ArmorBarOutline = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = true, Color = NewHex("#000000")}),
-								ArmorBar = Visuals:Draw("Square", {Thickness = 1, Visible = false, Filled = true, Color = NewHex("#09ff00")}),
-								Arrow = Visuals:Draw("Triangle", {Visible = false, Color = NewHex("#ffffff")}),
-								ArrowOutline = Visuals:Draw("Triangle", {Visible = false, Color = NewHex("#ffffff")}),
-								ArmorBarText = Visuals:Draw("Text", {Text = "100", Visible = false, Size = 13, Center = true, Color = NewHex("#09ff00"), Outline = true, OutlineColor = NewHex("#000000"), Font = 2}),
-								GunIcon = Visuals:Draw("Image", {Data = "", Transparency = 1, Visible = false, Size = NewVector2(129,55)}),
-								Corners = {}, 
-							},
-							Highlight = Instance.new("Highlight", game.CoreGui), 
-						}, {__index = Visuals.Base})
-						--
-						do -- // Corner Boxes
-							for Index = 9, 16 do
-								Self.Renders.Corners[Index] = Visuals:Draw("Line", {Thickness = 3, Color = NewHex("#000000")})
-							end
-							--
-							for Index = 1, 8 do
-								Self.Renders.Corners[Index] = Visuals:Draw("Line", {Thickness = 0, Color = NewHex("#1A66FF")})
-							end
-						end
-						-- 
-						Self.Highlight.Parent = game.CoreGui
-						--
-						Visuals.Bases[Properties.Player] = Self
-						--
-						return Self
-					end
-				end
-			end
-			-- 
-			function Visuals.Base:Opacity(State)
-				local Self = self
-				--
-				if Self then
-					local Renders = rawget(Self, "Renders")
-					--
-					for Index, Drawing in pairs(Renders) do
-						if Index ~= "Corners" then
-							Drawing.Visible = State -- what
-						end
-					end
-					--
-					for Index = 1, 16 do
-						Self.Renders.Corners[Index].Visible = State
-					end
-					--
-					if not State then
-						Self.Info.RootPosition = nil
-						Self.Info.Health = nil
-						Self.Info.MaxHealth = nil
-					end
-				end
-			end
-			--
-			function Visuals.Base:Remove()
-				local Self = self
-				--
-				if Self then
-					setmetatable(Self, {})
-					--
-					Visuals.Bases[Self.Player] = nil
-					--
-					Self.Object = nil
-					--
-					for Index, Drawing in pairs(Self.Renders) do
-						if Index ~= "Corners" then
-							Drawing:Remove()
-						end
-					end
-					--
-					for Index = 1, 16 do
-						Self.Renders.Corners[Index]:Remove()
-					end
-					--
-					Self.Highlight.Parent = nil; 
-					Self.Highlight = nil; 
-					-- 
-					Self.Renders = nil
-					Self = nil
-				end
-			end
-			-- 
-			function Visuals.Base:Update()
-				local Self = self
-				local Add = 0; 
-				--
-				if Self then
-					local Renders = rawget(Self, "Renders")
-					local Player = rawget(Self, "Player")
-					local Info = rawget(Self, "Info")
-					local Highlights = rawget(Self, "Highlight")
-					local Parent = Player.Parent
-					--
-					if (Player and Parent and Parent ~= nil) or (Info.RootPosition and Info.Health and Info.MaxHealth) then
-						if Player then
-							local Object, Humanoid, RootPart = utility:getPlayerInformation(Player)
-							local TransparencyMultplier = 1
-							--
-							if Object and Object.Parent and (Humanoid and RootPart) then
-								local Health, MaxHealth = Humanoid.Health, Humanoid.MaxHealth
-								--
-								if Health > 0 then
-									Info.Pass = true
-									Info.RootPosition = RootPart.Position
-									Info.Health = Health
-									Info.MaxHealth = MaxHealth
-									Info.ArmorValue = Object:FindFirstChild("BodyEffects") and Object["BodyEffects"]:FindFirstChild("Armor") and Object["BodyEffects"]:FindFirstChild("Armor").Value
-									Info.ToolHeld =  (Object:FindFirstChildOfClass("Tool") and Object:FindFirstChildOfClass("Tool").Name) or "None"
-								else
-									Info.Pass = false
-								end
-							else
-								Info.Pass = false
-							end
-							--
-							if Info.Pass then
-								Info.Tick = tick()
-							else
-								local FadeTime = (250 / (2 * 100))
-								local Value = Info.Tick - tick()
-								--
-								if Value <= FadeTime then
-									TransparencyMultplier = Clamp((Value + FadeTime) * 1 / FadeTime, 0, 1)
-								else
-									Info.RootPosition = nil
-									Info.Health = nil
-									Info.MaxHealth = nil
-								end
-							end
-							--
-							if Info.RootPosition and Info.Health and Info.MaxHealth and (Object and Humanoid and RootPart) then
-								local DistanceToPlayer = (Camera.CFrame.Position - Info.RootPosition).Magnitude
-								local Position, OnScreen = Camera:WorldToViewportPoint(Info.RootPosition)
-								--
-								local Size, BoxSize, BoxPosition, BoxCenter, TL, BL, TR, BR
-								--
-								if OnScreen then
-									local MaxDistance = tonumber(flags["ESP Distance"])
-									--
-									if DistanceToPlayer <= MaxDistance then
-										BoxSize, BoxPosition = utility:BoxCalculation(Info.RootPosition)
-										--
-										if (flags["PlayerESP_Box"] == true and flags["PlayerESP_Box_Type"] == "Corner") then -- // Corner Boxes
-											BoxCenter = Math:RoundVector(NewVector2(BoxPosition.X + BoxSize.X / 2, BoxPosition.Y + BoxSize.Y / 2));
-											TL = Math:RoundVector(NewVector2(BoxCenter.X - BoxSize.X / 2, BoxCenter.Y - BoxSize.Y / 2)); 
-											BL = Math:RoundVector(NewVector2(BoxCenter.X - BoxSize.X / 2, BoxCenter.Y + BoxSize.Y / 2));
-											TR = Math:RoundVector(NewVector2(BoxCenter.X + BoxSize.X / 2, BoxCenter.Y - BoxSize.Y / 2));
-											BR = Math:RoundVector(NewVector2(BoxCenter.X + BoxSize.X / 2, BoxCenter.Y + BoxSize.Y / 2));
-										end
-									end
-								end
-								--
-								if (BoxSize and BoxPosition) then
-									local GeneralOpacity = ((1 - 0.2) * TransparencyMultplier)
-									--
-									for Index, Drawing in pairs(Renders) do
-										if Index ~= "Corners" then
-											if Drawing.Visible then
-												Drawing.Visible = false
-											end
-										end
-									end
-									-- 
-									Highlights.Enabled = false 
-									--
-									for Index = 1, 16 do
-										if Renders.Corners[Index].Visible then
-											Renders.Corners[Index].Visible = false
-										end
-									end
-									--
-									if Player ~= LocalPlayer then 
-										do -- // Name
-											if flags["PlayerESP_Name"] then
-												local Name = Renders.Name
-												--
-												Name.Text = Player.Name
-												Name.Position = NewVector2(BoxSize.X / 2 + BoxPosition.X, BoxPosition.Y - 16)
-												Name.Visible = true
-												Name.Transparency = GeneralOpacity
-												Name.Color = flags["PlayerESP_Name_Color"].Color
-											end
-										end
-										-- 
-										do -- // Highlights
-											if flags["PlayerESP_Highlights"] then 
-												Highlights.Enabled = true 
-												Highlights.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-												Highlights.FillColor = flags["PlayerESP_HighlightFillSettings"].Color
-												Highlights.OutlineColor = flags["PlayerESP_HighlightOutlineSettings"].Color
-												Highlights.Adornee = Object
-												Highlights.OutlineTransparency = flags["PlayerESP_HighlightOutlineSettings"].Transparency
-												Highlights.FillTransparency = flags["PlayerESP_HighlightOutlineSettings"].Transparency
-											end 
-										end 
-										--
-										do -- // Corner Boxes
-											if flags["PlayerESP_Box"] then
-												if flags["PlayerESP_Box_Type"] == "Corner" then
-													local BoxCorners, BoxColor1, BoxColor2 = Renders.Corners, flags["PlayerESP_Box_Color1"].Color, flags["PlayerESP_Box_Color2"].Color
-													-- // Inlines
-													do
-														BoxCorners[1].Visible = true
-														BoxCorners[1].From = TL
-														BoxCorners[1].To = BoxCorners[1].From + NewVector2(0, BoxSize.X / 3)  
-														BoxCorners[1].Color = BoxColor1
-														--
-														BoxCorners[2].Visible = true
-														BoxCorners[2].From = TL + NewVector2(1, 0)
-														BoxCorners[2].To = BoxCorners[2].From + NewVector2(BoxSize.X / 3, 0)
-														BoxCorners[2].Color = BoxColor1
-														--
-														BoxCorners[3].Visible = true
-														BoxCorners[3].From = TR
-														BoxCorners[3].To = BoxCorners[3].From + NewVector2(-BoxSize.X / 3, 0)
-														BoxCorners[3].Color = BoxColor1
-														--
-														BoxCorners[4].Visible = true
-														BoxCorners[4].From = TR
-														BoxCorners[4].To = BoxCorners[4].From + NewVector2(0, BoxSize.X / 3)
-														BoxCorners[4].Color = BoxColor1
-														--
-														BoxCorners[5].Visible = true
-														BoxCorners[5].From = BR + NewVector2(0, 1)
-														BoxCorners[5].To = BoxCorners[5].From + NewVector2(0, -BoxSize.X / 3)
-														BoxCorners[5].Color = BoxColor1
-														--
-														BoxCorners[6].Visible = true
-														BoxCorners[6].From = BR
-														BoxCorners[6].To = BoxCorners[6].From + NewVector2(-BoxSize.X / 3, 0)
-														BoxCorners[6].Color = BoxColor1
-														--
-														BoxCorners[7].Visible = true
-														BoxCorners[7].From = BL + NewVector2(0, 1)
-														BoxCorners[7].To = BoxCorners[7].From + NewVector2(0, -BoxSize.X / 3)
-														BoxCorners[7].Color = BoxColor1
-														--
-														BoxCorners[8].Visible = true
-														BoxCorners[8].From = BL
-														BoxCorners[8].To = BoxCorners[8].From + NewVector2(BoxSize.X / 3, 0)
-														BoxCorners[8].Color = BoxColor1
-													end
-													-- // Outlines
-													do
-														BoxCorners[9].Visible = true
-														BoxCorners[9].From = BoxCorners[1].From + NewVector2(0, -1)
-														BoxCorners[9].To = BoxCorners[1].To + NewVector2(0, 1)
-														BoxCorners[9].Color = BoxColor2
-														--
-														BoxCorners[10].Visible = true
-														BoxCorners[10].From = BoxCorners[2].From
-														BoxCorners[10].To = BoxCorners[2].To + NewVector2(1, 0)
-														BoxCorners[10].Color = BoxColor2
-														--
-														BoxCorners[11].Visible = true
-														BoxCorners[11].From = BoxCorners[3].From + NewVector2(2, 0)
-														BoxCorners[11].To = BoxCorners[3].To + NewVector2(-1, 0)
-														BoxCorners[11].Color = BoxColor2
-														--
-														BoxCorners[12].Visible = true
-														BoxCorners[12].From = BoxCorners[4].From
-														BoxCorners[12].To = BoxCorners[4].To + NewVector2(0, 1)
-														BoxCorners[12].Color = BoxColor2
-														--
-														BoxCorners[13].Visible = true
-														BoxCorners[13].From = BoxCorners[5].From
-														BoxCorners[13].To = BoxCorners[5].To + NewVector2(0, -1)
-														BoxCorners[13].Color = BoxColor2
-														--
-														BoxCorners[14].Visible = true
-														BoxCorners[14].From = BoxCorners[6].From + NewVector2(2, 0)
-														BoxCorners[14].To = BoxCorners[6].To + NewVector2(-1, 0)
-														BoxCorners[14].Color = BoxColor2
-														--
-														BoxCorners[15].Visible = true
-														BoxCorners[15].From = BoxCorners[7].From
-														BoxCorners[15].To = BoxCorners[7].To + NewVector2(0, -1)
-														BoxCorners[15].Color = BoxColor2
-														--
-														BoxCorners[16].Visible = true
-														BoxCorners[16].From = BoxCorners[8].From + NewVector2(-1, 0)
-														BoxCorners[16].To = BoxCorners[8].To + NewVector2(1, 0)
-														BoxCorners[16].Color = BoxColor2
-													end
-													--
-													for Index = 1, 16 do
-														BoxCorners[Index].Transparency = GeneralOpacity
-													end
-												else
-													local Box = Renders.BoxInline
-													local BoxOutline = Renders.BoxOutline
-													--
-													Box.Size = BoxSize
-													Box.Position = BoxPosition
-													Box.Transparency = GeneralOpacity
-													Box.Color = flags["PlayerESP_Box_Color1"].Color
-													Box.Visible = true
-													--
-													BoxOutline.Size = BoxSize
-													BoxOutline.Position = BoxPosition
-													BoxOutline.Transparency = GeneralOpacity
-													BoxOutline.Color = flags["PlayerESP_Box_Color2"].Color
-													BoxOutline.Visible = true
-												end
-											end
-											--
-											if flags["PlayerESP_BoxFill"] then
-												local BoxFill = Renders.BoxFill
-												--
-												BoxFill.Size = BoxSize
-												BoxFill.Position = BoxPosition
-												BoxFill.Transparency = TransparencyMultplier - flags["PlayerESP_BoxFill_Color"].Transparency
-												BoxFill.Color = flags["PlayerESP_BoxFill_Color"].Color
-												BoxFill.Visible = true
-											end
-										end
-										--
-										do -- // HeatlhBar
-											if flags["PlayerESP_HealthBar"] then
-												local ArmorColor = flags["PlayerESP_ArmorBarColor"].Color
-												local HealthSize = (Floor(BoxSize.Y * (Info.Health / Info.MaxHealth)))
-												local Color = utility:Lerp(Info.Health / Info.MaxHealth, flags["PlayerESP_HealthBar_Color_Higher"].Color, flags["PlayerESP_HealthBar_Color_Low"].Color)
-												local Height = ((BoxPosition.Y + BoxSize.Y) - HealthSize)
-												--
-												-- // Bars
-												local HealthBarInline, HealthBarOutline, HealthBarValue = Renders.Health, Renders.HealthOutline, Renders.HealthText
-												local HealthBarTransparency = GeneralOpacity
-												--
-												HealthBarInline.Color = Color
-												HealthBarInline.Size = NewVector2(2, HealthSize)
-												HealthBarInline.Position = NewVector2(BoxPosition.X - 5, Height)
-												HealthBarInline.Visible = true
-												HealthBarInline.Transparency = HealthBarTransparency
-												--
-												HealthBarOutline.Size = NewVector2(4, BoxSize.Y + 2)
-												HealthBarOutline.Position = NewVector2(BoxPosition.X - 6, BoxPosition.Y - 1)
-												HealthBarOutline.Visible = true
-												HealthBarOutline.Transparency = HealthBarTransparency
-												--
-												do -- // Value
-													if flags["PlayerESP_HealthNumber"] then
-														local Text = Floor(Info.Health), BoxSize.Y
-														local ArmorText = Renders.ArmorBarText
-														local HealthNumberPosition = NewVector2((BoxPosition.X + 1), BoxPosition.Y + BoxSize.Y)
-														local Offset = flags["PlayerESP_ArmorBar"] and 23 or 18 
-														--
-														HealthBarValue.Text = Text
-														HealthBarValue.Color = Color
-														HealthBarValue.Position = NewVector2(HealthNumberPosition.X - Offset, HealthNumberPosition.Y - (Info.Health / Info.MaxHealth) * BoxSize.Y)
-														HealthBarValue.Visible = true
-														HealthBarValue.Transparency = HealthBarTransparency
-														-- 
-														if flags["PlayerESP_ArmorBar"] then 
-															ArmorText.Text = tostring(Info.ArmorValue)
-															ArmorText.Color = ArmorColor
-															ArmorText.Position = NewVector2(HealthNumberPosition.X - Offset, HealthNumberPosition.Y - (Info.ArmorValue / 200) * BoxSize.Y)
-															ArmorText.Visible = true
-															ArmorText.Transparency = HealthBarTransparency
-														end 
-													end
-												end
-												-- 
-												do 
-													if flags["PlayerESP_ArmorBar"] then 
-														local ArmorBar, ArmorBarOutline = Renders.ArmorBar, Renders.ArmorBarOutline
-														-- 
-														local ArmorSize = (Floor(BoxSize.Y * (Info.ArmorValue / 200)))
-														local ArmorHeight = ((BoxPosition.Y + BoxSize.Y) - ArmorSize)
-														-- 
-														ArmorBar.Color = ArmorColor
-														ArmorBar.Size = NewVector2(2, ArmorSize)
-														ArmorBar.Position = NewVector2(BoxPosition.X - 10, ArmorHeight)
-														ArmorBar.Visible = true
-														ArmorBar.Transparency = HealthBarTransparency
-														--
-														ArmorBarOutline.Size = NewVector2(4, BoxSize.Y + 2)
-														ArmorBarOutline.Position = NewVector2(BoxPosition.X - 11, BoxPosition.Y - 1)
-														ArmorBarOutline.Visible = true
-														ArmorBarOutline.Transparency = HealthBarTransparency
-													end 
-												end 
-											end
-										end
-										-- 
-										do -- // Gun Icons 
-											if flags["PlayerESP_GunIcons"] and Info.ToolHeld ~= "None" and images[Info.ToolHeld] ~= nil then 
-												local Gun = Renders.GunIcon
-												-- 
-												if tick() - Info.gunTick > 0.2 then 
-													Info.gunTick = tick()
-													Gun.Data = images[Info.ToolHeld] 
-												end 
-												Gun.Visible = true 
-												Gun.Size = NewVector2(51.9, 22.3)
-												Gun.Position = BoxPosition + NewVector2(BoxSize.X / 2, (BoxSize.Y + 2)) - NewVector2(Gun.Size.X/2, 0)
-												Add += 22.3
-											else 
-												Add = 0 
-											end 
-										end 
-										--
-										do -- // Weapon
-											if flags["PlayerESP_Weapon"] then
-												local Weapon = Renders.Weapon
-												--
-												Weapon.Text = Info.ToolHeld
-												Weapon.Position = BoxPosition + NewVector2(BoxSize.X / 2, (BoxSize.Y + 2) + Add)
-												Weapon.Color = flags["PlayerESP_Weapon_Color"].Color
-												Weapon.Transparency = GeneralOpacity
-												Weapon.Visible = true
-											end
-										end
-										--
-										do -- // Flag
-											if flags["PlayerESP_Flags"] then
-												local Flag = Renders.Flag
-												local FlagStr = ""
-												--
-												if Find(flags["PlayerESP_Flag_Options"], "Distance") then
-													FlagStr ..= ("%sm\n"):format(Round(DistanceToPlayer))
-												end
-												-- 
-												if Find(flags["PlayerESP_Flag_Options"], "Knocked") and Player.Character.BodyEffects then
-													FlagStr ..= ("%s\n"):format(tostring(Object.BodyEffects["K.O"].Value and "KNOCKED" or ""))
-												end
-												--
-												Flag.Text = FlagStr
-												Flag.Position = NewVector2(BoxSize.X + BoxPosition.X + 3, BoxPosition.Y - 2)
-												Flag.Visible = true
-												Flag.Color = flags["PlayerESP_FlagsColor"].Color
-												Flag.Transparency = GeneralOpacity
-											end
-										end		
-									else 
-										do -- // Name
-											if flags["Self_PlayerESP_Name"] then
-												local Name = Renders.Name
-												--
-												Name.Text = Player.Name
-												Name.Position = NewVector2(BoxSize.X / 2 + BoxPosition.X, BoxPosition.Y - 16)
-												Name.Visible = true
-												Name.Transparency = GeneralOpacity
-												Name.Color = flags["Self_PlayerESP_Name_Color"].Color
-											end
-										end
-										--    
-										do -- // Highlights
-											if flags["Self_PlayerESP_Highlights"] then 
-												Highlights.Enabled = true 
-												Highlights.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-												Highlights.FillColor = flags["Self_PlayerESP_HighlightFillSettings"].Color
-												Highlights.OutlineColor = flags["Self_PlayerESP_HighlightOutlineSettings"].Color
-												Highlights.Adornee = Object
-												Highlights.OutlineTransparency = flags["Self_PlayerESP_HighlightOutlineSettings"].Transparency
-												Highlights.FillTransparency = flags["Self_PlayerESP_HighlightOutlineSettings"].Transparency
-											end 
-										end 
-										--
-										do -- // Corner Boxes
-											if flags["Self_PlayerESP_Box"] then
-												local Box = Renders.BoxInline
-												local BoxOutline = Renders.BoxOutline
-												--
-												Box.Size = BoxSize
-												Box.Position = BoxPosition
-												Box.Transparency = GeneralOpacity
-												Box.Color = flags["Self_PlayerESP_Box_Color1"].Color
-												Box.Visible = true
-												--
-												BoxOutline.Size = BoxSize
-												BoxOutline.Position = BoxPosition
-												BoxOutline.Transparency = GeneralOpacity
-												BoxOutline.Color = flags["Self_PlayerESP_Box_Color2"].Color
-												BoxOutline.Visible = true
-											end
-											--
-											if flags["Self_PlayerESP_Box"] then
-												local BoxFill = Renders.BoxFill
-												--
-												BoxFill.Size = BoxSize
-												BoxFill.Position = BoxPosition
-												BoxFill.Transparency = TransparencyMultplier - flags["Self_PlayerESP_BoxFill_Color"].Transparency
-												BoxFill.Color = flags["Self_PlayerESP_BoxFill_Color"].Color
-												BoxFill.Visible = true
-											end
-										end
-										--
-										do -- // HeatlhBar
-											if flags["Self_PlayerESP_HealthBar"] then
-												local ArmorColor = flags["Self_PlayerESP_ArmorBarColor"].Color
-												local HealthSize = (Floor(BoxSize.Y * (Info.Health / Info.MaxHealth)))
-												local Color = utility:Lerp(Info.Health / Info.MaxHealth, flags["Self_PlayerESP_HealthBar_Color_Higher"].Color, flags["Self_PlayerESP_HealthBar_Color_Low"].Color)
-												local Height = ((BoxPosition.Y + BoxSize.Y) - HealthSize)
-												--
-												-- // Bars
-												local HealthBarInline, HealthBarOutline, HealthBarValue = Renders.Health, Renders.HealthOutline, Renders.HealthText
-												local HealthBarTransparency = GeneralOpacity
-												--
-												HealthBarInline.Color = Color
-												HealthBarInline.Size = NewVector2(2, HealthSize)
-												HealthBarInline.Position = NewVector2(BoxPosition.X - 5, Height)
-												HealthBarInline.Visible = true
-												HealthBarInline.Transparency = HealthBarTransparency
-												--
-												HealthBarOutline.Size = NewVector2(4, BoxSize.Y + 2)
-												HealthBarOutline.Position = NewVector2(BoxPosition.X - 6, BoxPosition.Y - 1)
-												HealthBarOutline.Visible = true
-												HealthBarOutline.Transparency = HealthBarTransparency
-												--
-												do -- // Value
-													if flags["Self_PlayerESP_HealthNumber"] then
-														local Text = Floor(Info.Health), BoxSize.Y
-														local ArmorText = Renders.ArmorBarText
-														local HealthNumberPosition = NewVector2((BoxPosition.X + 1), BoxPosition.Y + BoxSize.Y)
-														local Offset = flags["Self_PlayerESP_ArmorBar"] and 23 or 18 
-														--
-														HealthBarValue.Text = Text
-														HealthBarValue.Color = Color
-														HealthBarValue.Position = NewVector2(HealthNumberPosition.X - Offset, HealthNumberPosition.Y - (Info.Health / Info.MaxHealth) * BoxSize.Y)
-														HealthBarValue.Visible = true
-														HealthBarValue.Transparency = HealthBarTransparency
-														-- 
-														if flags["Self_PlayerESP_ArmorBar"] then 
-															ArmorText.Text = tostring(Info.ArmorValue)
-															ArmorText.Color = ArmorColor
-															ArmorText.Position = NewVector2(HealthNumberPosition.X - Offset, HealthNumberPosition.Y - (Info.ArmorValue / 200) * BoxSize.Y)
-															ArmorText.Visible = true
-															ArmorText.Transparency = HealthBarTransparency
-														end 
-													end
-												end
-												-- 
-												do 
-													if flags["Self_PlayerESP_ArmorBar"] then 
-														local ArmorBar, ArmorBarOutline = Renders.ArmorBar, Renders.ArmorBarOutline
-														-- 
-														local ArmorSize = (Floor(BoxSize.Y * (Info.ArmorValue / 200)))
-														local ArmorHeight = ((BoxPosition.Y + BoxSize.Y) - ArmorSize)
-														-- 
-														ArmorBar.Color = ArmorColor
-														ArmorBar.Size = NewVector2(2, ArmorSize)
-														ArmorBar.Position = NewVector2(BoxPosition.X - 10, ArmorHeight)
-														ArmorBar.Visible = true
-														ArmorBar.Transparency = HealthBarTransparency
-														--
-														ArmorBarOutline.Size = NewVector2(4, BoxSize.Y + 2)
-														ArmorBarOutline.Position = NewVector2(BoxPosition.X - 11, BoxPosition.Y - 1)
-														ArmorBarOutline.Visible = true
-														ArmorBarOutline.Transparency = HealthBarTransparency
-													end 
-												end 
-											end
-										end
-										-- 
-										do -- // Gun Icons 
-											if flags["Self_PlayerESP_GunIcons"] and Info.ToolHeld ~= "None" and images[Info.ToolHeld] ~= nil then 
-												local Gun = Renders.GunIcon
-												-- 
-												if tick() - Info.gunTick > 0.75 then 
-													Info.gunTick = tick()
-													Gun.Data = images[Info.ToolHeld] 
-												end 
-												Gun.Visible = true 
-												Gun.Size = NewVector2(51.9, 22.3)
-												Gun.Position = BoxPosition + NewVector2(BoxSize.X / 2, (BoxSize.Y + 2)) - NewVector2(Gun.Size.X/2, 0)
-												Add += 22.3
-											else 
-												Add = 0 
-											end 
-										end 
-										--
-										do -- // Weapon
-											if flags["Self_PlayerESP_Weapon"] then
-												local Weapon = Renders.Weapon
-												--
-												Weapon.Text = Info.ToolHeld
-												Weapon.Position = BoxPosition + NewVector2(BoxSize.X / 2, (BoxSize.Y + 2) + Add)
-												Weapon.Color = flags["Self_PlayerESP_Weapon_Color"].Color
-												Weapon.Transparency = GeneralOpacity
-												Weapon.Visible = true
-											end
-										end
-										--
-										do -- // Flag
-											if flags["Self_PlayerESP_Flags"] then
-												local Flag = Renders.Flag
-												local FlagStr = ""
-												--
-												if Find(flags["Self_PlayerESP_Flag_Options"], "Distance") then
-													FlagStr ..= ("%sm\n"):format(Round(DistanceToPlayer))
-												end
-												-- 
-												if Find(flags["Self_PlayerESP_Flag_Options"], "Knocked") and Player.Character.BodyEffects then
-													FlagStr ..= ("%s\n"):format(tostring(Object.BodyEffects["K.O"].Value and "KNOCKED" or ""))
-												end
-												--
-												Flag.Text = FlagStr
-												Flag.Position = NewVector2(BoxSize.X + BoxPosition.X + 3, BoxPosition.Y - 2)
-												Flag.Visible = true
-												Flag.Color = flags["Self_PlayerESP_FlagsColor"].Color
-												Flag.Transparency = GeneralOpacity
-											end
-										end		
-									end 
-									return
-								end
-							end
-						end
-						--
-						return Self:Opacity(false)
-					end
-					--
-					return Self:Remove()
-				end
-			end
-			-- 
-			function Visuals:Unload()
-				for Index, Base in pairs(Visuals.Bases) do
-					Base:Remove()
-				end
-			end
-		end 
-
-		-- // Creations + Setting Stuff 
-		do 
-			utility.drawings["Tracer"] = utility:drawObject("Line", {})
-			utility.drawings["Aim Assist FOV"] = utility:drawObject("Circle", {Visible = false, Radius = 8, Color = Color3.fromRGB(0,0,0), Filled = false})
-			utility.drawings["Sub"] = utility:drawObject("Text", {Outline = true, Text = "snitch", Color = Color3.new(1, 1, 1)})
-			utility.drawings["Domain"] = utility:drawObject("Text", {Outline = true, Text = "yaw", Color = Color3.fromRGB(132, 108, 188)})
-			--
-			for i,v in pairs(bodyClone:GetDescendants()) do 
-				if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then 
-					v.CanCollide = false 
-					v.Transparency = 0
-				end 
-			end 
-			
-			-- drawing lines for crosshair
-			do 
-				for Index = 1, 4 do
-					local line = utility:drawObject("Line",{
-						Visible = false,
-						Color = Color3.fromRGB(255,255,255),
-						Thickness = 1,
-						ZIndex = 2,
-						Transparency = 1
-					})
-					--
-					crosshair_Lines[Index] = line
-					-- 
-					local line_1 = utility:drawObject("Line",{
-						Visible = false,
-						Color = Color3.fromRGB(0, 0, 0),
-						Thickness = 2.5,
-						ZIndex = 1,
-						Transparency = 1
-					})
-					--
-					crosshair_Outlines[Index] = line_1
-				end
-			end 
-			
-			-- // Chat spam framework
-			do 
-				Messages = {
-					["Scottish"] = {
-						"You Grandma Still Wears Shin Pads To Work đŸ¤£đŸ¤£",
-						"Melon Head",
-						"Your Ma Is A Bin Man đŸ¤£đŸ¤£",
-						"Taped You Like I Did To Your Ma",
-						"Fore Headed Mong",
-						"Such A Fruit",
-						"YoUr A BoOt",
-						"keep Trying You Jobby",
-					},
-					["Lunar"] = {
-						"Owned By Lunar",
-						"Lunar Lunar Lunar RAHHHHH",
-						"Slammed by Lunar",
-						"YOU GOT SLAMMED BY LUNAR",
-						"SEEMS LIKE YOU NEED LUNAR GG/LUNARVIP",
-						"GG/LUNARVIP GG/LUNARVIP GG/LUNARVIP",
-						"GG/LUNARVIP <-- THIS WILL LET YOU COPE WITH YOUR ISSUES",
-						"WHAT YOU CANT BEAT LUNAR?",
-						"PRO TIP: BUY LUNAR",
-					},
-				}
-				utx = {
-					["symbols"] = {
-						"~",
-						"!",
-						"@",
-						"#",
-						"$",
-						"%",
-						"^",
-						"&",
-						"*",
-						"(",
-						")",
-						"_",
-						"+",
-						"{",
-						"}",
-						"|",
-						":",
-						'"',
-						"<",
-						">",
-						"?",
-						".",
-						",",
-						"/",
-						"'",
-					},
-					["emojis"] = {
-						"đŸ˜",
-						"đŸ¤£",
-						"đŸ‘€",
-						"đŸ™„",
-						"đŸ”¥",
-						"đŸ˜…",
-						"đŸ˜‚",
-						"đŸ˜¹",
-						"đŸ˜›",
-						"đŸ¤©",
-						"đŸŒˆ",
-						"đŸ˜",
-						"đŸ¤ ",
-						"đŸ˜”",
-						"đŸ¤¡",
-						"đŸ’¤",
-						"đŸ¶",
-						"đŸ™€",
-						"đŸ˜‚",
-						"đŸ“ˆ",
-						"đŸ¤",
-						"đŸŒˆ",
-						"đŸ˜",
-						"đŸ¤ ",
-						"đŸ˜”",
-					},
-				}
-			end 
-		end 
-
-		-- // Hit Reg 
-		do 
-			function HitReg:HitMarker(Gap, Color, Time) 
-				local Lines = {} 
-				local Hitmarker = true 
-				-- 
-				for i = 1, 4 do 
-					Lines[i] = utility:drawObject("Line", {Color = Color, Visible = true, Transparency = 1, Thickness = 1})
-				end 
-				-- 
-				local function setMarkerPos()
-					Lines[1].From = NewVector2(Mouse.X + Gap, (Mouse.Y + Offset) + Gap)
-					Lines[1].To = NewVector2(Mouse.X + (Gap * 2.5), (Mouse.Y + Offset) + (Gap * 2.5))
-					--
-					Lines[2].From = NewVector2(Mouse.X + Gap, (Mouse.Y + Offset) - Gap)
-					Lines[2].To = NewVector2(Mouse.X + (Gap * 2.5), (Mouse.Y + Offset) - (Gap * 2.5))
-					--
-					Lines[3].From = NewVector2(Mouse.X - Gap, (Mouse.Y + Offset) + Gap)
-					Lines[3].To = NewVector2(Mouse.X - (Gap * 2.5), (Mouse.Y + Offset) + (Gap * 2.5))
-					--
-					Lines[4].From = NewVector2(Mouse.X - Gap, (Mouse.Y + Offset) - Gap)
-					Lines[4].To = NewVector2(Mouse.X - (Gap * 2.5), (Mouse.Y + Offset) - (Gap * 2.5))
-				end 
-				-- 
-				delay(Time, function()
-					for i = Time, 0, -0.1 do
-						task.wait()
-						for _, Value in next, Lines do
-							Value.Transparency = i
-						end
-						setMarkerPos()
-					end
-					-- 
-					for _, Value in next, Lines do
-						Value:Remove()
-					end
-					-- 
-					Hitmarker = false 
-				end)
-			end 
-			-- 
-			function HitReg:HitMarker3D(Gap, Color, Time, Hit) 
-				local Lines = {} 
-				local Hitmarker = true 
-				-- 
-				for i = 1, 4 do 
-					Lines[i] = utility:drawObject("Line", {Color = Color, Visible = true, Transparency = 1, Thickness = 1})
-				end     
-				-- 
-				task.spawn(function()
-					while Hitmarker do 
-						local Position3D, OnScreen = Camera:WorldToViewportPoint(Hit)
-						-- 
-						Lines[1].From = NewVector2(Position3D.X + Gap, Position3D.Y + Gap)
-						Lines[1].To = NewVector2(Position3D.X + (Gap * 2.5), Position3D.Y + (Gap * 2.5))
-						--
-						Lines[2].From = NewVector2(Position3D.X + Gap, Position3D.Y - Gap)
-						Lines[2].To = NewVector2(Position3D.X + (Gap * 2.5), Position3D.Y - (Gap * 2.5))
-						--
-						Lines[3].From = NewVector2(Position3D.X - Gap, Position3D.Y + Gap)
-						Lines[3].To = NewVector2(Position3D.X - (Gap * 2.5), Position3D.Y + (Gap * 2.5))
-						--
-						Lines[4].From = NewVector2(Position3D.X - Gap, Position3D.Y - Gap)
-						Lines[4].To = NewVector2(Position3D.X - (Gap * 2.5), Position3D.Y - (Gap * 2.5))
-						-- 
-						for _, Value in next, Lines do
-							Value.Visible = OnScreen
-						end
-						-- 
-						task.wait()
-					end 
-				end)
-				-- 
-				delay(Time, function()
-					for i = Time, 0, -0.1 do
-						task.wait()
-						for _, Value in next, Lines do
-							Value.Transparency = i
-						end
-					end
-					-- 
-					for _, Value in next, Lines do
-						Value:Remove()
-					end
-					-- 
-					Hitmarker = false 
-				end)
-			end 
-			--
-			function HitReg:HitEffect(Type, Character)
-				local function convert(color)
-					return color.r/5, color.g/5, color.b/5
-				end 
-				-- 
-				local function Weld(x,y)
-					local W = Instance.new("Weld")
-					W.Part0 = x
-					W.Part1 = y
-					local CJ = NewCFrame(x.Position)
-					local C0 = x.CFrame:inverse()*CJ
-					local C1 = y.CFrame:inverse()*CJ
-					W.C0 = C0
-					W.C1 = C1
-					W.Parent = x
-				end
-				-- 
-				if Type == "Confetti" then 
-					task.spawn(function()
-						local Confetti_Amount = 20000
-						local RootPart = Character.HumanoidRootPart
-						local ConfettiClone = hitmodule:Clone()
-						ConfettiClone.RainbowParticles.Rate = Confetti_Amount
-						ConfettiClone.Parent = workspace
-						ConfettiClone.CanCollide = false
-						ConfettiClone.CFrame = RootPart.CFrame
-						-- 
-						for i = Confetti_Amount, 0 , -(Confetti_Amount/50) do 
-							task.wait()
-							ConfettiClone.RainbowParticles.Rate = i
-						end 
-						-- 
-						delay(5, function()
-							ConfettiClone:Destroy()
-						end)
-					end)
-				elseif Type == "Nova" then 
-					local Effect = Nova:Clone() 
-					Effect.Parent = Character.HumanoidRootPart
-					--	
-					for i,v in pairs(Effect:GetChildren()) do 
-						v.Rate = 0
-						v.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.new(convert(flags["Hit Effect Settings"].Color))),ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),})
-						v:Emit()
-					end 
-					-- 	
-					delay(2, function()
-						Effect:Destroy()
-					end)
-				else 
-					local Clone = SparklesEffect:Clone() 
-					Clone.Parent = Character.HumanoidRootPart
-					Clone.LockedToPart = false 
-					Clone.Acceleration = Vector3.new(0,-100,0)
-					-- 
-					Clone:Emit(15)
-					--
-					delay(5, function() Clone:Destroy() end)
-				end 
-			end 
-			-- 
-			function HitReg:HitSound(Id, Volume, Pitch)
-				local Sound = Instance.new("Sound", game:GetService("SoundService")); local PitchSound = Instance.new("PitchShiftSoundEffect", Sound)
-				-- 
-				Sound.SoundId = "rbxassetid://".. Id ..""
-				--[[writefile("song.mp3", game:HttpGet("https://lunar.feet.media/osiris/cmwr7ecb.mp3"))
-				Sound.SoundId = getcustomasset("song.mp3")]]
-				Sound.Volume = Volume
-				PitchSound.Octave = Pitch
-				Sound.PlayOnRemove = true
-				Sound:Destroy()
-			end 
-		end 
-
-		for i,v in pairs(LocalPlayer.Character:GetChildren()) do 
-			if v:IsA("BasePart") then 
-				table.insert(utility.bodyParts, v.Name)
-			end 
-		end 
-
-		-- // Tweens 
-		do
-			Tween.EasingStyles = {
-				[Enum.EasingStyle.Linear] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Delta
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return Delta
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						return Delta
-					end
-				},
-				[Enum.EasingStyle.Cubic] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Delta ^ 3
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return ((Delta - 1) ^ 3) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return (4 * Delta ^ 3)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return (4 * (Delta - 1) ^ 3) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Quad] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Delta ^ 2
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return (-(Delta - 1) ^ 2) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return (2 * Delta ^ 2)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return -(2 * (Delta - 1) ^ 2) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Quart] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Delta ^ 4
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return (-(Delta - 1) ^ 4) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return (8 * Delta ^ 4)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return -(8 * (Delta - 1) ^ 4) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Quint] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Delta ^ 5
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return ((Delta - 1) ^ 5) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return (16 * Delta ^ 5)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return (16 * (Delta - 1) ^ 5) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Sine] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return Sin(((Pi / 2) * Delta) - (Pi / 2)) + 1
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return Sin((Pi / 2) * Delta)
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						return (0.5 * Sin((Pi * Delta) - (Pi / 2))) + 0.5
-					end
-				},
-				[Enum.EasingStyle.Exponential] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return (2 ^ ((10 * Delta) - 10)) - 0.001
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return 1.001 * (-2 ^ -(10 * Delta)) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return 0.5 * (2 ^ ((20 * Delta) - 10)) - 0.0005
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return 0.50025 * (-2 ^ (-(20 * Delta) + 10)) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Back] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return (Delta * Delta) * (Delta * (1.70158 + 1) - 1.70158)
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return ((Delta - 1) ^ 2) * ((Delta - 1) * (1.70158 + 1) + 1.70158) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return (2 * (Delta * Delta)) * ((2 * Delta) * (2.5949095 + 1) - 2.5949095)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return (0.5 * ((2 * Delta) - 2) ^ 2) * (((2 * Delta) - 2) * (2.5949095 + 1) + 2.5949095) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Bounce] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						if 0 <= Delta and Delta <= (1 / 2.75) then
-							return 7.5625 * (Delta * Delta)
-						elseif (1 / 2.75) <= Delta and Delta <= (2 / 2.75) then
-							return 7.5625 * (Delta - (1.5 / 2.75)) ^ 2 + 0.75
-						elseif (2 / 2.75) <= Delta and Delta <= (2.5 / 2.75) then
-							return 7.5625 * (Delta - (2.25 / 2.75)) ^ 2 + 0.9375
-						elseif (2.5 / 2.75) <= Delta and Delta <= 1 then
-							return 7.5625 * (Delta - (2.625 / 2.75)) ^ 2 + 0.984375
-						end
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						if 0 <= Delta and Delta <= (0.25 / 2.75) then
-							return -7.5625 * (1 - Delta - (2.625 / 2.75)) ^ 2 + 0.015625
-						elseif (0.25 / 2.75) <= Delta and Delta <= (0.75 / 2.75) then
-							return -7.5625 * (1 - Delta - (2.25 / 2.75)) ^ 2 + 0.0625
-						elseif (0.75 / 2.75) <= Delta and Delta <= (1.75 / 2.75) then
-							return -7.5625 * (1 - Delta - (1.5 / 2.75)) ^ 2 + 0.25
-						elseif (1.75 / 2.75) <= Delta and Delta <= 1 then
-							return 1 - 7.5625 * (1 - Delta) ^ 2
-						end
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= (0.125 / 2.75) then
-							return 0.5 * (-7.5625 * (1 - (2 * Delta) - (2.625 / 2.75)) ^ 2 + 0.015625)
-						elseif (0.125 / 2.75) <= Delta and Delta <= (0.375 / 2.75) then
-							return 0.5 * (-7.5625 * (1 - (2 * Delta) - (2.25 / 2.75)) ^ 2 + 0.0625)
-						elseif (0.375 / 2.75) <= Delta and Delta <= (0.875 / 2.75) then
-							return 0.5 * (-7.5625 * (1 - (2 * Delta) - (1.5 / 2.75)) ^ 2 + 0.25)
-						elseif (0.875 / 2.75) <= Delta and Delta <= 0.5 then
-							return 0.5 * (1 - 7.5625 * (1 - (2 * Delta)) ^ 2)
-						elseif 0.5 <= Delta and Delta <= (1.875 / 2.75) then
-							return 0.5 + 3.78125 * ((2 * Delta) - 1) ^ 2
-						elseif (1.875 / 2.75) <= Delta and Delta <= (2.375 / 2.75) then
-							return 3.78125 * ((2 * Delta) - (4.25 / 2.75)) ^ 2 + 0.875
-						elseif (2.375 / 2.75) <= Delta and Delta <= (2.625 / 2.75) then
-							return 3.78125 * ((2 * Delta) - (5 / 2.75)) ^ 2 + 0.96875
-						elseif (2.625 / 2.75) <= Delta and Delta <= 1 then
-							return 3.78125 * ((2 * Delta) - (5.375 / 2.75)) ^ 2 + 0.9921875
-						end
-					end
-				},
-				[Enum.EasingStyle.Elastic] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return (-2 ^ (10 * (Delta - 1))) * Sin(((2 * Pi) * (Delta - 1 - (0.3 / 4))) / 0.3)
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return (2 ^ (-10 * Delta)) * Sin(((2 * Pi) * (Delta - (0.3 / 4))) / 0.3) + 1
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return -0.5 * (2 ^ ((20 * Delta) - 10)) * Sin(((2 * Pi) * ((2 * Delta) - 1.1125)) / 0.45)
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return 0.5 * (2 ^ ((-20 * Delta) + 10)) * Sin(((2 * Pi) * ((2 * Delta) - 1.1125)) / 0.45) + 1
-						end
-					end
-				},
-				[Enum.EasingStyle.Circular] = {
-					[Enum.EasingDirection.In] = function(Delta)
-						return -Sqrt(1 - Delta ^ 2) + 1
-					end,
-					[Enum.EasingDirection.Out] = function(Delta)
-						return Sqrt(-(Delta - 1) ^ 2 + 1)
-					end,
-					[Enum.EasingDirection.InOut] = function(Delta)
-						if 0 <= Delta and Delta <= 0.5 then
-							return -Sqrt(-Delta ^ 2 + 0.25) + 0.5
-						elseif 0.5 <= Delta and Delta <= 1 then
-							return Sqrt(-(Delta - 1) ^ 2 + 0.25) + 0.5
-						end
-					end
-				}
-			}
-		end
-	end
-end 
---
-local crosshair_lineOffsets = utility:generateAngles(4); 
-local Window = Library:Window({Size = UDim2.new(0,580,0,600)}) do 
-	-- // Rage
-	local aiming = Window:Page({Name = "Rage", Weapons = true}) do
-		local Settings = aiming:Weapon({Icon = "rbxassetid://6031280882"})
-		local Visuals = aiming:Weapon({Icon = "rbxassetid://7300480952"})
-		-- 
-		local mainTarget = Settings:Section({Name = "Main", Size = 330}) do 
-			mainTarget:Toggle({Name = "Enabled", Flag = "Silent Enabled", Risk = true})
-			mainTarget:Keybind({Name = "Key", Flag = "Silent_Bind", Mode = "Toggle", callback = function()
-				framework:selectTarget(); 
-				bodyClone:SetPrimaryPartCFrame(NewCFrame(9959,9999,9990))
-			end})
-		end 
-		-- 
-		local targetSettings = Settings:Section({Name = "Settings", Size = 330}) do 
-			targetSettings:Toggle({Name = "Look At", Flag = "Look At"})
-			targetSettings:Toggle({Name = "Auto Shoot", Flag = "Auto Shoot"})
-			targetSettings:Toggle({Name = "Spectate", Flag = "Spectate"})
-			targetSettings:Toggle({Name = "Notify", Flag = "Notify"})
-			targetSettings:Toggle({Name = "Aim Viewer Bypass", Flag = "Aim Viewer Bypass"})
-		end 
-		-- 
-		local targetMethods = Settings:Section({Name = "Methods", Size = 330}) do 
-			targetMethods:Toggle({Name = "Resolver", Flag = "Resolver"})
-			targetMethods:Dropdown({Name = "Resolver Method", Flag = "Resolver Method", Options = {"Recalculate Velocity", "Suppress Velocity", "Move Direction"}, Default = "Recalculate Velocity"})
-		end 
-		-- 
-		local targetPrediction = Settings:Section({Name = "Prediction", Size = 330, Side = "Right"}) do 
-			targetPrediction:Toggle({Name = "Auto Prediction", Flag = "Auto Prediction"})
-			targetPrediction:Textbox({Name = "Prediction", Flag = "Manual Prediction Value", Placeholder = "Prediction"})
-			targetPrediction:Dropdown({Name = "Hit-Part", Flag = "Single Hit Part", Options = utility.bodyParts, Default = "HumanoidRootPart"})
-			targetPrediction:Toggle({Name = "Nearest Part", Flag = "Nearest Part"})
-			targetPrediction:Dropdown({Name = "Closest Hit Part", Flag = "Closest Hit Part", Options = utility.bodyParts, Default = {"HumanoidRootPart"}, Max = 9e9})
-			targetPrediction:Toggle({Name = "Jump Prediction", Flag = "Jump Prediction"})
-			targetPrediction:Textbox({Name = "Jump Prediction", Flag = "Manual Offset Value", Placeholder = "Jump Offset"})
-			targetPrediction:Dropdown({Name = "Air Hit-Part", Flag = "Air Hit Part", Options = utility.bodyParts, Default = "RightFoot"})
-		end 
-		-- 
-		local targetChecks = Settings:Section({Name = "Checks", Size = 330, Side = "Right"}) do 
-			targetChecks:Dropdown({Name = "Checks", Flag = "Silent Checks", Options = {"Knocked Check", "Wall Check", "Friend Check", "Grabbed Check"}, Max = 9e9})
-		end 
-		-- 
-		local targetAutoSelect = Settings:Section({Name = "Auto Select", Size = 330, Side = "Right"}) do 
-			targetAutoSelect:Toggle({Name = "Enabled", Flag = "Target Auto Select"})
-			targetAutoSelect:Slider({Name = "Delay", Suffix = "ms", Flag = 'Auto Select Delay', Min = 0, Max = 1000, Default = 100, Decimals = 1})
-		end 	
-		-- 
-		local targetStrafe = Settings:Section({Name = "Target Strafe", Size = 330, Side = "Left"}) do 
-			targetStrafe:Toggle({Name = "Enabled", Flag = "Target Strafe Enabled", Risk = true})
-			targetStrafe:Slider({Name = "Radius", Flag = 'Target Strafe Distance', Min = -15, Max = 15, Default = 10, Decimals = 1})
-			targetStrafe:Slider({Name = "Speed", Flag = 'Target Strafe Speed', Min = -15, Max = 15, Default = 10, Decimals = 1})
-			targetStrafe:Slider({Name = "Height", Flag = 'Target Strafe Height', Min = -15, Max = 15, Default = 0, Decimals = 1})
-		end
-		-- 
-		local targetVisuals = Visuals:Section({Name = "Visuals", Size = 330, Side = "Left"}) do 
-			local line1 = targetVisuals:Toggle({Name = "Line", Flag = "Line Enabled"})
-			line1:Colorpicker({Default = Color3.fromRGB(255,0,0), Flag = "Line Settings"});
-			targetVisuals:Slider({Name = "Thickness", Flag = 'Line Thickness', Min = 0, Max = 2, Default = 1, Decimals = 0.01, Callback = function(Int)
-				utility.drawings["Tracer"].Thickness = Int
-			end})
-			local highlight = targetVisuals:Toggle({Name = "Highlight", Flag = "Highlight Enabled"})
-			highlight:Colorpicker({Default = Color3.fromRGB(0,255,0), Alpha = 0.5, Flag = "Highlight Fill Color"});
-			highlight:Colorpicker({Default = Color3.fromRGB(0,125,0), Flag = "Highlight Outline Color"});
-			local backtrack = targetVisuals:Toggle({Name = "Backtrack", Flag = "Back Track Enabled"})
-			backtrack:Colorpicker({Default = Color3.fromRGB(255, 0, 0), alpha = 0.65, Flag = "Back Track Settings"});
-			targetVisuals:Dropdown({Name = "Method", Flag = "Back Track Method", Options = {"Clone", "Follow"}, Default = "Follow"})
-			targetVisuals:Dropdown({Name = "Material", Flag = "Back Track Material", Options = {"Neon", "Plastic", "ForceField"}, Default = "Neon"})
-			targetVisuals:Slider({Name = "Delay", Flag = 'Back Track Delay', Min = 0, Max = 1, Default = 1, Decimals = 0.05})
-			targetVisuals:Toggle({Name = "Target Esp", Flag = "Target Esp"})
-		end 
-	end
-	-- // Legit  
-	local legit = Window:Page({Name = "Legit"}) do 
-		local Vertical;
-		local Horizontal;
-		local Smoothness;
-		-- 
-		local aimAssist = legit:Section({Name = "Aim Assist", Size = 330}) do 
-			aimAssist:Toggle({Name = "Enabled", Flag = "Aim Assist"}):Keybind({Name = "Aim Assist", Flag = "Aim Assist Bind", Mode = "Toggle", Callback = function()
-				aimAssistTarget = utility.target or utility:getClosestPlayerToCursor(math.huge)
-			end}) -- portal is a fuckin g
-			local Vertical = aimAssist:Slider({Name = "Horizontal Smoothness", Flag = "Horizontal Smoothness", Min = 0, Max = 100, Default = 20, Decimals = 1})
-			Vertical:SetVisible(false)
-			local Horizontal = aimAssist:Slider({Name = "Vertical Smoothness", Flag = 'Vertical Smoothness', Min = 0, Max = 100, Default = 20, Decimals = 1})
-			Horizontal:SetVisible(false)
-			local Smoothness = aimAssist:Slider({Name = "Smoothness", Flag = 'Smoothness', Min = 0, Max = 100, Default = 50, Decimals = 1})
-			aimAssist:Dropdown({Name = "Method", Flag = "Aim Assist Method", Options = {"Use Mouse", "Use Camera"}, Default = "Use Camera", Callback = function(Option)
-				if Option == "Use Mouse" then 
-					Vertical:SetVisible(true)
-					Horizontal:SetVisible(true)
-					Smoothness:SetVisible(false)
-				else 
-					Vertical:SetVisible(false)
-					Horizontal:SetVisible(false)
-					Smoothness:SetVisible(true)
-				end 
-			end})
-		end 
-		-- 
-		local aimAssist_Settings = legit:Section({Name = "Settings", Size = 330}) do 
-			aimAssist_Settings:Dropdown({Name = "Hit-Part", Flag = "Aim Assist Single Hit Part", Options = utility.bodyParts, Default = "HumanoidRootPart"})
-			aimAssist_Settings:Toggle({Name = "Jump Prediction", Flag = "Aim Assist Jump Prediction"})
-			aimAssist_Settings:Textbox({Name = "Prediction", Flag = "Aim Assist Manual Prediction Value", Placeholder = "Prediction"})
-			aimAssist_Settings:Textbox({Name = "Jump Offset", Flag = "Aim Assist Manual Offset Value", Placeholder = "Jump Offset"})
-		end 
-		-- 
-		local aimAssistFov = legit:Section({Name = "Field Of View", Size = 330}) do 
-			aimAssistFov:Toggle({Name = "Enabled", Flag = "Aim Assist Field Of View", Callback = function(Bool)
-				utility.drawings["Aim Assist FOV"].Visible = Bool 
-			end}):Colorpicker({Default = Color3.fromRGB(255, 0, 0), alpha = 0.65, Flag = "Field Of View Color", Callback = function()
-				utility.drawings["Aim Assist FOV"].Color = flags["Field Of View Color"].Color
-				utility.drawings["Aim Assist FOV"].Transparency = 1 - flags["Field Of View Color"].Transparency
-			end});
-			aimAssistFov:Slider({Name = "Radius", Flag = 'Aim Assist Field Of View Radius', Min = 0.1, Max = 500, Default = 50, Decimals = 0.1, Callback = function(Int)
-				utility.drawings["Aim Assist FOV"].Radius = Int
-			end})
-			aimAssistFov:Toggle({Name = "Enabled", Flag = "Aim Assist Field Of View Filled", Callback = function(Bool)
-				utility.drawings["Aim Assist FOV"].Filled = Bool
-			end})
-			aimAssistFov:Slider({Name = "Thickness", Flag = 'Aim Assist Field Of View Thickness', Min = 0.1, Max = 3, Default = 1, Decimals = 0.01, Callback = function(Int)
-				utility.drawings["Aim Assist FOV"].Thickness = Int
-			end})
-		end 
-		-- 
-		local aimAssistChecks = legit:Section({Name = "Checks", Size = 330}) do 
-			aimAssistChecks:Dropdown({Name = "Checks", Flag = "Aim Assist Checks", Options = {"Knocked Check", "Wall Check", "Friend Check", "Grabbed Check"}, Max = 9e9})
-		end 
-	end 	
-	-- 	// Esp 
-	local esp = Window:Page({Name = "Visuals", Weapons = true}) do 
-		local ESP = esp:Weapon({Icon = "rbxassetid://6034281935"})
-		local World = esp:Weapon({Icon = "rbxassetid://16997762295"})
-		-- 
-		local playerEsp = ESP:Section({Name = "Player Esp", Size = 330, Side = "Left"}) do 
-			playerEsp:Toggle({Name = "Enabled", Flag = "PlayerESP_Enabled", Callback = function(Bool)
-				if Bool then 
-					for i,v in next, Players:GetPlayers() do 
-						if v ~= LocalPlayer and not Visuals.Bases[v] then 
-							Visuals:Create({Player = v})
-						end 
-					end 
-				else 
-					Visuals:Unload()
-				end 
-			end})
-			playerEsp:Slider({Name = "Distance", Flag = 'ESP Distance', Min = 0, Max = 5000, Default = 5000, Decimals = 5})
-			local box = playerEsp:Toggle({Name = "Boxes", Flag = "PlayerESP_Box"})
-			box:Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "PlayerESP_Box_Color1"});
-			box:Colorpicker({Default = Color3.fromRGB(0, 0, 0), Flag = "PlayerESP_Box_Color2"});
-			playerEsp:Toggle({Name = "Box-Fill", Flag = "PlayerESP_BoxFill"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Transparency = 0.7, Flag = "PlayerESP_BoxFill_Color"});
-			playerEsp:Dropdown({Name = "Box Type", Flag = "PlayerESP_Box_Type", Options = {"Bounding", "Corner"}, Default = "Bounding"})
-			playerEsp:Toggle({Name = "Name", Flag = "PlayerESP_Name"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "PlayerESP_Name_Color"});
-			playerEsp:Toggle({Name = "Weapons", Flag = "PlayerESP_Weapon"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "PlayerESP_Weapon_Color"});
-			playerEsp:Toggle({Name = "Flags", Flag = "PlayerESP_Flags"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "PlayerESP_FlagsColor"});
-			playerEsp:Dropdown({Name = "Flags", Flag = "PlayerESP_Flag_Options", Options = {"Distance", "Knocked"}, Max = 9e9})
-			playerEsp:Toggle({Name = "Gun Icons", Flag = "PlayerESP_GunIcons"})
-			local highlight = playerEsp:Toggle({Name = "Chams", Flag = "PlayerESP_Highlights"})
-			highlight:Colorpicker({Default = Color3.fromHex("#7D0DC3"), Transparency = 0.7, Flag = "PlayerESP_HighlightFillSettings"});
-			highlight:Colorpicker({Default = Color3.new(0,0,0), Flag = "PlayerESP_HighlightOutlineSettings"});
-		end 
-		-- 
-		local Properties = ESP:Section({Name = "Properties", Size = 330, Side = "Left"})
-			local health = Properties:Toggle({Name = "Health Bar", Flag = "PlayerESP_HealthBar"})
-			health:Colorpicker({Default = Color3.fromRGB(0,255,0), Flag = "PlayerESP_HealthBar_Color_Higher"});
-			health:Colorpicker({Default = Color3.fromRGB(255,0,0), Flag = "PlayerESP_HealthBar_Color_Low"});
-			Properties:Toggle({Name = "Health Number", Flag = "PlayerESP_HealthNumber"})
-			Properties:Toggle({Name = "Armor Bar", Flag = "PlayerESP_ArmorBar"}):Colorpicker({Default = Color3.fromRGB(0,0,255), Flag = "PlayerESP_ArmorBarColor"});
-		-- 
-		local selfEsp = ESP:Section({Name = "Self Esp", Size = 330, Side = "Right"}) do 
-			selfEsp:Toggle({Name = "Enabled", Flag = "Self_PlayerESP_Enabled", Callback = function(Bool)
-					if Bool then 
-						Visuals:Create({Player = LocalPlayer})
-					else 
-						Visuals.Bases[LocalPlayer]:Remove()
-					end 
-				end})
-			selfEsp:Slider({Name = "Distance", Flag = 'Self_ESP Distance', Min = 0, Max = 5000, Default = 5000, Decimals = 5})
-			local box = selfEsp:Toggle({Name = "Boxes", Flag = "Self_PlayerESP_Box"})
-			selfEsp:Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Self_PlayerESP_Box_Color1"});
-			selfEsp:Colorpicker({Default = Color3.fromRGB(0, 0, 0), Flag = "Self_PlayerESP_Box_Color2"});
-			selfEsp:Toggle({Name = "Box-Fill", Flag = "Self_PlayerESP_BoxFill"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Transparency = 0.7, Flag = "Self_PlayerESP_BoxFill_Color"});
-			selfEsp:Toggle({Name = "Name", Flag = "Self_PlayerESP_Name"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Self_PlayerESP_Name_Color"});
-			selfEsp:Toggle({Name = "Weapons", Flag = "Self_PlayerESP_Weapon"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Self_PlayerESP_Weapon_Color"});
-			selfEsp:Toggle({Name = "Flags", Flag = "Self_PlayerESP_Flags"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Self_PlayerESP_FlagsColor"});
-			selfEsp:Dropdown({Name = "Flags", Flag = "Self_PlayerESP_Flag_Options", Options = {"Distance", "Knocked"}, Max = 9e9})
-			selfEsp:Toggle({Name = "Gun Icons", Flag = "Self_PlayerESP_GunIcons"})
-			local highlight = selfEsp:Toggle({Name = "Chams", Flag = "Self_PlayerESP_Highlights"})
-			highlight:Colorpicker({Default = Color3.fromHex("#7D0DC3"), Transparency = 0.7, Flag = "Self_PlayerESP_HighlightFillSettings"});
-			highlight:Colorpicker({Default = Color3.new(0,0,0), Flag = "Self_PlayerESP_HighlightOutlineSettings"});
-		end 
-		-- 
-		local selfEspProperties = ESP:Section({Name = "Properties", Size = 330, Side = "Right"}) do 
-			local health = selfEspProperties:Toggle({Name = "Health Bar", Flag = "Self_PlayerESP_HealthBar"})
-			health:Colorpicker({Default = Color3.fromRGB(0,255,0), Flag = "Self_PlayerESP_HealthBar_Color_Higher"});
-			health:Colorpicker({Default = Color3.fromRGB(255,0,0), Flag = "Self_PlayerESP_HealthBar_Color_Low"});
-			selfEspProperties:Toggle({Name = "Health Number", Flag = "Self_PlayerESP_HealthNumber"})
-			selfEspProperties:Toggle({Name = "Armor Bar", Flag = "Self_PlayerESP_ArmorBar"}):Colorpicker({Default = Color3.fromRGB(0,0,255), Flag = "Self_PlayerESP_ArmorBarColor"});
-		end 
-		--  seperate here
-		local worldVisuals = World:Section({Name = "Lighting", Size = 330, Side = "Left"}) do 
-			worldVisuals:Toggle({Name = "Master Switch", Flag = "Master Switch", Callback = function()
-				for i,v in pairs(Lighting_Save) do 
-					Lighting[i] = v 
-				end 
-			end})
-			worldVisuals:Toggle({Name = "Clock Time", Flag = "Clock Time Enabled"})
-			worldVisuals:Slider({Name = "Clock Time", Flag = 'Clock Time', Min = 0, Max = 24, Default = 12, Decimals = 0.1})
-			worldVisuals:Toggle({Name = "Color Shift Bottom", Flag = "Color Shift Bottom"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Color Shift Bottom Color"});
-			worldVisuals:Toggle({Name = "Ambient", Flag = "Ambient"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Ambience Color"});
-			worldVisuals:Toggle({Name = "Outdoor Ambience", Flag = "Outdoor Ambience"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Outdoor Ambience color"});
-			worldVisuals:Toggle({Name = "Brightness", Flag = "Brightness Enabled"})
-			worldVisuals:Slider({Name = "Brightness", Flag = 'Brightness', Min = 0, Max = 20, Default = 3, Decimals = 1})
-			worldVisuals:Toggle({Name = "Color Shift Top", Flag = "Color Shift Top"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Color Shift Top Color"});
-			worldVisuals:Toggle({Name = "Fog", Flag = "Fog"}):Colorpicker({Default = Color3.fromRGB(255, 255, 255), Flag = "Fog Color"});
-		end 
-		-- 
-		local bulletTracers = World:Section({Name = "Bullet Modification", Size = 330, Side = "Left"}) do 
-			bulletTracers:Toggle({Name = "Bullet Tracers", Flag = "Bullet Tracers"}):Colorpicker({Default = Color3.new(1,1,1), Flag = "Bullet Tracers Color"});
-			bulletTracers:Slider({Name = "Lifetime", Flag = 'Tracers Life Time', Min = 0, Max = 10, Default = 2, Decimals = 0.1})
-			bulletTracers:Toggle({Name = "Face Camera", Flag = "Face Camera", Default = true})
-			bulletTracers:Slider({Name = "Brightness", Flag = 'Bullet Brightness', Min = 0, Max = 20, Default = 6, Decimals = 1})
-			bulletTracers:Slider({Name = "Speed", Flag = 'Bullet Speed', Min = 0, Max = 20, Default = 3, Decimals = 0.01})
-			bulletTracers:Slider({Name = "Size", Flag = 'Bullet Size', Min = 1, Max = 20, Default = 1, Decimals = 0.01})
-			bulletTracers:Toggle({Name = "Bullet Impacts", Flag = "Bullet Impacts"}):Colorpicker({Default = Color3.new(1,1,1), Alpha = 0, Flag = "Bullet Impacts Color"});
-			bulletTracers:Slider({Name = "Size", Flag = 'Impact Size', Min = 0.01, Max = 5, Default = 0.25, Decimals = 0.01})
-		end 
-		-- 
-		local crosshairSection = World:Section({Name = "Crosshair", Size = 330, Side = "Right"}) do 
-			crosshairSection:Toggle({Name = "Crosshair", Flag = "Crosshair", Callback = function()
-				for i = 1, #crosshair_Lines do
-					crosshair_Lines[i].Visible = false; 
-				end 
-				--
-				for i = 1, #crosshair_Outlines do
-					crosshair_Outlines[i].Visible = false; 
-				end 
-			end}):Colorpicker({Default = Color3.fromRGB(255,255,255), Flag = "Crosshair Color", Callback = function()
-				for i = 1, #crosshair_Lines do 
-					crosshair_Lines[i].Color = flags["Crosshair Color"].Color;
-					crosshair_Lines[i].Transparency = flags["Crosshair Color"].Transparency;
-				end 
-			end});
-			crosshairSection:Toggle({Name = "Always Rotating", Flag = "Crosshair Always Rotating"})
-			crosshairSection:Slider({Name = "Speed", Flag = 'Crosshair Speed', Min = 0, Max = 24, Default = 12, Decimals = 0.1})
-			crosshairSection:Slider({Name = "Gap Size", Flag = 'Crosshair Gap Size', Min = 0, Max = 30, Default = 12, Decimals = 1})
-			crosshairSection:Slider({Name = "Length", Flag = 'Crosshair Length', Min = 0, Max = 30, Default = 12, Decimals = 1})
-			crosshairSection:Slider({Name = "Thickness", Flag = 'Crosshair Thickness', Min = 0.1, Max = 5, Default = 1.5, Decimals = 0.1, Callback = function(Int)
-				for i = 1, #crosshair_Lines do
-					crosshair_Lines[i].Thickness = Int; 
-					crosshair_Outlines[i].Thickness = Int; 
-				end 
-			end})
-			crosshairSection:Slider({Name = "Sides", Flag = 'Crosshair Sides', Min = 1, Max = 10, Default = 4, Decimals = 1, callback = function(Int)
-				crosshair_LineAmount = Int
-				-- 
-				crosshair_lineOffsets = utility:generateAngles(Int)
-				--
-				for i = 1, #crosshair_Lines do
-					crosshair_Lines[i]:Remove(); 
-					crosshair_Lines[i] = nil; 
-				end 
-				-- 
-				for i = 1, #crosshair_Outlines do
-					crosshair_Outlines[i]:Remove(); 
-					crosshair_Outlines[i] = nil; 
-				end 
-				-- 
-				do 
-					for Index = 1, Int do
-						local line = utility:drawObject("Line",{
-							Visible = false,
-							Color = flags["Crosshair Color"].Color,
-							Thickness = flags["Crosshair Thickness"],
-							ZIndex = 2,
-							Transparency = 1
-						})
-						--
-						crosshair_Lines[Index] = line
-						--
-						local line_1 = utility:drawObject("Line",{
-							Visible = false,
-							Color = Color3.fromRGB(0, 0, 0),
-							Thickness = flags["Crosshair Thickness"] * 2.5,
-							ZIndex = 1,
-							Transparency = 1
-						})
-						-- 
-						crosshair_Outlines[Index] = line_1
-					end
-				end 
-			end})
-			crosshairSection:Dropdown({Name = "Sizing Easing Style", Flag = "Crosshair Sizing Easing Style", Options = {"Off", "Linear", "Cubic", "Quad", "Quart", "Quint", "Sine", "Exponential", "Back", "Bounce", "Elastic", "Circular"}, Default = "Off"})
-			crosshairSection:Dropdown({Name = "Speed Easing Style", Flag = "Crosshair Speed Easing Style", Options = {"Off", "Linear", "Cubic", "Quad", "Quart", "Quint", "Sine", "Exponential", "Back", "Bounce", "Elastic", "Circular"}, Default = "Off"})
-			crosshairSection:Toggle({Name = "Show Text", Flag = "Script Name", Callback = function(Bool)
-				local sub = utility.drawings["Sub"]
-				local domain = utility.drawings["Domain"]
-				-- 
-				sub.Visible = Bool 
-				domain.Visible = Bool 
-			end})
-			crosshairSection:Toggle({Name = "Pulse", Flag = "Pulse"})
-			crosshairSection:Toggle({Name = "Attach to target", Flag = "Attach to target"})
-		end 
-		-- 
-		local ingameCrosshair = World:Section({Name = "In-Game Crosshair", Size = 330, Side = "Right"}) do 
-			ingameCrosshair:Toggle({Name = "Spinning", Flag = "In-Game Crosshair Spin", Callback = function()
-				game:GetService("Players").LocalPlayer.PlayerGui.MainScreenGui.Aim.Rotation = 0 
-			end})
-			ingameCrosshair:Slider({Name = "Speed", Flag = 'In-Game Crosshair Spin Speed', Min = 0, Max = 30, Default = 1, Decimals = 1})
-			ingameCrosshair:Toggle({Name = "Dont Show", Flag = "In-Game Crosshair Invisible"}) 
-		end 
-	end 
-	-- // Visuals 
-	local misc = Window:Page({Name = "Misc", Weapons = true}) do 
-		local Movement = misc:Weapon({Icon = "rbxassetid://6034509993"})
-		local Exploits = misc:Weapon({Icon = "rbxassetid://16997954488"})
-		local movementSection = Movement:Section({Name = "General", Size = 330}) do 
-			movementSection:Toggle({Name = "Speed", Flag = "Speed Enabled"}):Keybind({Name = "Speed", Flag = "Speed Key", Mode = "Toggle", Callback = function()
-				if Chatting then return end 
-			end})
-			movementSection:Slider({Name = "Speed", Flag = 'Speed', Min = 0, Max = 100, Default = 20, Decimals = 1})
-			movementSection:Toggle({Name = "Fly", Flag = "Fly Enabled"}):Keybind({Name = "Fly", Flag = "Fly Key", Mode = "Toggle", Callback = function()
-				if Chatting then return end
-				LocalPlayer.Character.HumanoidRootPart.Anchored = false; 
-			end})	
-			movementSection:Slider({Name = "Fly", Flag = 'Fly Speed', Min = 0, Max = 100, Default = 20, Decimals = 1})
-		end 
-		-- 
-		local hitEffects = Movement:Section({Name = "Hit Effects", Size = 330, Side = "Right"}) do 
-			hitEffects:Toggle({Name = "Hit Marker", Flag = "Hit Marker"}):Colorpicker({Default = Color3.fromRGB(255,255,255), Flag = "Hit Marker Settings"});
-			hitEffects:Toggle({Name = "3D Hit Marker", Flag = "3D Hit Marker"}):Colorpicker({Default = Color3.fromRGB(255,255,255), Flag = "3D Hit Marker Settings"});
-			hitEffects:Slider({Name = "Fading Time", Flag = 'Hit Markers Time', Min = 0.1, Max = 10.0, Default = 5.0, Decimals = 0.1})
-			hitEffects:Toggle({Name = "Hit Sounds", Flag = "Hit Sounds"})
-			hitEffects:Dropdown({Name = "Hit Sounds", Flag = "Hit Sounds Sound", Options = sfx_names, Default = "Neverlose"})
-			hitEffects:Slider({Name = "Volume", Flag = 'Hit Sounds Volume', Min = 0.1, Max = 10.0, Default = 5.0, Decimals = 0.1})
-			hitEffects:Slider({Name = "Pitch", Flag = 'Hit Sounds Pitch', Min = 0.1, Max = 10.0, Default = 1.0, Decimals = 0.1})
-			hitEffects:Toggle({Name = "Hit Effects", Flag = "Hit Effects"}):Colorpicker({Default = Color3.fromRGB(255,255,255), Flag = "Hit Effect Settings"});
-			hitEffects:Dropdown({Name = "Hit Effects", Flag = "Hit Effects Option", Options = {"Confetti", "Nova", "Sparkle"}, Default = "Confetti"})
-			hitEffects:Toggle({Name = "Hit Chams", Flag = "Hit Chams"}):Colorpicker({Default = Color3.fromRGB(255, 0, 0), Transparency = 0.8, Flag = "Hit Chams Settings"});
-			hitEffects:Dropdown({Name = "Material", Flag = "Hit Chams Material", Options = {"ForceField", "Neon", "Plastic"}, Default = "Neon"})
-			hitEffects:Slider({Name = "Fading Time", Flag = 'Hit Chams Fading Time', Min = 0.1, Max = 10.0, Default = 5.0, Decimals = 0.1})
-			hitEffects:Toggle({Name = "Hit-Logs", Flag = "Hit Notify"})
-		end 
-		-- 
-		local chatSpam = Movement:Section({Name = "Chat Spam", Size = 330, Side = "Left"}) do
-			chatSpam:Toggle({Name = "Enabled", Flag = "Chat Spam"})
-			chatSpam:Dropdown({Name = "Type", Flag = "Chat Spam Type", Options = {"Lunar", "Scottish"}, Default = "Lunar"})
-			chatSpam:Slider({Name = "Delay", Flag = 'Chat Spam Delay', Suffix = "s", Min = 0.1, Max = 10.0, Default = 5.0, Decimals = 0.1})
-			chatSpam:Toggle({Name = "Emojis", Flag = "Emojis"})
-			chatSpam:Toggle({Name = "Symbols", Flag = "Symbol"})
-			chatSpam:Toggle({Name = "Repeat", Flag = "Repeat"})
-		end 
-		-- 
-		local characterMods = Movement:Section({Name = "Character", Size = 330, Side = "Left"}) do 
-			characterMods:Toggle({Name = "Remove Chairs", Flag = "Remove Chairs", Callback = function(Bool)
-				for i,v in pairs(Workspace:GetDescendants()) do 
-					if v:IsA("Seat") then 
-						v.Disabled = Bool
-					end 
-				end 
-			end})
-			characterMods:Toggle({Name = "No Slow", Flag = "No Slow"})		
-			characterMods:Toggle({Name = "Auto Reload", Flag = "Auto Reload"})	
-			characterMods:Toggle({Name = "Auto Armor", Flag = "Auto Armor"})	
-			characterMods:Toggle({Name = "Anti Void Kill", Flag = "Anti Void Kill", Callback = function(Bool)
-				Workspace.FallenPartsDestroyHeight = Bool and -50000 or -500
-			end})	
-		end 
-		-- 
-		local cframeDesync = Exploits:Section({Name = "Desync", Size = 330, Side = "Left"}) do
-			local customSliders, strafeSliders, randomSliders = {}, {}, {}
-			cframeDesync:Toggle({Name = "Enabled", Flag = "Desync"}):Keybind({Name = "Desync Key", Flag = "Desync Key", Mode = "Toggle", Callback = function()
-				if flags["Desync Key"] == false and C_Desync["OldPosition"] then 
-					LocalPlayer.Character.HumanoidRootPart.CFrame = C_Desync["OldPosition"]
-					C_Desync["OldPosition"] = nil 
-				end 
-			end}) 
-			local Vis = cframeDesync:Toggle({Name = "Visualize", Flag = "Desync Visualize"}); Vis:Colorpicker({Default = Color3.fromRGB(0,0,0), Flag = "Desync Visualize Outline", Alpha = 0}); Vis:Colorpicker({Default = Color3.fromHex("#7D0DC3"), Flag = "Desync Visualize Fill", Alpha = 0.7});
-			cframeDesync:Toggle({Name = "Attach onto target", Flag = "Attach Target"});
-			cframeDesync:Dropdown({Name = "Type", Flag = "Desync Type", Options = {"Custom", "Random", "Target Strafe", "Roll"}, Default = "Target Strafe", Callback = function(Option)
-				if #customSliders ~= 0 then 
-					for _,v in pairs(customSliders) do v:SetVisible(Option == "Custom" and true or false) end; for _,v in pairs(strafeSliders) do v:SetVisible(Option == "Target Strafe" and true or false) end; for _,v in pairs(randomSliders) do v:SetVisible(Option == "Random" and true or false) end 		
-				end 
-			end})
-			-- // Dropdown Sliders
-			do 
-				local _ = cframeDesync:Slider({Name = "Position X", Flag = 'Desync X', Min = -15, Max = 15, Default = 0, Decimals = 1, Suffix = "m"}) table.insert(customSliders, _)
-				local _ = cframeDesync:Slider({Name = "Position Y", Flag = 'Desync Y', Min = -15, Max = 15, Default = 0, Decimals = 1, Suffix = "m"}) table.insert(customSliders, _)
-				local _ = cframeDesync:Slider({Name = "Position Z", Flag = 'Desync Z', Min = -15, Max = 15, Default = 0, Decimals = 1, Suffix = "m"}) table.insert(customSliders, _)
-				-- 		
-				local _ = cframeDesync:Slider({Name = "Rotation X", Flag = 'Rotation X', Min = -180, Max = 180, Default = 0, Decimals = 1, Suffix = "Â°"}) table.insert(customSliders, _)
-				local _ = cframeDesync:Slider({Name = "Rotation Y", Flag = 'Rotation Y', Min = -180, Max = 180, Default = 0, Decimals = 1, Suffix = "Â°"}) table.insert(customSliders, _)
-				local _ = cframeDesync:Slider({Name = "Rotation Z", Flag = 'Rotation Z', Min = -180, Max = 180, Default = 0, Decimals = 1, Suffix = "Â°"}) table.insert(customSliders, _)
-				-- 
-				local _ = cframeDesync:Slider({Name = "Radius", Flag = 'Desync Strafe Radius', Min = -15, Max = 15, Default = 10, Decimals = 1, Suffix = "m"}) table.insert(strafeSliders, _)
-				local _ = cframeDesync:Slider({Name = "Speed", Flag = 'Desync Strafe Speed', Min = -15, Max = 15, Default = 10, Decimals = 1, Suffix = "m/s"}) table.insert(strafeSliders, _)
-				local _ = cframeDesync:Slider({Name = "Height", Flag = 'Desync Strafe Height', Min = -15, Max = 15, Default = 0, Decimals = 1, Suffix = "m"}) table.insert(strafeSliders, _)
-				-- 
-				local _ = cframeDesync:Slider({Name = "Random Range", Flag = 'Desync Random Range', Min = 0, Max = 50, Default = 0, Decimals = 1, Suffix = "st"}) table.insert(randomSliders, _)
-				-- 
-				for _,v in pairs(customSliders) do v:SetVisible(false) end 		
-				for _,v in pairs(strafeSliders) do v:SetVisible(true) end 	
-				for _,v in pairs(randomSliders) do v:SetVisible(false) end 
-			end 	
-		end	
-		-- 
-		local invisDesync = Exploits:Section({Name = "Exploits", Size = 330, Side = "Right"}) do
-			local loop; 
-			invisDesync:Toggle({Name = "Invis Desync", Flag = "Invis Desync"}):Keybind({Name = "Invisible Desync", Flag = "Invis Desync Key", Mode = "Toggle", Callback = function()
-				if flags["Invis Desync"] and flags["Invis Desync Key"] then 
-					if flags["Invis Desync Key"] then 
-						setfflag("S2PhysicsSenderRate", 2)
-						loop = RunService.Heartbeat.Connect(RunService.Heartbeat, framework.desyncInit);
-					end
-				else 
-					-- skibidi sigma rizz
-					if loop then 
-						loop:Disconnect()
-						loop = nil 
-						setfflag("S2PhysicsSenderRate", 15) 
-					end 
-				end 
-			end})
-			-- 
-			invisDesync:Toggle({Name = "Destroy Cheaters", Flag = "Destroy Cheaters"}):Keybind({Name = "Destroy Cheaters", Flag = "Destroy Cheaters Key", Mode = "Toggle"})
-			flags["Destroy Cheaters Key"] = true 
-		end 
-		-- 
-		local fastFlags = Exploits:Section({Name = "Fast Flags", Size = 330, Side = "Right"}) do
-			fastFlags:Toggle({Name = "Enabled", Flag = "Fast Flags", Callback = function()
-				setfflag("S2PhysicsSenderRate", 15)
-			end})
-			fastFlags:Slider({Name = "Amount", Flag = 'Fast Flags Amount', Min = 1, Max = 15, Default = 2, Decimals = 0.01})
-			-- 
-			fastFlags:Toggle({Name = "Network Desync", Flag = "Network Desync", Callback = function()
-				sethiddenproperty(LocalPlayer.Character.HumanoidRootPart, "NetworkIsSleeping", false)
-			end})
-			fastFlags:Slider({Name = "Delay", Flag = 'Network Delay', Suffix = "s", Min = 0.01, Max = 15, Default = 2, Decimals = 0.01})
-		end 
-	end 
-	-- // Settings
-	local Config = Window:Page({Name = "Settings"}) do
-		local Menu = Config:Section({Name = "Menu", Size = 120})
-		local Cfgs = Config:Section({Name = "Configs", Size = 200, Side = "Right"})
-		--
-		local abc = false 
-		Menu:Keybind({Name = "Menu key", Flag = "MenuKey", Default = Enum.KeyCode.End, Mode = "Toggle", Callback = function() abc = not abc Library:SetOpen(abc) end})
-		Menu:Dropdown({Name = "Notification Position", Flag = "Notification Position", Options = {"Top Left", "Middle"}, Default = "Top Left"})
-		Menu:Label({Centered = true, Name = "Credits: \nPortal : User Interface"})
-		--
-		local CFGList = Cfgs:Dropdown({Name = "Cfg List", Flag = "SettingConfigurationList", Options = {}})
-		Cfgs:Textbox({Flag = "SettingsConfigurationName", Placeholder = "Config name"})
-		--
-		local CurrentList = {};
-		if not isfolder("Lunar") then 
-			makefolder("Lunar")
-		end 
-		if not isfolder("Lunar/Configs") then 
-			makefolder("Lunar/Configs")
-		end 
-		local function UpdateConfigList()
-			local List = {};
-			for idx, file in ipairs(listfiles("Lunar/Configs")) do
-				local FileName = file:gsub("Lunar/Configs\\", ""):gsub(".cfg", "")
-				List[#List + 1] = FileName;
-			end;
-
-			local IsNew = #List ~= #CurrentList
-			if not IsNew then
-				for idx, file in ipairs(List) do
-					if file ~= CurrentList[idx] then
-						IsNew = true;
-						break;
-					end;
-				end;
-			end;
-
-			if IsNew then
-				CurrentList = List;
-				CFGList:Refresh(CurrentList);
-			end;
-		end;
-		--
-		Cfgs:Button({Name = "Create", Callback = function()
-			local ConfigName = flags.SettingsConfigurationName;
-			if ConfigName == "" or isfile("Lunar/Configs/" .. ConfigName .. ".cfg") then
-				return;
-			end;
-			writefile("Lunar/Configs/" .. ConfigName .. ".cfg", Library:GetConfig());
-			UpdateConfigList();
-		end})
-		Cfgs:Button({Name = "Save", Callback = function()
-			local SelectedConfig = flags.SettingConfigurationList;
-			if SelectedConfig then
-				writefile("Lunar/Configs/" .. SelectedConfig .. ".cfg", Library:GetConfig())
-			end;
-		end})
-		Cfgs:Button({Name = "Load", Callback = function()
-			local SelectedConfig = flags.SettingConfigurationList;
-			if SelectedConfig then
-				Library:LoadConfig(readfile("Lunar/Configs/" .. SelectedConfig .. ".cfg"))
-			end
-		end})
-		Cfgs:Button({Name = "Delete", Callback = function()
-			local SelectedConfig = flags.SettingConfigurationList;
-			if SelectedConfig then
-				delfile("Lunar/Configs/" .. SelectedConfig .. ".cfg")
-			end
-			UpdateConfigList();
-		end})
-		Cfgs:Button({Name = "Refresh", Callback = function()
-			UpdateConfigList();
-		end})
-		Cfgs:Toggle({Name = "Keybind List", Flag = "Keybind List", Callback = function(Bool)
-			PlaceHolderUI.Enabled = Bool
-		end})
-		UpdateConfigList();
-	end
-end 
-
--- // Framework
-do 
-	getgenv().offset = nil; 
-	local Origin; 
-	local Position, OnScreen, PreviousGun, PreviousAmmo, Sine, Radians = nil, nil, nil, nil, 0, 1; 
-	local NetworkTick, Networking = 0, false; 
-	local chatTick = 0; 
-	-- // Loops
-	do
-		framework["connections"]["Main Loop"] = RunService.Heartbeat:Connect(LPH_NO_VIRTUALIZE(function(Fps)
-			-- // Framework Calls
-			do 
-				framework:aimAssist() 
-				framework:worldVisuals()
-			end 
-			--// Auto Armor
-			do 
-				if flags["Auto Armor"] then 
-					if LocalPlayer.Character.BodyEffects.Armor.Value < 100 then 
-						local Pos = LocalPlayer.Character.HumanoidRootPart.CFrame
-						LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Ignored.Shop["[High-Medium Armor] - $2440"].Head.CFrame
-						fireclickdetector(workspace.Ignored.Shop["[High-Medium Armor] - $2440"].ClickDetector)
-						RunService.RenderStepped:Wait()
-						LocalPlayer.Character.HumanoidRootPart.CFrame = Pos 
-					end 
-				end 
-			end 
-			-- // No Slow Down 
-			do 
-				if flags["No Slow"] then 
-					if LocalPlayer.Character.BodyEffects.Reload.Value then
-						LocalPlayer.Character.BodyEffects.Reload.Value = false
-					end
-					--
-					local Slowdowns = LocalPlayer.Character.BodyEffects.Movement:FindFirstChild('NoJumping') or LocalPlayer.Character.BodyEffects.Movement:FindFirstChild('NoWalkSpeed') or LocalPlayer.Character.BodyEffects.Movement:FindFirstChild('ReduceWalk')
-					if Slowdowns then
-						Slowdowns:Destroy()
-					end
-				end 
-			end 
-			-- // Target Framework
-			do 
-				if utility.target and utility:ValidateClient(utility.target) and flags["Silent_Bind"] then
-					Position, OnScreen = Camera:WorldToViewportPoint(utility.target.Character.HumanoidRootPart.Position);
-					prediction = framework:selectPrediction()
-					-- 
-					if flags["Target Auto Select"] then 
-						framework:autoSelect()
-					end 
-					--
-					if flags["Resolver"] then 
-						offset = framework:calculateResolverOffset(utility.target); 
-					end      
-					--
-					if flags["Highlight Enabled"] then 
-						targetHighlight.Enabled = true 
-						targetHighlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-						targetHighlight.FillColor = flags["Highlight Fill Color"].Color
-						targetHighlight.OutlineColor = flags["Highlight Outline Color"].Color
-						targetHighlight.Adornee = utility.target.Character
-						targetHighlight.OutlineTransparency = flags["Highlight Outline Color"].Transparency
-						targetHighlight.FillTransparency = flags["Highlight Fill Color"].Transparency 
-					else 
-						targetHighlight.Enabled = false 
-					end 
-					-- 
-					if flags["Nearest Part"] then 
-						partClosest = framework:calculateNearestPart(utility.target, flags["Closest Hit Part"]).Name
-					end 
-					--
-					checks = framework:getChecks(utility.target, table.find(flags["Silent Checks"], "Friend Check"), table.find(flags["Silent Checks"], "Wall Check"), table.find(flags["Silent Checks"], "Knocked Check"), table.find(flags["Silent Checks"], "Grabbed Check"));
-					-- 
-					if flags["Line Enabled"] then 
-						utility.drawings["Tracer"].Visible = OnScreen and true or false  
-						utility.drawings["Tracer"].From = NewVector2(Mouse.X, Mouse.Y + Offset)
-						utility.drawings["Tracer"].To = NewVector2(Position.X, Position.Y)
-						utility.drawings["Tracer"].Color = flags["Line Settings"].Color
-						utility.drawings["Tracer"].Transparency = flags["Line Settings"].Transparency
-					end
-					--
-					if flags["Target Strafe Enabled"] then 
-						utility.angle = utility.angle + flags["Target Strafe Speed"]
-						local strafe = utility.target.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(utility.angle), 0) * NewCFrame(0, flags["Target Strafe Height"], flags["Target Strafe Distance"])
-						-- 
-						LocalPlayer.Character.HumanoidRootPart.CFrame = strafe
-					end 
-					-- 
-					if flags["Back Track Enabled"] and flags["Back Track Method"] == "Follow" then 
-						for _, Part in pairs(utility.folders["Part Chams"]:GetChildren()) do 
-							if Part:IsA("BasePart") and table.find(utility.bodyParts, Part.Name) then 
-								Part.Position = utility.target.Character[Part.Name].Position + utility.target.Character.HumanoidRootPart.Velocity * 0.1413
-								Part.Rotation = utility.target.Character[Part.Name].Rotation
-							end     
-						end 
-					end 
-					-- 
-					if flags["Look At"] then 
-						LocalPlayer.Character.Humanoid.AutoRotate = false;
-						local OldCframe = LocalPlayer.Character.PrimaryPart;
-						local NearestRoot = utility.target.Character.HumanoidRootPart
-						local NearestPos = NewCFrame(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(NearestRoot.Position.X, OldCframe.Position.Y, NearestRoot.Position.Z));
-						LocalPlayer.Character:SetPrimaryPartCFrame(NearestPos);
-					end 
-					-- 
-					if flags["Auto Shoot"] then 
-						local Tool = utility:getHeld(); 
-						if Tool then 
-							Tool:Activate()
-						end 
-					end 
-				else 
-					-- 
-					if (utility.drawings["Tracer"].Visible == true) then 
-						utility.drawings["Tracer"].Visible = false 
-					end 
-					-- 
-					targetHighlight.Enabled = false 
-				end 
-			end 
-			-- // Anti Cheat Bypass
-			do 
-				if tick() - antiCheattick > 1 and LocalPlayer.Character then 
-					antiCheattick = tick() 
-					-- 
-					for _, Script in pairs(LocalPlayer.Character:GetChildren()) do
-						if Script:IsA("Script") and Script.Name ~= "Health" and Script.Name ~= "Sound" and Script:FindFirstChild("LocalScript") then
-							Script:Destroy()
-						end
-					end
-				end 	
-			end 
-			-- // Movement
-			do 
-				if LocalPlayer.Character and not (flags["Desync"] and flags["Desync Key"]) then 
-					framework:cframeSpeed() 
-					framework:fly(Fps)			
-				end 
-			end 
-			-- // Physics and Network shits
-			do 
-				if flags["Fast Flags"] and getfflag("S2PhysicsSenderRate") ~= flags["Fast Flags Amount"] then 
-					setfflag("S2PhysicsSenderRate", flags["Fast Flags Amount"])
-				end 
-				-- 
-				if flags["Network Desync"] then 
-					if tick() - NetworkTick > flags["Network Delay"] then 
-						NetworkTick = tick() 
-						Networking = not Networking
-						sethiddenproperty(LocalPlayer.Character.HumanoidRootPart, "NetworkIsSleeping", Networking)
-					end 
-				end 
-			end 
-			-- // Chat Spam
-			do 
-				if flags["Chat Spam"] then 
-					if tick() - chatTick > flags["Chat Spam Delay"] then 
-						chatTick = tick()
-						local Message = framework:chatSpam(flags["Chat Spam Type"], flags["Repeat"], flags["Emojis"], flags["Symbol"])
-						ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Message, "All")
-					end 
-				end 
-			end 
-		end))
-		framework["connections"]["Desync"] = RunService.Heartbeat:Connect(LPH_NO_VIRTUALIZE(function(delta)
-			-- // Desync
-			do 
-				if ((flags["Desync"] and flags["Desync Key"]) or (flags["Destroy Cheaters"] and flags["Destroy Cheaters Key"]) and LocalPlayer.Character) then 
-					C_Desync["OldPosition"] = LocalPlayer.Character.HumanoidRootPart.CFrame
-					local Origin = (flags["Attach Target"] and checks and utility.target and utility.target.Character and utility.target.Character.HumanoidRootPart) or LocalPlayer.Character.HumanoidRootPart
-					local randomRange = flags["Desync Random Range"]
-					Radians += flags["Desync Strafe Speed"]
-					local calculatedPositions = {
-						["Random"] = (NewCFrame(Origin.Position) + Vector3.new(Random(-randomRange, randomRange), Random(-randomRange, randomRange), Random(-randomRange, randomRange))) * CFrame.Angles(Rad(Random(-180, 180)), Rad(Random(-180, 180)), Rad(Random(-180, 180))),
-						["Roll"] = Origin.CFrame * NewCFrame(0, -4 ,0) * CFrame.Angles(0, Rad(Random(1, 360)), Rad(-180)),
-						["Target Strafe"] = Origin.CFrame * CFrame.Angles(0, Rad(Radians), 0) * NewCFrame(0, flags["Desync Strafe Height"], flags["Desync Strafe Radius"]),
-						["Custom"] = Origin.CFrame * NewCFrame(flags["Desync X"], flags["Desync Y"], flags["Desync Z"]) * CFrame.Angles(Rad(flags["Rotation X"]), Rad(flags["Rotation Y"]), Rad(flags["Rotation Z"])), 
-						["Destroy Cheaters"] = Origin.CFrame * NewCFrame(9e9, 0/0, math.huge)
-					}
-					--
-					C_Desync["PredictedPosition"] = flags["Destroy Cheaters"] and flags["Destroy Cheaters Key"] and calculatedPositions["Destroy Cheaters"] or calculatedPositions[flags["Desync Type"]]
-					-- 
-					LocalPlayer.Character.HumanoidRootPart.CFrame = C_Desync["PredictedPosition"]
-					-- 
-					if flags["Desync Visualize"] then 
-						bodyClone:SetPrimaryPartCFrame(LocalPlayer.Character.HumanoidRootPart.CFrame)	
-						visualizeChams.FillColor = flags["Desync Visualize Fill"].Color;
-						visualizeChams.FillTransparency = flags["Desync Visualize Fill"].Transparency; 
-						visualizeChams.OutlineColor = flags["Desync Visualize Outline"].Color; 
-						visualizeChams.OutlineTransparency = flags["Desync Visualize Outline"].Transparency; 			
-					end  		
-					-- 
-					game:GetService("RunService").RenderStepped:Wait()
-					-- 	
-					LocalPlayer.Character.HumanoidRootPart.CFrame = C_Desync["OldPosition"]
-					--
-					framework:cframeSpeed() 
-					framework:fly(delta)	
-				else 
-					bodyClone:SetPrimaryPartCFrame(NewCFrame(9999,9999,9999))	
-				end 
-			end
-		end)) 
-		framework["connections"]["ESP Loop"] = RunService.RenderStepped:Connect(LPH_NO_VIRTUALIZE(function(Fps)
-			for Index, Base in pairs(Visuals.Bases) do
-				Base:Update()
-			end 
-			-- // Crosshair Visuals
-			do 
-				crosshair_SpinAngle = flags["Crosshair Always Rotating"] and crosshair_SpinAngle + math.rad((flags["Crosshair Speed"] * 10) * Fps) or 0;  
-				-- // Crosshair 
-				do 
-					if flags["Crosshair"] then 
-						local Radius = flags["Crosshair Length"] * 5
-						local Gap = flags["Crosshair Gap Size"] 
-						--
-						if flags["Attach to target"] and utility.target ~= nil and utility.target.Character and OnScreen then 
-							Origin = NewVector2(Position.X, Position.Y)
-						else 
-							Origin = NewVector2(Mouse.X, Mouse.Y + Offset)
-						end 
-						-- 
-						CursorSize += 0.025
-						-- 
-						local SmoothAngle = flags["Crosshair Speed Easing Style"] ~= "Off" and Tween.EasingStyles[Enum.EasingStyle[flags["Crosshair Speed Easing Style"]]][Enum.EasingDirection.InOut](utility:Shift(crosshair_SpinAngle)) * (Pi * Pi/2) or crosshair_SpinAngle
-						local Dynamic = Cos(CursorSize)
-						local SmoothSize =  flags["Crosshair Sizing Easing Style"] ~= "Off" and ((Radius / 2) * (Tween.EasingStyles[Enum.EasingStyle[flags["Crosshair Sizing Easing Style"]]][Enum.EasingDirection.In](utility:Shift(Dynamic)))) or 0 
-						local localRadius = Radius - SmoothSize
-						--
-						for i = 1, #crosshair_Lines do 
-							local Positions = NewVector2(Cos(SmoothAngle + crosshair_lineOffsets[i]), (Sin(SmoothAngle + crosshair_lineOffsets[i])))
-							-- 
-							crosshair_Lines[i].From = Origin + NewVector2(Positions.X, Positions.Y) * Gap 
-							crosshair_Lines[i].To = crosshair_Lines[i].From + NewVector2(Positions.X, Positions.Y) * localRadius
-							-- 
-							crosshair_Outlines[i].From = Origin + NewVector2(Positions.X, Positions.Y) * (Gap - 1)
-							crosshair_Outlines[i].To = crosshair_Lines[i].From + NewVector2(Positions.X, Positions.Y) * (localRadius + 1)
-							-- 
-							crosshair_Lines[i].Visible = true 
-							crosshair_Outlines[i].Visible = true 
-						end 
-					end 
-				end 
-				-- // Crosshair Text 
-				do
-					if flags["Script Name"] then 
-						local sub = utility.drawings["Sub"]
-						local domain = utility.drawings["Domain"]
-						-- 
-						local yOffset = flags["Crosshair"] and ((flags["Crosshair Length"] * 5) + flags["Crosshair Gap Size"]) or 30
-						-- 
-						local textOrigin; 
-						if flags["Attach to target"] and utility.target ~= nil and utility.target.Character and OnScreen then 
-							textOrigin = NewVector2(Position.X - 23, Position.Y + yOffset)
-						else 
-							textOrigin = NewVector2(Mouse.X - 23, Mouse.Y + Offset + yOffset)
-						end 
-						-- 
-						sub.Visible = true 
-						domain.Visible = true    
-						-- 
-						sub.Position = textOrigin
-						domain.Position = sub.Position + NewVector2(sub.TextBounds.X, 0)
-					end 
-					-- 
-					if flags["Pulse"] and flags["Script Name"] then 
-						local sub = utility.drawings["Sub"]
-						-- 
-						Sine = flags["Pulse"] and math.abs(math.sin(tick() * 4)) or 1 
-						sub.Transparency = Sine
-					end 
-				end
-				-- // In-Game Crosshair Shit 
-				do 
-					if flags["In-Game Crosshair Spin"] and not flags["In-Game Crosshair Invisible"] then 
-						LocalPlayer.PlayerGui.MainScreenGui.Aim.Rotation += flags["In-Game Crosshair Spin Speed"]
-					end 
-					-- 
-					if flags["In-Game Crosshair Invisible"] and LocalPlayer.PlayerGui.MainScreenGui.Aim.Visible == true then 
-						Players.LocalPlayer.PlayerGui.MainScreenGui.Aim.Visible = false 
-					end 
-				end 
-			end 
-			-- // Hit Detection 
-			do 
-				local Gun = LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
-				local Connection = framework["connections"]["Hit Detection"]
-				
-				if Gun ~= PreviousGun and Connection then
-					PreviousGun = Gun
-					PreviousAmmo = 999
-					Connection:Disconnect()
-					framework["connections"]["Hit Detection"] = nil
-				end
-			
-				if not framework["connections"]["Hit Detection"] and Gun and Gun.Ammo.Value then
-					framework["connections"]["Hit Detection"] = Gun.Ammo:GetPropertyChangedSignal("Value"):Connect(function()
-						local CurrentAmmo = Gun.Ammo.Value
-						if CurrentAmmo < PreviousAmmo then
-							local ChildrenAdded = 0;
-							local ChildAdded;
-							local IgnoreList = {LocalPlayer.Character, Gun.Handle};
-							ChildAdded = Workspace.Ignored.Siren.Radius.ChildAdded:Connect(function(Object)
-								if Object.Name == "BULLET_RAYS" then
-									ChildrenAdded += 1;
-									if (table.find({"[Double-Barrel SG]", "[TacticalShotgun]", "[Shotgun]"}, Gun.Name) and ChildrenAdded <= 5) or (ChildrenAdded == 1) then
-										local Pos = Object.CFrame.Position
-										local LookVector = Object.CFrame.LookVector
-										-- 
-										local RayCastParams = RaycastParams.new()
-										RayCastParams.FilterType = Enum.RaycastFilterType.Exclude
-										RayCastParams.IgnoreWater = true
-										RayCastParams.FilterDescendantsInstances = IgnoreList
-										local Ray = Workspace:Raycast(Pos, LookVector * 1000, RayCastParams)
-										if not Ray then return end 
-										local HitPosition = Ray.Position
-										local HitInstance = Ray.Instance
-										-- 	
-										delay(0.001, function()
-											if flags["Bullet Tracers"] then 	
-												Object:Destroy() 	
-												utility:CreateBeam(Pos, HitPosition, flags["Bullet Tracers Color"].Color, flags["Face Camera"], flags["Bullet Size"], flags["Bullet Speed"], flags["Bullet Brightness"])
-											end 
-											-- 
-											if flags["Bullet Impacts"] then 
-												local Impact = Instance.new("Part")
-												Impact.Anchored = true 
-												Impact.CanCollide = false 
-												Impact.Parent = game.Workspace
-												Impact.Material = "Neon"
-												Impact.Shape = Enum.PartType.Block 
-												Impact.Transparency = flags["Bullet Impacts Color"].Transparency
-												Impact.Color = flags["Bullet Impacts Color"].Color
-												Impact.Size = NewVector3(flags["Impact Size"], flags["Impact Size"], flags["Impact Size"])
-												Impact.CFrame = NewCFrame(HitPosition)
-												delay(3, function()
-													Impact:Destroy()
-												end)
-											end 
-											-- 
-											if HitInstance then
-												local InstanceHit = HitInstance:FindFirstAncestorOfClass('Model')
-												if not InstanceHit then return end 
-												
-												if InstanceHit:FindFirstChild("Humanoid") and InstanceHit:FindFirstChild("HumanoidRootPart") then 
-													if flags["Hit Sounds"] then 
-														HitReg:HitSound(sfx[flags["Hit Sounds Sound"]], flags["Hit Sounds Volume"], flags["Hit Sounds Pitch"])
-													end 
-													-- 
-													if flags["Hit Chams"] then 
-														local Model = Instance.new("Model", utility.folders["Hit Chams"]) 
-														utility:characterClone(Players[InstanceHit.Name], flags["Hit Chams Settings"].Color, flags["Hit Chams Material"], flags["Hit Chams Settings"].Transparency, Model);
-														delay(flags["Hit Chams Fading Time"], function()
-															Model:Destroy()
-														end)
-													end
-													-- 
-													if flags["Hit Notify"] then 
-														local Text = string.format("You Hit %s in the %s!", Players[InstanceHit.Name].Name, HitInstance.Name)
-														Library:Notification(Text, 3, Library.Accent, flags["Notification Position"])
-													end 
-													-- 
-													if flags["Hit Marker"] then 
-														HitReg:HitMarker(4, flags["Hit Marker Settings"].Color, flags["Hit Markers Time"])
-													end 
-													-- 
-													if flags["3D Hit Marker"] then 
-														HitReg:HitMarker3D(4, flags["3D Hit Marker Settings"].Color, flags["Hit Markers Time"], HitPosition) 
-													end 
-													-- 
-													if flags["Hit Effects"] then 
-														HitReg:HitEffect(flags["Hit Effects Option"], Players[InstanceHit.Name].Character)
-													end 
-												end 
-											end 
-											ChildAdded:Disconnect()
-										end)
-									end
-								else
-									ChildAdded:Disconnect()
-								end
-							end)
-						end
-						PreviousAmmo = CurrentAmmo
-					end)
-				end
-			end 
-		end)) 
-		framework["connections"]["Typing Check"] = InputService.InputBegan:Connect(function(_, Chatting)
-			Typing = Chatting
-		end)
-		framework["connections"]["Text"] = InputService.InputChanged:Connect(function(_)
-			if utility.drawings["Aim Assist FOV"].Visible then 
-				utility.drawings["Aim Assist FOV"].Position = NewVector2(Mouse.X, Mouse.Y + Offset)
-			end 
-		end) 
-		framework["connections"]["ESP Player Find Loop"] = Players.PlayerAdded:Connect(LPH_NO_VIRTUALIZE(function(Player)
-			if flags["PlayerESP_Enabled"] then 
-				Visuals:Create({Player = Player})
-			end 
-		end))
-	end 
-	-- // Gun Handling
-	do  
-		local function Aimbot() 
-			utility:calculateAimViewerEndPoint()
-		end 	
-		-- 	
-		local function Ammo()
-			framework:autoReload()            
-		end 	
-		-- 
-		framework["connections"]["Anti Aim Viewer"] = {} 
-		framework["connections"]["auto reload >_< :3"] = {}
-		for i, v in pairs(LocalPlayer.Backpack:GetChildren()) do
-			if v:IsA("Tool") and v:FindFirstChild("Ammo") then
-				if not framework["connections"]["Anti Aim Viewer"][v] then 
-					framework["connections"]["Anti Aim Viewer"][v] = v.Activated:Connect(Aimbot)
-				end 
-				--
-				if not framework["connections"]["auto reload >_< :3"][v] then 
-					framework["connections"]["auto reload >_< :3"][v] = v.Ammo:GetPropertyChangedSignal("Value"):Connect(Ammo)
-				end 
-			end
-		end
-		for i, v in pairs(LocalPlayer.Character:GetChildren()) do
-			if v:IsA("Tool") and v:FindFirstChild("Ammo") then
-				if not framework["connections"]["Anti Aim Viewer"][v] then 
-					framework["connections"]["Anti Aim Viewer"][v] = v.Activated:Connect(Aimbot)
-				end 
-				--
-				if not framework["connections"]["auto reload >_< :3"][v] then 
-					framework["connections"]["auto reload >_< :3"][v] = v.Ammo:GetPropertyChangedSignal("Value"):Connect(Ammo)
-				end 
-			end
-		end
-		LocalPlayer.Character.ChildAdded:connect(function(v)
-			if v:IsA("Tool") and v:FindFirstChild("Ammo") then
-				if not framework["connections"]["Anti Aim Viewer"][v] then 
-					framework["connections"]["Anti Aim Viewer"][v] = v.Activated:Connect(Aimbot)
-				end 
-				--
-				if not framework["connections"]["auto reload >_< :3"][v] then 
-					framework["connections"]["auto reload >_< :3"][v] = v.Ammo:GetPropertyChangedSignal("Value"):Connect(Ammo)
-				end 
-			end
-		end)
-		LocalPlayer.CharacterAdded:connect(function(v)
-			for i = 1, #framework["connections"]["Anti Aim Viewer"], 1 do
-				framework["connections"]["Anti Aim Viewer"][i]:Disconnect()
-				framework["connections"]["Anti Aim Viewer"][i] = nil
-				framework["connections"]["auto reload >_< :3"][i]:Disconnect()
-				framework["connections"]["auto reload >_< :3"][i] = nil
-			end
-			v.ChildAdded:connect(function(v)
-				if v:IsA("Tool") and v:FindFirstChild("Ammo") then
-					if not framework["connections"]["Anti Aim Viewer"][v] then 
-						framework["connections"]["Anti Aim Viewer"][v] = v.Activated:Connect(Aimbot)
-					end 
-					--
-					if not framework["connections"]["auto reload >_< :3"][v] then 
-						framework["connections"]["auto reload >_< :3"][v] = v.Ammo:GetPropertyChangedSignal("Value"):Connect(Ammo)
-					end 
-				end
-			end)
-		end)
-	end 	
-	-- // Target Back Track
-	do 
-		task.spawn(function()
-			while true do 
-				task.wait(flags["Back Track Delay"]/2)
-				if utility.target and utility:ValidateClient(utility.target) then 
-					if flags["Back Track Enabled"] and flags["Back Track Method"] == "Clone" then
-						utility:characterClone(utility.target, flags["Back Track Settings"].Color, flags["Back Track Material"], flags["Back Track Settings"].Transparency, utility.folders["Part Chams"]);
-						task.wait(flags["Back Track Delay"]/2)
-						utility.folders["Part Chams"]:ClearAllChildren(); 
-					end     
-				end 
-			end 
-		end)
-	end 
-	-- // Hooks 
-	do 
-		local Old; 
-		Old = hookmetamethod(game, "__namecall", LPH_NO_VIRTUALIZE(function(self, ...)
-			if tostring(self.Name) == "MainEvent" then 
-				local Args = {...}
-				-- 
-				if getnamecallmethod() == "FireServer" and Args[1] == "UpdateMousePos" and not flags["Aim Viewer Bypass"] then 
-					if utility.target and utility.target.Character and flags["Silent_Bind"] then 
-						local part = (flags["Jump Prediction"] and utility.target.Character.Humanoid.FloorMaterial == Enum.Material.Air and "RightFoot") or (flags["Nearest Part"] and partClosest) or flags["Single Hit Part"]
-						local yOffset = utility.target.Character.Humanoid.FloorMaterial == Enum.Material.Air and flags["Manual Offset Value"] or 0 
-						--
-						if (checks == true) then 
-							if flags["Resolver"] then  
-								Args[2] = utility.target.Character[tostring(part)].Position + offset + NewVector3(0, yOffset, 0)
-							else 
-								Args[2] = utility.target.Character[tostring(part)].Position + (utility.target.Character.HumanoidRootPart.Velocity * prediction) + NewVector3(0, yOffset, 0)
-							end   
-						end   
-					end 
-				end 
-				--
-				return Old(self, unpack(Args))
-			end 
-			-- 
-			return Old(self, ...)
-		end))
-
-		--[[local IndexThing
-		IndexThing = hookmetamethod(game, "__index", function(self, k)
-			if (self:IsA("Mouse") and (k == "Hit" or k == "Target")) then 
-				if utility.target and utility.target.Character and flags["Silent_Bind"] and LocalPlayer.Character then 
-					local part = (flags["Jump Prediction"] and utility.target.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall and flags["Air Hit Part"]) or (flags["Nearest Part"] and partClosest) or flags["Single Hit Part"]
-					local yOffset = utility.target.Character.Humanoid.FloorMaterial == Enum.Material.Air and flags["Manual Offset Value"] or 0 
-					--
-					if (checks == true) then 
-						if flags["Resolver"] then  
-							getgenv().Hit = utility.target.Character[tostring(part)].Position + offset + NewVector3(0, yOffset, 0)
-						else 
-							getgenv().Hit = utility.target.Character[tostring(part)].Position + (utility.target.Character.HumanoidRootPart.Velocity * prediction) + NewVector3(0, yOffset, 0)
-						end  
-						return (k == "Hit" and CFrame.new(getgenv().Hit)) 
-					end   
-				end 	
-			end
-			return IndexThing(self, k)
-		end)]]
-
-		local old
-		old = hookmetamethod(game, "__index", LPH_NO_VIRTUALIZE(function(self, key)
-			if not checkcaller() then
-				if key == "CFrame" and LocalPlayer.Character and self == LocalPlayer.Character.HumanoidRootPart and ((flags["Desync"] and flags["Desync Key"]) or (flags["Destroy Cheaters Key"] and flags["Destroy Cheaters"])) and C_Desync["OldPosition"] ~= nil and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character:FindFirstChild("Humanoid") and LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
-					return C_Desync["OldPosition"]
-				end
-			end 
-			return old(self, key)
-		end))
-	end 
-end 
-
-Library:Notification("Loaded snitchyaw in " .. Floor((tick() - loadingTime) * 1000)  .."ms", 3, Library.Accent, flags["Notification Position"])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --[[
 
-NICE TRY POORON >_< :3333
+// Misery Source || v1.0.5
+// Hi calls || << >>
 
-]]
+]]--
+
+print("=")
+
+--// Initialize
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+print("=")
+  
+  if (not LPH_OBFUSCATED) then
+      LPH_NO_VIRTUALIZE = function(...) return (...) end;
+      LPH_JIT_MAX = function(...) return (...) end;
+      LPH_JIT_ULTRA = function(...) return (...) end;
+  end
+
+  print("CheckPoint 1")
+  
+  --// Custom Drawing
+  -- loadstring((syn and syn.request or request)({Url = "https://raw.githubusercontent.com/Hxckerskyy/miserycc.lua/main/someshit.lua", Method = "Get"}).Body)(); -- J4VZ9cJh
+  local MainColor = Color3.fromRGB(255, 102, 204)
+  local CrosshairHandler = loadstring(game:HttpGet('https://raw.githubusercontent.com/Hxckerskyy/miserycc.lua/main/crosshair.lua', true))() do
+    getgenv().crosshair.enabled = false
+    getgenv().crosshair.color = MainColor
+  end
+  local ESPHandler = loadstring(game:HttpGet('https://raw.githubusercontent.com/Hxckerskyy/miserycc.lua/main/esp.lua', true))() do
+    getgenv().esp.Enabled = false
+    getgenv().esp.SkeletonEnabled = false
+    getgenv().esp.ChamsEnabled = false
+  end
+
+  local YunDrawingApi = loadstring(game:HttpGet('https://raw.githubusercontent.com/Hxckerskyy/miserycc.lua/main/yunapi.lua', true))()
+
+  local TargetCircle = YunDrawingApi:New3DCircle() do
+    TargetCircle.Visible = false
+    TargetCircle.ZIndex = 1
+    TargetCircle.Transparency = 1
+    TargetCircle.Color = MainColor
+    TargetCircle.Thickness = 1
+    TargetCircle.Radius = 2
+    TargetCircle.Rotation = Vector2.new(2, 0)
+end
+  
+  --// Services
+  local Workspace = game:GetService("Workspace")
+  local Debris            = game:GetService('Debris');
+  local Players = game:GetService("Players")
+  local UserInputService = game:GetService('UserInputService')
+  local TweenService = game:GetService('TweenService')
+  local ContextAction = game:GetService('ContextActionService')
+  local Lighting = game:GetService('Lighting')
+  local MarketPlace = game:GetService('MarketplaceService')
+  local RunService = game:GetService('RunService')
+  local ReplicatedStorage = game:GetService('ReplicatedStorage')
+  
+  --// Variables
+
+  print("CheckPoint 2")
+  
+  local Target = nil
+  local Notification_Icon = "rbxassetid://57254792"
+  
+  
+  local Notifications = {};
+  local Utility = {};
+  local TracerLine, nigganiggaXD , FakeHitboxPart, DotParent, newBillboard, newFrame, newUiCornor = Drawing.new("Line"), Instance.new("MeshPart"), Instance.new("Part",game.Workspace), Instance.new("Part",game.Workspace), Instance.new("BillboardGui", DotParent), Instance.new("Frame", newBillboard),  Instance.new("UICorner", newFrame)
+  local sayMessage = function(msg) ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "ALL") end
+  task.spawn(function ()
+    newBillboard.Name = "endless"
+    newBillboard.Adornee = DotParent
+    newBillboard.Size = UDim2.new(1, 0, 1, 0)
+    newBillboard.AlwaysOnTop = true
+    newFrame.Size = UDim2.new(1, 0, 1, 0)
+    newFrame.BackgroundTransparency = 0
+    newUiCornor.CornerRadius = UDim.new(50, 50)
+    DotParent.CanCollide = false
+    DotParent.Anchored = true
+    DotParent.CFrame = CFrame.new(0,2000,0)
+    DotParent.Transparency = 1
+    nigganiggaXD.MeshId = "rbxassetid://3726303797"  --3726303797
+    nigganiggaXD.CanCollide = false
+    nigganiggaXD.Anchored = true
+    nigganiggaXD.Material = Enum.Material.Neon
+    nigganiggaXD.Parent = game.Workspace
+  end)
+  
+  local AntiAimViewer_Enabled = false
+  local AntiAimViewer_HighLight = false
+  local AntiAimViewer_HighLight_OutLineColor = Color3.fromRGB(255, 255, 255)
+  local AntiAimViewer_HighLight_FillColor = MainColor
+  
+  local AntiAimViewer_Color = Color3.fromRGB(255, 102, 204)
+  local AntiAimViewer_Target = nil
+  local AntiAimViewer_Method = "MousePos"
+  
+  local Client = Players.LocalPlayer
+  local ClientCharacter = Client and (Client.Character or Client.CharacterAdded:Wait())
+  local enabled, TargetFalling, DetectAnti, AntiGroundValue, WhenAntiGroundActivate, Script = false, false, true, 0.5, -20, {
+    Drawing = {},
+    Connections = {},
+    Locals = {
+        NetworkShouldSleep = false,
+        OriginalVelocity = {}
+    },
+    Functions = {}
+}
+  local Mouse, Camera = Client:GetMouse(), game:GetService("Workspace").CurrentCamera
+  local PreviousPosition, PreviusVelocity = Vector3.new(0,0,0), Vector3.new(0,0,0)
+  local req =  (syn and syn.request or request);
+  local CFrameSpeedKeyBind
+  local flyvariableshit = false
+  local chatSpamTick = tick()
+  local GuiService   = game:GetService('GuiService');
+  local GetGuiInset = GuiService.GetGuiInset
+
+
+  local EnabledTrashTalkF = true;
+  getgenv().UsableTrashTalk = false
+  
+  
+  local raycastParams = RaycastParams.new()
+  raycastParams.FilterDescendantsInstances = {Workspace.CurrentCamera, ClientCharacter}
+  raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+  raycastParams.IgnoreWater = true
+  
+  --// Tables
+  local Notifications = {};
+  local Utility = {};
+  local FoVCircle = Drawing.new('Circle') do
+    FoVCircle.Radius       = 1500
+    FoVCircle.Color        = MainColor
+    FoVCircle.Filled       = false
+    FoVCircle.NumSides     = 120
+    FoVCircle.Transparency = 1
+    FoVCircle.Visible      = false
+end
+
+local TeleportService = game:GetService("TeleportService");
+local Desync = {}
+
+local Notifications = {};
+local Utility = {};
+local Games = {
+    [2788229376] = {Name = "Da Hood",                  Argument = "UpdateMousePosI"},
+    [16033173781] = {Name = "Da Hood Macro",                  Argument = "UpdateMousePosI"},
+    [9825515356] = {Name = "Hood Customs",             Argument = "MousePosUpdate"},
+    [5602055394] = {Name = "Hood Modded",              Argument = "MousePos"},
+    [9183932460] = {Name = "Untitled Hood",            Argument = "UpdateMousePos"},
+    [16709048641] = {Name = "Da Downhill",             Argument = "MOUSE"},
+    [16357436647] = {Name = "Hood Bank",               Argument = "MOUSE"},
+    [16357446356] = {Name = "Da Uphill",               Argument = "MOUSE"},
+    [15186202290] = {Name = "Da Strike",               Argument = "MOUSE"},
+    [15763167440] = {Name = "Da Hood Bot Aim Trainer", Argument = "MOUSE"},
+    [11143225577] = {Name = "1v1 Hood Aim Trainer",    Argument = "UpdateMousePos"},
+    [15763494605] = {Name = "Hood Aim",                Argument = "MOUSE"},
+    [15166543806] = {Name = "Moon Hood",               Argument = "MoonUpdateMousePos"},
+}
+
+if Games[game.PlaceId] then
+    local gameInfo = Games[game.PlaceId]
+    MousePos = gameInfo.Argument
+else
+    MousePos = "UpdateMousePos"
+end
+
+local ItemTable = {
+    ['Guns'] = {
+        ['LMG'] = '[LMG] - $3978';
+        ['AK-47'] = '[AK47] - $2387';
+        ['Silencer AR'] = '[SilencerAR] - $1326';
+        ['Silencer'] = '[Silencer] - $583';
+        ['Revolver'] = '[Revolver] - $1379';
+        ['AR'] = '[AR] - $1061';
+        ['AUG'] = '[AUG] - $2069';
+        ['Double-Barrel'] = '[Double-Barrel SG] - $1432';
+        ['Drum Gun'] = '[DrumGun] - $3183';
+        ['Flamethrower'] = '[Flamethrower] - $15914';
+        ['Glock'] = '[Glock] - $318';
+        ['P90'] = '[P90] - $1061';
+        ['RPG'] = '[RPG] - $6365';
+        ['Rifle'] = '[Rifle] - $1644';
+        ['SMG'] = '[SMG] - $796';
+        ['Shotgun'] = '[Shotgun] - $1326';
+        ['Tactical Shotgun'] = '[TacticalShotgun] - $1857';
+    };
+
+    ['Ammo'] = {
+        ['LMG'] = '200 [LMG Ammo] - $318';
+        ['AK-47'] = '90 [AK47 Ammo] - $85';
+        ['Silencer AR'] = '120 [SilencerAR Ammo] - $80';
+        ['Silencer'] = '25 [Silencer Ammo] - $53';
+        ['Revolver'] = '12 [Revolver Ammo] - $80';
+        ['AR'] = '100 [AR Ammo] - $80';
+        ['AUG'] = '90 [AUG Ammo] - $85';
+        ['Double-Barrel'] = '18 [Double-Barrel SG Ammo] - $53';
+        ['Drum Gun'] = '100 [DrumGun Ammo] - $212';
+        ['Flamethrower'] = '140 [Flamethrower Ammo] - $1644';
+        ['Glock'] = '25 [Glock Ammo] - $64';
+        ['P90'] = '120 [P90 Ammo] - $64';
+        ['RPG'] = '5 [RPG Ammo] - $1061';
+        ['Rifle'] = '5 [Rifle Ammo] - $265';
+        ['SMG'] = '80 [SMG Ammo] - $64';
+        ['Shotgun'] = '20 [Shotgun Ammo] - $64';
+        ['Tactical Shotgun'] = '20 [TacticalShotgun Ammo] - $64';
+    };
+
+    ['Armor'] = {
+        ['High'] = '[High-Medium Armor] - $2440';
+        ['Medium'] = '[Medium Armor] - $1061';
+        ['Fire'] = '[Fire Armor] - $2493';
+    };
+};
+
+  local AssetTable = {
+      Sounds = {
+          ['None']         = '',
+          ['OSU']          = 'rbxassetid://7147454322',
+          ['Neverlose']    = 'rbxassetid://7216848832',
+          ['Bameware']     = 'rbxassetid://3124331820',
+          ['Hitmarker']    = 'rbxassetid://160432334',
+          ['skeet']        = 'rbxassetid://4817809188',
+          ['Rust']         = 'rbxassetid://5043539486',
+          ['Lazer Beam']   = 'rbxassetid://130791043',
+          ['Bow Hit']      = 'rbxassetid://1053296915',
+          ['Bow']          = 'rbxassetid://3442683707',
+          ['TF2 Hitsound'] = 'rbxassetid://3455144981',
+          ['TF2 Critical'] = 'rbxassetid://296102734',
+      };
+      Textures = {
+          ['Normal'] = 'rbxassetid://7151778302',
+          ['Fog'] = 'rbxassetid://9150635648',
+      };
+  };
+  
+  local ItemTableValues = {Sounds = {}, Guns = {}, Ammo = {}}; do 
+  
+      for i, v in pairs(AssetTable.Sounds) do
+          table.insert(ItemTableValues.Sounds, i)
+      end
+
+      for i, v in pairs(ItemTable.Guns) do 
+        table.insert(ItemTableValues.Guns, i)
+    end 
+
+    for i, v in pairs(ItemTable.Ammo) do 
+        table.insert(ItemTableValues.Ammo, i)
+    end 
+  
+  end 
+  
+  local Settings = {
+    ['AntiAim'] = {
+        ['InvisibleDesync'] = { ['Enabled'] = false;
+            ['X'] = {['Start'] = -16000; ['End'] = 16000;};
+            ['Y'] = {['Start'] = -16000; ['End'] = 16000;};
+            ['Z'] = {['Start'] = -16000; ['End'] = 16000;};
+        }
+    },
+
+    ['Destroy Cheaters'] = {
+        Enabled = false,
+        Keybind = Enum.KeyCode.G,
+    };
+
+    ['Combat'] = {
+        ['TargetLock'] = {
+            Enabled = false,
+            Predict = true,
+            KeyBind = Enum.KeyCode.T,
+            Prediction = 0.135,
+            HitParts = 'HumanoidRootPart',
+            NearestPart = false,
+            HitPartMode = 'Nearest Point',
+            Notifications = false,
+        },
+        ['Stuff'] = {
+            LookAt = false,
+            Spectate = false,
+            Notification = false,
+            AutoPrediction = true,
+        },
+        ['Checks'] = {
+            Resolver = true,
+            ResolverMethod = 'Recaculate',
+            AimviewerBypass = true,
+            NoGroundShots = true,
+            Knocked = true,
+            Grabbed = false,
+            Friend = false,
+            Crew = false,
+            AntiCurve = true,
+            WallCheck = true,
+        },
+        ['Visuals'] = {
+            ['Line'] = {
+                Enabled = true,
+                Circle = true,
+                Visible = true,
+                Color = MainColor,
+                Transparency = 1,
+                Thickness = 2,
+            },
+            ['HighLight'] = {
+                Enabled = true,
+                Transparency = 0,
+                FillColor = MainColor,
+                OutLineColor = Color3.fromRGB(255, 255, 255),
+            },
+            ['BackTrack'] = {
+                Enabled = true,
+                Material = 'ForceField',
+                Color = MainColor,
+                Delay = 0.1,
+                Transparency = 0,
+            },
+        },
+    };
+  
+    ['Visuals'] = {
+        ['Weapon_Chams'] = {
+            Enabled = false,
+            Material = Enum.Material.SmoothPlastic,
+            Color = MainColor,
+        },
+        ['Character_Chams'] = {
+            Enabled = false,
+            Material = Enum.Material.ForceField,
+            Color = MainColor,
+
+            Trail = false,
+            Trail_Color = MainColor,
+            Trail_Life = 3,
+        },
+        ['World_Customization'] = {
+            Enabled = false,
+
+            Bars = false,
+            BarsColor = MainColor,
+        },
+        ['Bullet_Trails'] = {
+            Enabled = false,
+            Magnitude = 12,
+            Width = 1.7,
+            Brightness = 5,
+            Segments = 10,
+            LightEmission = 10,
+            Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(240, 175, 235)), ColorSequenceKeypoint.new(1, Color3.fromRGB(240, 175, 235))}),
+            Speed = 3,
+            Texture = 'Normal', -- 12781803086
+        },
+        ['Hit_Detection'] = {
+          Enabled = false,
+  
+          Notify = true,
+          Clone = true,
+          Pulse = false,
+          Sound = true,
+          HitSound = 'Rust',
+        },
+    };
+  
+    ['Misc'] = {
+        ['Auto_Buy'] = {
+            Gun = 'LMG',
+        },
+        ['Random'] = {
+            AutoStomp = false,
+            AntiBag = false,
+            NoJumpCooldown = false,
+            NoSlow = false,
+            NoRecoil = false,
+        },
+        ['Cash'] = {
+            AutoDrop = false,
+            Amount = 8000,
+            AutoPick = false,
+        },
+        ['NetworkAnti'] = {
+            Enabled = false,
+            Notification = true,
+            Keybind = Enum.KeyCode.K
+        },
+        ['PredictionDisabler'] = {
+            Enabled = false,
+            KeyBind = Enum.KeyCode.X,
+            Notifications = false,
+            Errors = false,
+            AutoWalkSpeed = false,
+            AnimationSpeed = 21,
+            WalkSpeed = 12,
+        },
+        ['TargetStrafe'] = {
+            Enabled = false,
+            Visualize_Circle = false,
+            Color = Color3.fromRGB(255, 194, 254),
+            Distance = 9,
+            Speed = 1,
+            Height = 0,
+  
+            Method = 'Strafe', -- Strafe, Randomize
+            RandomizeMin = 2,
+            RandomizeMax = 17,
+
+            AutoFire = true,
+            AutoReload = true,
+        },
+        ['Fly'] = {
+            Enabled = false,
+            Notification = false,
+            KeyBind = Enum.KeyCode.X,
+            Speed = 5 * 50,
+        },
+        ['WalkSpeed'] = {
+            Enabled = false,
+            Notifications = false,
+            KeyBind = Enum.KeyCode.X,
+            Speed = 1,
+        },
+        ['TrashTalk'] = {
+            ['Use'] = {
+                Enabled = false,
+                Target = false,
+                Notification = false,
+                UsekeyBind = false,
+                KeyBind = Enum.KeyCode.B,
+                Method = "Misery",
+            },
+            ['Words'] = {
+                Misery = {"do you have $$$$mmMMIIEERRY!!!", "MoveDirection isn't a resolver", "SkidđŸ¤£", "WHERE BRO AIMING AT!?", "Lost 2 Misery", "omg so bad", "imagine dying to me", "whats the point of playing with that aimđŸ™đŸ˜‚", "WOWZIES", "OH MY DAYS", "Misery'd", "1d luh bro", "WOW U SUCK", "Im right heređŸ˜‚", "couldnt be me", "just broke ur ankles", "UR ANKLES? GONE?", "destroyed", "LOL DESTROYED", "LOL"},
+            },
+        },
+    };
+  
+    ['Configs'] = {
+        Menu = {
+            Keybind = Enum.KeyCode.P,
+        },
+    };
+  };
+  
+  print("CheckPoint 3")
+  
+  
+  getgenv().MethodBeingUsed = Settings.Misc.TrashTalk.Words.Misery
+  
+  -- // functions
+
+function Script.Functions.Connection(event, func)
+    return event:Connect(func)
+end
+
+local function DestroyCheaters()
+    Settings['Destroy Cheaters'].Enabled = not Settings['Destroy Cheaters'].Enabled;
+
+    if Settings['Destroy Cheaters'].Enabled then
+        local Character = Client and Client.Character
+        if Character then
+            local RootPart = Character and Character:FindFirstChild('HumanoidRootPart')
+            local Position = RootPart and RootPart.CFrame
+    
+            task.wait()
+
+            while task.wait(2) do
+                Desync.cframe = (RootPart.CFrame * CFrame.new(9e9, 0/0, 9e9))
+        
+                task.wait(1)
+    
+                Desync.cframe = Position
+                task.wait()
+                Desync.cframe = nil
+            end
+
+        end
+
+    end
+end
+
+Script.Functions.Update_Desync = function(bool)
+    Settings.AntiAim.InvisibleDesync.Enabled = bool 
+
+    if (not bool) then 
+        if (Script.Connections['Invisible Desync']) then 
+            Script.Connections['Invisible Desync']:Disconnect()
+            Script.Connections['Invisible Desync'] = nil 
+        end
+
+        setfflag('S2PhysicsSenderRate', 15)
+        setfflag('PhysicsSenderMaxBandwidthBps', 38760)
+        sethiddenproperty(Client.Character.HumanoidRootPart, "NetworkIsSleeping", false)
+    end
+end
+
+Script.Functions.InvisibleDesync = function()   
+    local NetworkShouldSleep = false
+    if not Script.Connections["Invisible Desync"] then
+        Script.Connections["Invisible Desync"] = Script.Functions.Connection(RunService.Heartbeat, function()
+            if (not Settings.AntiAim.InvisibleDesync.Enabled) then return end 
+
+            Script.Locals.NetworkShouldSleep = not Script.Locals.NetworkShouldSleep
+            setfflag("S2PhysicsSenderRate", tostring(2)) 
+            setfflag("PhysicsSenderMaxBandwidthBps", tostring(math.pi/3))
+
+            sethiddenproperty(Client.Character.HumanoidRootPart, "NetworkIsSleeping", Script.Locals.NetworkShouldSleep)
+            Script.Locals.OriginalVelocity[1] = Client.Character.HumanoidRootPart.Velocity
+            Script.Locals.OriginalVelocity[2] = Client.Character.HumanoidRootPart.AssemblyLinearVelocity
+
+            Client.Character.HumanoidRootPart.Velocity = Client.Character.HumanoidRootPart.Velocity + Vector3.new(math.random(Settings.AntiAim.InvisibleDesync.X['Start'], Settings.AntiAim.InvisibleDesync.X['End']), math.random(Settings.AntiAim.InvisibleDesync.Y['Start'], Settings.AntiAim.InvisibleDesync.Y['End']), math.random(Settings.AntiAim.InvisibleDesync.Z['Start'], Settings.AntiAim.InvisibleDesync.Z['End']))
+            Client.Character.HumanoidRootPart.AssemblyLinearVelocity = Client.Character.HumanoidRootPart.AssemblyLinearVelocity + Vector3.new(math.random(Settings.AntiAim.InvisibleDesync.X['Start'], Settings.AntiAim.InvisibleDesync.X['End']), math.random(Settings.AntiAim.InvisibleDesync.Y['Start'], Settings.AntiAim.InvisibleDesync.Y['End']), math.random(Settings.AntiAim.InvisibleDesync.Z['Start'], Settings.AntiAim.InvisibleDesync.Z['End']))
+
+            RunService.RenderStepped:Wait()
+
+            Client.Character.HumanoidRootPart.Velocity = Script.Locals.OriginalVelocity[1]
+            Client.Character.HumanoidRootPart.AssemblyLinearVelocity = Script.Locals.OriginalVelocity[2]
+            setfflag("S2PhysicsSenderRate", tostring(1))
+            NetworkShouldSleep = not NetworkShouldSleep
+        end)
+    end
+    RunService.RenderStepped:Wait()
+    sethiddenproperty(Client.Character.HumanoidRootPart, "NetworkIsSleeping", NetworkShouldSleep)
+    setfflag("S2PhysicsSenderRate", tostring(15))
+end
+
+Script.Functions.InvisibleDesync()
+
+local function ToggleTrail(Bool)
+    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+        if v:IsA("BasePart") then
+            if Bool then
+                local BlaBla = Instance.new("Trail", v)
+                BlaBla.Texture = "rbxassetid://1390780157"
+                BlaBla.Parent = v
+                local Pointer1 = Instance.new("Attachment", v)
+                Pointer1.Name = "Pointer1"
+                local Pointer2 = Instance.new("Attachment", game.Players.LocalPlayer.Character.HumanoidRootPart)
+                Pointer2.Name = "Pointer2"
+                BlaBla.Attachment0 = Pointer1
+                BlaBla.Attachment1 = Pointer2
+                BlaBla.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Settings.Visuals.Character_Chams.Trail_Color), ColorSequenceKeypoint.new(1, Settings.Visuals.Character_Chams.Trail_Color)});
+                BlaBla.Lifetime = Settings.Visuals.Character_Chams.Trail_Life
+                BlaBla.Name = "BlaBla" -- Set the name
+            else
+                for _, child in ipairs(v:GetChildren()) do
+                    if child:IsA("Trail") and child.Name == 'BlaBla' then -- Corrected the condition
+                        child:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function AutoBuy(Obj, Ammo, Amount)
+    local Character = Client and (Client.Character or Client.CharacterAdded:Wait())
+    local RootPart  = Character and Character.HumanoidRootPart
+    local RootPos   = RootPart.CFrame
+
+    local ObjectPath = Workspace.Ignored.Shop[Obj]
+    local ClickDet   = ObjectPath.ClickDetector
+
+    if Character and Ammo then
+        for i = 1, Amount do
+            RootPart.CFrame = ObjectPath.Head.CFrame
+            task.wait(0.3)
+            fireclickdetector(ClickDet)
+            task.wait(0.15)
+        end
+
+        RootPart.CFrame = RootPos
+    else
+        RootPart.CFrame = ObjectPath.Head.CFrame
+        task.wait(0.15)
+        fireclickdetector(ClickDet)
+        task.wait(0.15)
+        RootPart.CFrame = RootPos
+    end
+end
+
+
+  function Alive(Player)
+    if Player and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") ~= nil and Player.Character:FindFirstChild("Humanoid") ~= nil and Player.Character:FindFirstChild("Head") ~= nil then
+        return true
+    end
+    return false
+  end
+  
+  local function GetTool()
+    local Character = Client.Character 
+    local Tool = nil 
+
+    if (not Character) then 
+        return Tool
+    end
+
+    for _, v in pairs(Character:GetChildren()) do 
+        if (not v:IsA('Tool')) then continue end 
+
+        if (v:FindFirstChild('Ammo') and v:FindFirstChild('MaxAmmo')) then 
+            Tool = v 
+        end
+    end
+
+    return Tool
+end
+  
+  function findPlayerByUsername(username)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player.Name == username then
+            return player
+        end
+    end
+    return nil  -- Player not found
+  end
+
+  local function FindPlayer(Player)
+    for i, v in pairs(Players:GetPlayers()) do
+        if (v.Name:lower():find(Player:lower())) then
+            if v.Name == Client.name then continue end
+            return v
+        end
+    end
+end
+
+  
+  
+  --\\ Ui
+  local Menu = loadstring(req({Url = "https://raw.githubusercontent.com/Hxckerskyy/miserycc.lua/main/menu.lua", Method = "Get"}).Body)(); -- WYVJcRAt
+
+    local function MenuNameUpdate()
+        while (task.wait()) do
+            local Name, PlaceHolder = 'Misery', ''
+            for i = 1, #Name do --try
+                local Character = string.sub(Name, i, i)
+                PlaceHolder = PlaceHolder .. Character
+                Menu:SetTitle(PlaceHolder .. '<font color="#' .. tostring(Menu.Accent:ToHex()) .. '">.cc</font>')
+                task.wait(.25)
+            end
+        end
+    end
+  
+    --// functions
+    local function MenuToggle(Action_Name: string, State: EnumItem, Input: InputObject)
+        if not State or State == Enum.UserInputState.Begin then
+            Menu:SetVisible(not Menu.IsVisible)
+        end
+    end
+  
+    task.spawn(MenuNameUpdate)
+  
+    Menu.Accent = MainColor
+
+    Menu.Keybinds = Menu.Keybinds() do
+        Menu.Keybinds.Add('Fly', Settings.Misc.Fly.Enabled and 'On' or 'Off')
+        Menu.Keybinds.Add('CFrame', Settings.Misc.WalkSpeed.Enabled and 'On' or 'Off')
+        Menu.Keybinds.Add('Prediction Breaker', Settings.Misc.PredictionDisabler.Enabled and 'On' or 'Off')
+    end
+
+    Menu.Indicators = Menu.Indicators() do
+        Menu.Indicators.Add('Target', 'Text', 'nil')
+        Menu.Indicators.Add('Target Health', 'Bar', 50, 0, 100) -- Value, Min, Max
+        Menu.Indicators.Add('Target Armor', 'Bar', 100, 0, 200) -- Value, Min, Max
+
+        Menu.Indicators.Add('Knocked Out', 'Text', 'True')
+        Menu.Indicators.Add('Anti Aiming', 'Text', 'True')
+        Menu.Indicators.Add('Target Ammo', 'Bar', 50, 0, 200) -- Value, Min, Max
+        --Menu.Indicators:SetPosition(UDim2.new(0, 39, 0, 281))
+    end
+    Menu.Watermark()
+    Menu.Watermark:Update('Misery<font color="#' .. tostring(Menu.Accent:ToHex()) .. '">.cc</font>') -- please fix this and we can add a variable for a color.
+  
+    local Window = Menu:SetTitle('Misery') do
+  
+        local CombatTab = Menu.Tab("Main") do
+  
+            local TargetAimSection = Menu.Container("Main", "Target Aim", "Left") do
+                Menu.CheckBox("Main", "Target Aim", "Enabled", false, function(a)
+                    Settings.Combat.TargetLock.Enabled = a
+                end)
+                Menu.Hotkey("Main", "Target Aim", "Keybind", Enum.KeyCode.T, function(a)
+                    Settings.Combat.TargetLock.KeyBind = a
+                end)
+                Menu.CheckBox("Main", "Target Aim", "Look At", false, function(a)
+                    Settings.Combat.Stuff.LookAt = a
+                end)
+                Menu.CheckBox("Main", "Target Aim", "Spectate", false, function(a)
+                    Settings.Combat.Stuff.Spectate = a
+                end)
+                Menu.CheckBox("Main", "Target Aim", "Notification", false, function(a)
+                    Settings.Combat.Stuff.Notification = a
+                end)
+            end
+  
+            local HitPartSection = Menu.Container("Main", "HitPart", "Left") do
+                Menu.CheckBox("Main", "HitPart", "NearestPart", false, function(a)
+                    Settings.Combat.TargetLock.NearestPart = a
+                end)
+                Menu.ComboBox("Main", "HitPart", "NearestPart Mode", "Nearest Part", {"Nearest Point", "Nearest Part"}, function(a)
+                    Settings.Combat.TargetLock.HitPartMode = a
+                end)
+                Menu.ComboBox("Main", "HitPart", "HitPart", "HumanoidRootPart", {"Head", "LeftHand", "RightHand", "LeftLowerArm", "RightLowerArm", "LeftUpperArm", "RightUpperArm", "LeftFoot", "LeftLowerLeg", "UpperTorso", "HumanoidRootPart", "LeftUpperLeg", "RightLowerLeg", "RightFoot", "LowerTorso"}, function(a)
+                    Settings.Combat.TargetLock.HitParts = a
+                end)
+            end
+  
+            local PredictionSection = Menu.Container("Main", "Prediction", "Left") do
+                Menu.CheckBox("Main", "Prediction", "Enabled", true, function(a)
+                    Settings.Combat.TargetLock.Predict = a
+                end)
+                Menu.CheckBox("Main", "Prediction", "Auto Prediction", true, function(a)
+                    Settings.Combat.Stuff.AutoPrediction = a
+                end)
+                Menu.TextBox("Main", "Prediction", "Prediction", '0.135', function(a)
+                    Settings.Combat.TargetLock.Prediction = a
+                end)
+            end
+  
+            local ChecksSection = Menu.Container("Main", "Checks", "Left") do
+                Menu.CheckBox("Main", "Checks", "No Ground Shots", true, function(a)
+                    Settings.Combat.Checks.NoGroundShots = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Anti Curve", true, function(a)
+                    Settings.Combat.Checks.AntiCurve = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Knocked Check", true, function(a)
+                    Settings.Combat.Checks.Knocked = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Grabbed Check", false, function(a)
+                    Settings.Combat.Checks.Grabbed = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Crew Check", false, function(a)
+                    Settings.Combat.Checks.Crew = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Aim Viewer Bypass", true, function(a)
+                    print(a)
+                end)
+                Menu.CheckBox("Main", "Checks", "Resolver", true, function(a)
+                    print(a)
+                end)
+                Menu.CheckBox("Main", "Checks", "Friend Check", false, function(a)
+                    Settings.Combat.Checks.Friend = a
+                end)
+                Menu.CheckBox("Main", "Checks", "Wall Check", true, function(a)
+                    Settings.Combat.Checks.WallCheck = a
+                end)
+            end
+  
+            local TSSection = Menu.Container("Main", "Target Strafe", "Right") do
+                Menu.CheckBox("Main", "Target Strafe", "Enabled", false, function(a)
+                    Settings.Misc.TargetStrafe.Enabled = a
+                end)
+                Menu.ComboBox("Main", "Target Strafe", "Method", "Strafe", {"Strafe", "Randomize"}, function(a)
+                  Settings.Misc.TargetStrafe.Method = a
+              end)
+                Menu.CheckBox("Main", "Target Strafe", "Visualize", false, function(a)
+                    Settings.Misc.TargetStrafe.Visualize_Circle = a
+                end)
+                Menu.CheckBox("Main", "Target Strafe", "Auto Fire", true, function(a)
+                    Settings.Misc.TargetStrafe.AutoFire = a
+                end)
+                Menu.CheckBox("Main", "Target Strafe", "Auto Reload", true, function(a)
+                    Settings.Misc.TargetStrafe.AutoReload = a
+                end)
+                Menu.ColorPicker("Main", "Target Strafe", "Color", MainColor, 0, function(a)
+                    Settings.Misc.TargetStrafe.Color = a
+                end)
+                Menu.Slider("Main", "Target Strafe", "Distance", 0, 50, 9, '', 1, function(a)
+                    Settings.Misc.TargetStrafe.Distance = a
+                end)
+                Menu.Slider("Main", "Target Strafe", "Speed", 0, 15, 1, '', 1, function(a)
+                    Settings.Misc.TargetStrafe.Speed = a
+                end)
+                Menu.Slider("Main", "Target Strafe", "Height", 0, 15, 0, '', 1, function(a)
+                    Settings.Misc.TargetStrafe.Height = a
+                end)
+                Menu.Slider('Main', 'Target Strafe', 'Teleport Min', 1, 20, 2, '', 1, function(Value)
+                  Settings.Misc.TargetStrafe.RandomizeMin = Value
+              end)
+              Menu.Slider('Main', 'Target Strafe', 'Teleport Max', 2, 40, 17, '', 1, function(Value)
+                  Settings.Misc.TargetStrafe.RandomizeMax = Value
+              end)
+  
+            end
+  
+            local HitDetectionSection = Menu.Container("Main", "Hit Detection", "Right") do
+              Menu.CheckBox("Main", "Hit Detection", "Enabled", false, function(a)
+                  Settings.Visuals.Hit_Detection.Enabled = a
+              end)
+              Menu.CheckBox("Main", "Hit Detection", "Hit Sound", false, function(a)
+                  Settings.Visuals.Hit_Detection.Sound = a
+              end)
+              Menu.CheckBox("Main", "Hit Detection", "Notify", false, function(a)
+                  Settings.Visuals.Hit_Detection.Notify = a
+              end)
+              Menu.ComboBox('Main', 'Hit Detection', 'Sounds', 'Rust', ItemTableValues.Sounds, function(self)
+                  Settings.Visuals.Hit_Detection.HitSound = self
+              end)
+              Menu.MultiSelect('Main', 'Hit Detection', 'Hit Effects', {
+                  ['Clone'] = Settings.Visuals.Hit_Detection.Clone,
+                  ['Pulse'] = Settings.Visuals.Hit_Detection.Pulse,
+              }, function(Selection)
+                  Settings.Visuals.Hit_Detection.Clone = Selection['Clone']
+                  Settings.Visuals.Hit_Detection.Pulse = Selection['Pulse']
+              end)
+  
+            end
+  
+  
+        end
+  
+        local MiscTab = Menu.Tab("Misc") do
+  
+            local MTSection1 = Menu.Container("Misc", "Prediction Breaker", "Left") do
+                Menu.CheckBox("Misc", "Prediction Breaker", "Enabled", false, function(a)
+                    Settings.Misc.PredictionDisabler.Enabled = a
+                end)
+                Menu.Hotkey("Misc", "Prediction Breaker", "Keybind", Enum.KeyCode.X, function(a)
+                    Settings.Misc.PredictionDisabler.KeyBind = a
+                end)
+                Menu.CheckBox("Misc", "Prediction Breaker", "Notifications", false, function(a)
+                    Settings.Misc.PredictionDisabler.Notifications = a
+                end)
+                Menu.CheckBox("Misc", "Prediction Breaker", "Errors", false, function(a)
+                    Settings.Misc.PredictionDisabler.Errors = a
+                end)
+                Menu.CheckBox("Misc", "Prediction Breaker", "Auto Settings", false, function(a)
+                    Settings.Misc.PredictionDisabler.AutoWalkSpeed = a
+                end)
+                Menu.Slider("Misc", "Prediction Breaker", "Animation Speed", 0, 50, 21, '%', 1, function(a)
+                    Settings.Misc.PredictionDisabler.AnimationSpeed = a
+                end)
+                Menu.Slider("Misc", "Prediction Breaker", "Walk Speed", 0, 50, 12, '%', 1, function(a)
+                    Settings.Misc.PredictionDisabler.WalkSpeed = a
+                end)
+            end
+  
+            local MTSection2 = Menu.Container("Misc", "CFrame Speed", "Right") do
+                Menu.CheckBox("Misc", "CFrame Speed", "Enabled", false, function(a)
+                    Settings.Misc.WalkSpeed.Enabled = a
+                end)
+                Menu.Hotkey("Misc", "CFrame Speed", "Keybind", Enum.KeyCode.X, function(a)
+                    Settings.Misc.WalkSpeed.KeyBind = a
+                end)
+                Menu.CheckBox("Misc", "CFrame Speed", "Notification", false, function(a)
+                    Settings.Misc.WalkSpeed.Notifications = a
+                end)
+                Menu.Slider("Misc", "CFrame Speed", "Speed", 0, 10, 3, '%', 1, function(a)
+                    Settings.Misc.WalkSpeed.Speed = a
+                end)
+            end
+  
+            local MTSection3 = Menu.Container("Misc", "Fly", "Right") do
+                Menu.CheckBox("Misc", "Fly", "Enabled", false, function(a)
+                    Settings.Misc.Fly.Enabled = a
+                end)
+                Menu.Hotkey("Misc", "Fly", "Keybind", Enum.KeyCode.X, function(a)
+                    Settings.Misc.Fly.KeyBind = a
+                end)
+                Menu.CheckBox("Misc", "Fly", "Notification", false, function(a)
+                    Settings.Misc.Fly.Notification = a
+                end)
+                Menu.Slider("Misc", "Fly", "Speed", 0, 30, 5, '%', 1, function(a)
+                    Settings.Misc.Fly.Speed = a * 50
+                end)
+            end
+  
+            local MTSection4 = Menu.Container("Misc", "Trash Talk", "Left") do
+                Menu.CheckBox("Misc", "Trash Talk", "Enabled", false, function(a)
+                    Settings.Misc.TrashTalk.Use.Enabled = a
+                end)
+                Menu.CheckBox("Misc", "Trash Talk", "Target", false, function(a)
+                    Settings.Misc.TrashTalk.Use.Target = a
+                end)
+                Menu.CheckBox("Misc", "Trash Talk", "Notification", false, function(a)
+                    Settings.Misc.TrashTalk.Use.Notification = a
+                end)
+                Menu.CheckBox("Misc", "Trash Talk", "Use Keybind", false, function(a)
+                    Settings.Misc.TrashTalk.Use.UsekeyBind = a
+                end)
+                Menu.Hotkey("Misc", "Trash Talk", "Keybind", Enum.KeyCode.B, function(a)
+                    Settings.Misc.TrashTalk.Use.KeyBind = a
+                end)
+            end
+  
+            local MTSection4 = Menu.Container("Misc", "Network Anti", "Left") do
+                Menu.CheckBox("Misc", "Network Anti", "Enabled", false, function(a)
+                    Settings.Misc.NetworkAnti.Enabled = a
+                end)
+                Menu.Hotkey("Misc", "Network Anti", "Keybind", Enum.KeyCode.K, function(a)
+                    Settings.Misc.NetworkAnti.KeyBind = a
+                end)
+                Menu.CheckBox("Misc", "Network Anti", "Notification", false, function(a)
+                    Settings.Misc.NetworkAnti.Notification = a
+                end)
+            end
+  
+            local MTSection5 = Menu.Container("Misc", "Teleport", "Right") do
+                Menu.ComboBox("Misc", "Teleport", "Place :", "Choose", {"Admin Base","Military","Revolver","High Medium Armor","Food","Gas Station","School","Ufo","Bank","Gym Top","Casino","Uphill","PlayGround","Flank"}, function(State)
+                    local CFrameValues = {
+                        ["Admin Base"] = CFrame.new(-874.903992, -32.6492004, -525.215698),
+                        ["High Medium Armor"] = CFrame.new(-934.73651123047, -28.492471694946, 565.99884033203),
+                        ["Food"] = CFrame.new(-788.39318847656, -39.649200439453, -935.27795410156),
+                        ["Gas Station"] = CFrame.new(608.599426, 65.3087997, -267.643066, -0.414288431, -1.04483455e-09, -0.91014564, -1.30518893e-08, 1, 4.79309215e-09, 0.91014564, 1.38648408e-08, -0.41428),
+                        ["School"] = CFrame.new(-581.790283, 68.4947281, 331.046448, 0.220051467, -7.56681329e-05, 0.975498199, -3.96428077e-05, 0.999999583, 8.65130132e-05, -0.975498199, -5.77078645e-05, 0.22005),
+                        ["Military"] = CFrame.new(92.643799, 122.749977, -860.128784, 0.986730993, 5.09704545e-09, 0.162363499, -9.24942123e-10, 1, -2.57716568e-08, -0.162363499, 2.52795154e-08, 0.986730993),
+                        ["Ufo"] = CFrame.new(65.1504517, 138.999954, -691.819031, -0.935115993, -5.9791418e-08, -0.354341775, -3.10840989e-08, 1, -8.67077574e-08, 0.354341775, -7.0067415e-08, -0.935115993),
+                        ["Bank"] = CFrame.new(-374.538391, 102.052887, -440.20871, 0.958144963, 9.24065989e-06, -0.286283433, -9.98981818e-07, 1, 2.89345699e-05, 0.286283433, -2.74375216e-05, 0.958144963),
+                        ["Gym Top"] = CFrame.new(-76.178093, 56.6998138, -629.940979, -0.9998914, -1.09370752e-07, 0.0147391548, -1.0945012e-07, 1, -4.57786342e-09, -0.0147391548, -6.1905685e-09, -0.9998914),
+                        ["Casino"] = CFrame.new(-1048.95093, 110.254997, -154.554016, 0.198458344, 0.0412604436, -0.979240835, -4.06676299e-05, 0.999113858, 0.0420895219, 0.98010987, -0.00831318926, 0.198284075),
+                        ["Uphill"] = CFrame.new(485.651947, 112.5, -644.316833, -0.998899043, 1.33881997e-06, 0.0469136797, 8.00526664e-07, 1, -1.14929126e-05, -0.0469136797, -1.14426994e-05, -0.998899043),
+                        ["Revolver"] = CFrame.new(-659.053162, 110.748001, -158.224365, 0.146754071, -2.38941595e-08, -0.989172995, -1.60316838e-09, 1, -2.43935396e-08, 0.989172995, 5.16566212e-09, 0.146754071),
+                        ["Flank"] = CFrame.new(376.730621, 130.748001, -245.620468, 0.996583343, 5.90310174e-06, -0.0825867951, -1.72590728e-06, 1, 5.06508768e-05, 0.0825867951, -5.03353003e-05, 0.996583343),
+                        ["PlayGround"] = CFrame.new(-260.836182, 126.424866, -877.783875, -0.977067351, -1.56508904e-05, -0.212922528, 9.92513264e-07, 1, -7.80593255e-05, 0.212922528, -7.64806027e-05, -0.977067351),
+                    }
+  
+                if CFrameValues[State] then
+                    Client.Character.HumanoidRootPart.CFrame = CFrameValues[State]
+                end
+                end)
+            end
+
+            local AutoBuySection = Menu.Container('Misc', 'Buy', 'Right') do
+
+                Menu.ComboBox('Misc', 'Buy', 'Gun', 'LMG', ItemTableValues.Guns, function(self)
+                    Settings.Misc.Auto_Buy.Gun = self
+                end)
+                Menu.Button('Misc', 'Buy', 'Buy Gun', function()
+                    AutoBuy(ItemTable.Guns[Settings.Misc.Auto_Buy.Gun], false, 2)
+                end)
+
+                Menu.Button('Misc', 'Buy', 'Buy Ammo', function()
+                    AutoBuy(ItemTable.Ammo[Settings.Misc.Auto_Buy.Gun], true, 1)
+                end)
+
+            end
+  
+            local MTSection6 = Menu.Container("Misc", "Stuff", "Left") do
+                Menu.CheckBox("Misc", "Stuff", "Auto Grab Cash", false, function(a)
+                    Settings.Misc.Cash.AutoPick = a
+                end)
+                Menu.CheckBox("Misc", "Stuff", "Auto Drop Cash", false, function(a)
+                    Settings.Misc.Cash.AutoDrop = a
+                end)
+                Menu.Slider("Misc", "Stuff", "Auto Drop Amount", 0, 10, 6, '%', 1, function(a)
+                    Settings.Misc.Cash.Amount = a * 1000
+                end)
+                Menu.CheckBox("Misc", "Stuff", "Auto Stomp", false, function(a)
+                    Settings.Misc.Random.AutoStomp = a
+                end)
+                
+                Menu.CheckBox("Misc", "Stuff", "No Recoil", false, function(a)
+                  Settings.Misc.Random.NoRecoil = a
+              end)
+  
+              Menu.CheckBox("Misc", "Stuff", "No Slow", false, function(a)
+                  Settings.Misc.Random.NoSlow = a
+              end)
+  
+                Menu.CheckBox("Misc", "Stuff", "No Jump cooldown", false, function(a)
+                    if a then
+                        local IsA = game.IsA
+                        local newindex = nil
+  
+                        newindex = hookmetamethod(game, "__newindex", function(self, Index, Value)
+                            if not checkcaller() and IsA(self, "Humanoid") and Index == "JumpPower" then
+                                return
+                            end
+                            return newindex(self, Index, Value)
+                        end)
+                    end
+                end)
+                Menu.CheckBox("Misc", "Stuff", "Anti Bag", false, function(a)
+                    Settings.Misc.Random.AntiBag = a
+                end)
+                Menu.CheckBox("Misc", "Stuff", "Bunny Hop", false, function(a)
+                    getgenv().Bhop = a
+                    while getgenv().Bhop do
+                        task.wait()
+                        if Client.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
+                            Client.Character.Humanoid:ChangeState("Jumping")
+                        end
+                    end
+                end)
+            end
+
+            local MTSection9 = Menu.Container("Misc", "Desync", "Left") do
+                Menu.CheckBox("Misc", "Desync", "Invisible Desync", false, function(a)
+
+                    for i = 1, 2 do 
+                        Script.Functions.Update_Desync(a)
+                        task.wait(.1)
+                    end
+
+                end)
+
+                Menu.CheckBox("Misc", "Desync", "CFrame Desync", false, function(a)
+                    Settings['Destroy Cheaters'].Enabled = a
+                    DestroyCheaters()
+                end)
+
+                Menu.Hotkey("Misc", "Desync", "Keybind", Settings['Destroy Cheaters'].Keybind, function(a)
+                    Settings['Destroy Cheaters'].Keybind = a
+                    DestroyCheaters()
+                end)
+
+            end
+        end
+  
+        local VisualsTab = Menu.Tab("Visuals") do
+  
+            local TLHightlightSection = Menu.Container("Visuals", "ESP", "Left") do
+                Menu.CheckBox("Visuals", "ESP", "Enabled", false, function(a)
+                    getgenv().esp.Enabled = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Box", true, function(a)
+                    getgenv().esp.BoxEnabled = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "Box Color", Color3.fromRGB(255, 255, 255), 0, function(a)
+                    getgenv().esp.BoxColor = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "Text Color", Color3.fromRGB(255, 255, 255), 0, function(a)
+                    getgenv().esp.TextColor = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Name", true, function(a)
+                    getgenv().esp.TextLayout.name.enabled = a
+                end)
+                
+                Menu.CheckBox("Visuals", "ESP", "Health", true, function(a)
+                    getgenv().esp.TextLayout.health.enabled = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "HealthBar", true, function(a)
+                    getgenv().esp.BarLayout.health.enabled = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "LowerHealthColor", Color3.fromRGB(255, 255, 255), 0, function(a)
+                    getgenv().esp.BarLayout.health.color_empty = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "HigherHealthColor", Color3.fromRGB(255, 102, 204), 0, function(a)
+                    getgenv().esp.BarLayout.health.color_full = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Armor", true, function(a)
+                    getgenv().esp.TextLayout.armor.enabled = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "ArmorBar", true, function(a)
+                    getgenv().esp.BarLayout.armor.enabled = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "LowerArmorColor", Color3.fromRGB(255, 102, 204), 0, function(a)
+                    getgenv().esp.BarLayout.armor.color_empty = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "HigherArmorColor", Color3.fromRGB(255, 102, 204), 0, function(a)
+                    getgenv().esp.BarLayout.armor.color_full = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Distance", true, function(a)
+                    getgenv().esp.TextLayout.distance.enabled = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Tool", true, function(a)
+                    getgenv().esp.TextLayout.tool.enabled = a
+                end)
+                Menu.CheckBox("Visuals", "ESP", "Skeletons", false, function(a)
+                    getgenv().esp.SkeletonEnabled = a
+                end)
+
+                Menu.CheckBox("Visuals", "ESP", "Chams", false, function(a)
+                    getgenv().esp.ChamsEnabled = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "ChamsInnerColor", Color3.fromRGB(255, 102, 204), 0, function(a)
+                    getgenv().esp.ChamsInnerColor = a
+                end)
+                Menu.ColorPicker("Visuals", "ESP", "ChamsOuterColor", Color3.fromRGB(255, 255, 255), 0, function(a)
+                    getgenv().esp.ChamsOuterColor = a
+                end)
+            end
+  
+            local Section6 = Menu.Container("Visuals", "World Customization", "Left") do
+                Menu.CheckBox("Visuals", "World Customization", "Enabled", false, function(self)
+                    Settings.Visuals.World_Customization.Enabled = self
+                end)
+                Menu.ColorPicker("Visuals", "World Customization", "World Customization", MainColor, 0, function(self)
+                    task.spawn(function()
+                        while task.wait() do
+                            if Settings.Visuals.World_Customization.Enabled then
+                                Lighting.ColorCorrection.TintColor = self
+                            else
+                                Lighting.ColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+                            end
+                        end
+                    end)
+                end)
+
+                Menu.CheckBox("Visuals", "World Customization", "UI", false, function(self)
+                    Settings.Visuals.World_Customization.Bars = self
+                end)
+                Menu.ColorPicker("Visuals", "World Customization", "World Customization", MainColor, 0, function(self)
+                    Settings.Visuals.World_Customization.BarsColor = self
+                end)
+            end
+  
+            local Section7 = Menu.Container("Visuals", "Crosshair", "Right") do
+              Menu.CheckBox("Visuals", "Crosshair", "Enabled", false, function(a)
+                  getgenv().crosshair.enabled = a
+              end)
+              Menu.ColorPicker("Visuals", "Crosshair", "Color", MainColor, 0, function(a)
+                  getgenv().crosshair.color = a
+              end)
+              Menu.ComboBox("Visuals", "Crosshair", "Position", "mouse", {"mouse", "center"}, function(a)
+                  getgenv().crosshair.mode = a
+              end)
+  
+              Menu.Slider('Visuals', 'Crosshair', 'Width', 1, 5, 2.5, '', 1, function(self)
+                  getgenv().crosshair.width = self
+              end)
+              Menu.Slider('Visuals', 'Crosshair', 'Length', 1, 50, 10, '', 0, function(self)
+                  getgenv().crosshair.length = self
+              end)
+              Menu.Slider('Visuals', 'Crosshair', 'Radius', 0, 20, 11, '', 1, function(self)
+                  getgenv().crosshair.radius = self
+              end)
+  
+              Menu.CheckBox('Visuals', 'Crosshair', 'Spin', getgenv().crosshair.spin, function(self)
+                  getgenv().crosshair.spin = self
+              end)
+              Menu.Slider('Visuals', 'Crosshair', 'Spin Speed', 1, 340, 150, '', 0, function(self)
+                  getgenv().crosshair.spin_speed = self
+              end)
+  
+              Menu.CheckBox('Visuals', 'Crosshair', 'Resize', getgenv().crosshair.resize, function(self)
+                  getgenv().crosshair.resize = self
+              end)
+              Menu.Slider('Visuals', 'Crosshair', 'Resize Speed', 1, 22, 5, '', 0, function(self)
+                  getgenv().crosshair.resize_speed = self
+              end)
+          end
+  
+            local TLHightlightSection = Menu.Container("Visuals", "HighLight", "Right") do
+                Menu.CheckBox("Visuals", "HighLight", "Enabled", true, function(a)
+                    Settings.Combat.Visuals.HighLight.Enabled = a
+                end)
+                Menu.ColorPicker("Visuals", "HighLight", "Fill Color", MainColor, 0, function(a)
+                    Settings.Combat.Visuals.HighLight.FillColor = a
+                end)
+                Menu.ColorPicker("Visuals", "HighLight", "OutLine Color", Color3.fromRGB(255, 255, 255), 0, function(a)
+                    Settings.Combat.Visuals.HighLight.OutLineColor = a
+                end)
+            end
+  
+            local TLBackTrackSection = Menu.Container("Visuals", "BackTrack", "Right") do
+                Menu.CheckBox("Visuals", "BackTrack", "Enabled", true, function(a)
+                    Settings.Combat.Visuals.BackTrack.Enabled = a
+                end)
+                Menu.Slider("Visuals", "BackTrack", "Transparency", 0, 1, 0, '', 1, function(a)
+                    Settings.Combat.Visuals.BackTrack.Transparency = a
+                end)
+                Menu.Slider("Visuals", "BackTrack", "Delay", 0, 5, 0.1, '', 1, function(a)
+                    Settings.Combat.Visuals.BackTrack.Delay = a
+                end)
+                Menu.ColorPicker("Visuals", "BackTrack", "Color", MainColor, 0, function(a)
+                    Settings.Combat.Visuals.BackTrack.Color = a
+                end)
+                Menu.ComboBox("Visuals", "BackTrack", "Material", "ForceField", {"ForceField", "Neon", "Plastic"}, function(a)
+                    Settings.Combat.Visuals.BackTrack.Material = a
+                end)
+            end
+  
+            local TLLineSection = Menu.Container("Visuals", "Line", "Right") do
+                Menu.CheckBox("Visuals", "Line", "Enabled", true, function(a)
+                    Settings.Combat.Visuals.Line.Visible = a
+                end)
+                Menu.CheckBox("Visuals", "Line", "Circle", true, function(a)
+                    Settings.Combat.Visuals.Line.Circle = a
+                end)
+                Menu.Slider("Visuals", "Line", "Transparency", 0, 1, 0, '', 1, function(a)
+                    Settings.Combat.Visuals.Line.Transparency = a
+                end)
+                Menu.Slider("Visuals", "Line", "Thickness", 0, 5, 0.5, '', 1, function(a)
+                    Settings.Combat.Visuals.Line.Thickness = a
+                end)
+                Menu.ColorPicker("Visuals", "Line", "Color", MainColor, 0, function(a)
+                    Settings.Combat.Visuals.Line.Color = a
+                end)
+            end
+  
+            local Section8 = Menu.Container("Visuals", "Bullet Tracers", "Right") do
+                Menu.CheckBox("Visuals", "Bullet Tracers", "Enabled", false, function(self)
+                    Settings.Visuals.Bullet_Trails.Enabled = self
+                end)
+  
+                Menu.ComboBox("Visuals", "Bullet Tracers", "Texture", "Normal", {"Normal", "Fog"}, function(self)
+                    Settings.Visuals.Bullet_Trails.Texture = self
+                end)
+  
+                Menu.ColorPicker("Visuals", "Bullet Tracers", "Color", MainColor, 0, function(self)
+                    Settings.Visuals.Bullet_Trails.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, self), ColorSequenceKeypoint.new(1, self)})
+                end)
+            end
+  
+            local Section8 = Menu.Container("Visuals", "Aim Viewer", "Right") do
+              Menu.CheckBox("Visuals", "Aim Viewer", "Enabled", false, function(self)
+                AntiAimViewer_Enabled = self
+              end)
+  
+              Menu.ColorPicker("Visuals", "Aim Viewer", "Color", MainColor, 0, function(self)
+                AntiAimViewer_Color = self
+              end)
+  
+              Menu.TextBox("Visuals", "Aim Viewer", "Target", 'Username', function(self)
+                AntiAimViewer_Target = findPlayerByUsername(self)
+              end)
+  
+              Menu.CheckBox("Visuals", "Aim Viewer", "HighLight", false, function(self)
+                AntiAimViewer_HighLight = self
+              end)
+  
+              Menu.ColorPicker("Visuals", "Aim Viewer", "Color", Color3.fromRGB(255, 255, 255), 0, function(self)
+                AntiAimViewer_HighLight_OutLineColor = self
+              end)
+  
+              Menu.ColorPicker("Visuals", "Aim Viewer", "Color", MainColor, 0, function(self)
+                AntiAimViewer_HighLight_FillColor = self
+              end)
+          end
+  
+          local Section7 = Menu.Container("Visuals", "Client Chams", "Left") do
+            Menu.CheckBox("Visuals", "Client Chams", "Weapon Enabled", false, function(self)
+                Settings.Visuals.Weapon_Chams.Enabled = self
+            end)
+            Menu.ColorPicker("Visuals", "Client Chams", "Weapon Color", MainColor, 0, function(self)
+                Settings.Visuals.Weapon_Chams.Color = self
+            end)
+            Menu.ComboBox("Visuals", "Client Chams", "Weapon Cham Type", "Plastic", {"Plastic", "Neon"}, function(self)
+                if self == 'Plastic' then
+                    Settings.Visuals.Weapon_Chams.Material = Enum.Material.SmoothPlastic
+                elseif self == 'Neon' then
+                    Settings.Visuals.Weapon_Chams.Material = Enum.Material.Neon
+                end
+            end)
+
+            Menu.CheckBox("Visuals", "Client Chams", "Client Enabled", false, function(self)
+                Settings.Visuals.Character_Chams.Enabled = self
+            end)
+            Menu.ColorPicker("Visuals", "Client Chams", "Client Color", MainColor, 0, function(self)
+                Settings.Visuals.Character_Chams.Color = self
+            end)
+            Menu.ComboBox("Visuals", "Client Chams", "Client Cham Type", "Force Field", {"Force Field", "Neon"}, function(self)
+                if self == 'Force Field' then
+                    Settings.Visuals.Character_Chams.Material = Enum.Material.ForceField
+                elseif self == 'Neon' then
+                    Settings.Visuals.Character_Chams.Material = Enum.Material.Neon
+                end
+            end)
+
+            Menu.CheckBox("Visuals", "Client Chams", "Trail Enabled", false, function(self)
+                ToggleTrail(self)
+            end)
+            Menu.ColorPicker("Visuals", "Client Chams", "Trail Color", MainColor, 0, function(self)
+                Settings.Visuals.Character_Chams.Trail_Color = self
+            end)
+            Menu.Slider("Visuals", "Client Chams", "Trail Life", 1, 10, 3, '', 0, function(a)
+                Settings.Combat.Visuals.Line.Trail_Life = a
+            end)
+        end
+  
+        end
+  
+        local ConfigsTab = Menu.Tab("Configuration") do
+  
+            local MenuSection = Menu.Container("Configuration", "Menu", "Left") do
+                Menu.Hotkey('Configuration', 'Menu', 'Menu key', Settings.Configs.Menu.Keybind, function(a)
+                    Settings.Configs.Menu.Keybind = a
+                    ContextAction:BindAction('menuToggle', MenuToggle, true, a)
+                end)
+
+                Menu.ColorPicker("Configuration", "Menu", "Color", MainColor, 0, function(self)
+                    MainColor = self
+                    Menu.Accent = self
+                end)
+        
+                Menu.CheckBox('Configuration', 'Menu', 'Indicators', false, function(Boolean)
+                    Menu.Indicators:SetVisible(Boolean)
+                end)
+        
+                Menu.CheckBox('Configuration', 'Menu', 'Keybinds', false, function(Boolean)
+                    Menu.Keybinds:SetVisible(Boolean)
+                end)
+        
+                Menu.Button('Configuration', 'Menu', 'Rejoin', function()
+                    TeleportPlace(game.PlaceId, game.JobId)
+                end)
+
+            end
+
+            local ConfigSection = Menu.Container('Configuration', 'Configs', 'Right') do
+                Menu.TextBox('Configuration', 'Configs', 'Config Name', '')
+
+                Menu.ListBox('Configuration', 'Configs', 'Config List', false, {}, function()
+
+                end)
+
+                Menu.Button('Configuration', 'Configs', 'Create', function()
+                    
+                end)
+
+                Menu.Button('Configuration', 'Configs', 'Save', function()
+                    
+                end)
+
+                Menu.Button('Configuration', 'Configs', 'Load', function()
+                    
+                end)
+            end
+            
+        end
+    end
+
+  local function UpdateIndicators()
+
+    --Menu.Keybinds.List['Enabled']:Update(Settings['Main']['Enabled'] and "On" or "Off")
+
+    if enabled and Target then
+        Menu.Indicators.List['Target']:Update(Target.Name)
+
+        Menu.Indicators.List['Target Health']:SetVisible(true)
+        Menu.Indicators.List['Target Armor']:SetVisible(true)
+
+        Menu.Indicators.List['Knocked Out']:SetVisible(true)
+        Menu.Indicators.List['Anti Aiming']:SetVisible(true)
+    else
+        Menu.Indicators.List['Target']:Update('nil')
+        Menu.Indicators.List['Target Health']:SetVisible(false)
+        Menu.Indicators.List['Target Armor']:SetVisible(false)
+
+        Menu.Indicators.List['Knocked Out']:SetVisible(false)
+        Menu.Indicators.List['Anti Aiming']:SetVisible(false)
+
+        Menu.Indicators.List['Target Ammo']:SetVisible(false)
+    end
+
+    if enabled and Target then
+        local Character = Target.Character
+
+        if Character then
+            local RootPart = Character and Character:FindFirstChild('HumanoidRootPart')
+            local Humanoid = Character and Character:FindFirstChild('Humanoid')
+
+            local BodyEffects = Character and Character:FindFirstChild('BodyEffects')
+            local Armor = BodyEffects and BodyEffects:FindFirstChild('Armor')
+            local KnockedOut = BodyEffects and BodyEffects:FindFirstChild('K.O')
+
+            Menu.Indicators.List['Target Health']:Update(math.floor(Humanoid.Health), 0, 100)
+            Menu.Indicators.List['Target Armor']:Update(Armor.Value, 0, 200)
+
+            if KnockedOut and KnockedOut.Value then
+                Menu.Indicators.List['Knocked Out']:Update('[True]')
+            else
+                Menu.Indicators.List['Knocked Out']:Update('[False]')
+            end
+
+            if RootPart and (RootPart.AssemblyLinearVelocity.X > 40 or RootPart.AssemblyLinearVelocity.Y > 40 or RootPart.AssemblyLinearVelocity.Z > 40 or RootPart.AssemblyLinearVelocity.X < -40 or RootPart.AssemblyLinearVelocity.Y < -40 or RootPart.AssemblyLinearVelocity.Z < -40) then
+                Menu.Indicators.List['Anti Aiming']:Update('[True]')
+            else
+                Menu.Indicators.List['Anti Aiming']:Update('[False]')
+            end
+
+            for i, v in pairs(Character:GetChildren()) do
+                if v:IsA('Tool') and (v:FindFirstChild('Ammo') and v:FindFirstChild('MaxAmmo')) then
+                    Menu.Indicators.List['Target Ammo']:SetVisible(true)
+
+                    local Ammo = v.Ammo.Value
+                    local MaxAmmo = v.MaxAmmo.Value
+
+                    task.wait()
+                    Menu.Indicators.List['Target Ammo']:Update(Ammo, 0, MaxAmmo)
+                else
+                    Menu.Indicators.List['Target Ammo']:SetVisible(false)
+                end
+            end
+
+        end
+
+    end
+end
+  
+  
+  ---------------------------------------------------------------------------------- scripts
+  
+  do --// notification library
+    do --// Notifications 
+        local NotificationContainer = Instance.new("ScreenGui", gethui());
+        do  --// Functions
+            function Notifications:UpdateNotifications()
+                local i = 0
+                for v in next, Notifications do
+                    if v.Holder then
+                        local tween = Utility:Tween(v.Holder, TweenInfo.new(0.8, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = UDim2.new(0, 20, 0, 75 + (i * 25))})
+                        i = i + 1
+                    end
+                end
+            end;
+  
+            function Notifications:UpdateNotifications2(Item)
+                for i,v in pairs(Item) do
+                    if typeof(v) == "Instance" then
+                        task.spawn(function()
+                            local tween = Utility:Tween(v, TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundTransparency = 1});
+  
+                            tween.Completed:Connect(function()
+                                if v.Name == "Holder" then
+                                    v:Destroy();
+                                end
+                            end)
+                        end);
+                        if v.ClassName == "TextLabel" then
+                            local tween = Utility:Tween(v, TweenInfo.new(1, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {TextTransparency = 1})
+                        end
+                    end
+                end
+            end
+  
+            function Notifications:New(Text, Time, Color)
+                Time = Time or 2;
+                Color = Color or Color3.fromRGB(100, 95, 192);
+                Text = Text or "No text provided? retard? "..tostring(math.random());
+  
+                local Notification = {};
+  
+                local Holder = Instance.new("Frame")
+                Holder.Position = UDim2.new(0, -30, 0, 75);
+                Holder.Size = UDim2.new(0, 0, 0, 23);
+                Holder.BackgroundTransparency = 0;
+                Holder.Parent = NotificationContainer;
+                Holder.BackgroundColor3 = Color3.fromRGB(37, 37, 37);
+                Holder.BorderSizePixel = 1
+                Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
+                Notification.Holder = Holder;
+  
+                local Background = Instance.new("Frame");
+                Background.Parent = Holder;
+                Background.Size = UDim2.new(1, -4, 1, -4);
+                Background.BackgroundColor3 = Color3.fromRGB(17, 17, 17);
+                Background.Position = UDim2.new(0, 2, 0, 2);
+                Background.BorderSizePixel = 1
+                Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+                Notification.Background = Background;
+  
+                local AccentBar = Instance.new("Frame");
+                AccentBar.Size = UDim2.new(0, 1, 1, 0);
+                AccentBar.Parent = Background;
+                AccentBar.BackgroundColor3 = Color;
+                AccentBar.Position = UDim2.new(0, 0, 0, 0);
+                AccentBar.BorderSizePixel = 0
+                Notification.AccentBar = AccentBar;
+  
+                local AccentBar2 = Instance.new("Frame");
+                AccentBar2.Size = UDim2.new(0, 0, 0, 1);
+                AccentBar2.Position = UDim2.new(0, 0, 0, 15);
+                AccentBar2.Parent = Background;
+                AccentBar2.BackgroundColor3 = Color;
+                AccentBar2.BorderSizePixel = 0
+  
+                Notification.AccentBar2 = AccentBar2
+                local NotifText = Instance.new("TextLabel");
+                NotifText.TextXAlignment = Enum.TextXAlignment.Left;
+                NotifText.Position = UDim2.new(0, 3, 0, 0);
+                NotifText.Size = UDim2.new(1, 0, 1, 0)
+                NotifText.Parent = Background;
+                NotifText.Font = Enum.Font.Ubuntu;
+                NotifText.TextColor3 = Color3.new(1,1,1);
+                NotifText.BackgroundTransparency = 1;
+                NotifText.TextSize = 12.00;
+                NotifText.Text = Text;
+  
+                Notification.NotifText = NotifText;
+                Notification.Holder.Size = UDim2.new(0, NotifText.TextBounds.X + 10, 0, 19);
+  
+                AccentBar2.Size = UDim2.new(0, 1, 0, 1)
+  
+                Notifications[Notification] = true
+  
+                local Connection
+                function Notification:Remove()
+                    Notifications[Notification] = nil
+                    Notifications:UpdateNotifications();
+                end;
+                task.spawn(function()
+                    Notification.Holder.Size = UDim2.new(0, NotifText.TextBounds.X + 10, 0, 19);
+                    Notifications:UpdateNotifications()
+                    Notification.AccentBar2:TweenSize(UDim2.new(0, Background.AbsoluteSize.X - 1, 0, 1), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, Time, false);
+                    task.wait(Time)
+  
+                    Notifications:UpdateNotifications2(Notification)
+                    task.wait(1.2)
+                    Notification:Remove()
+                end);
+            end;
+        end;
+    end;
+  
+    do
+        function Utility:Tween(...)
+            local NewTween = game:GetService("TweenService"):Create(...)
+            NewTween:Play();
+            return NewTween;
+        end;
+    end
+  end
+  
+--// Functions
+local function GetCalculatedVelocity(Player)
+    local Char = Player.Character
+    local Root = Char and Char:FindFirstChild('HumanoidRootPart')
+    local Velocity = Vector3.new()
+
+    if (Char and Root) then
+        local CurrentPos = Root.Position
+        local CurrentTime = tick()
+
+        task.wait(0.00350)
+
+        local NewPos = Root.Position
+        local NewTime = tick()
+
+        local FinalTime = NewTime - CurrentTime
+        Velocity = (NewPos - CurrentPos) / FinalTime
+        CurrentPos = NewPos
+        CurrentTime = NewPos
+    end
+
+    return Velocity
+end
+
+local function UpdateBuiltVelocity()
+    if Target then
+        BuiltVelocity = GetCalculatedVelocity(Target)
+    end
+end
+
+
+local VisibleCheck = function (Part, PartDescendant)
+    local Character = Client.Character or Client.CharacterAdded.Wait(Client.CharacterAdded)
+    local Origin = Camera.CFrame.Position
+    local _, OnScreen = Camera.WorldToViewportPoint(Camera, Part.Position)
+
+    if (OnScreen) then
+        local raycastParams = RaycastParams.new()
+        raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+        raycastParams.FilterDescendantsInstances = {Character, Camera}
+
+        local Result = Workspace.Raycast(Workspace, Origin, Part.Position - Origin, raycastParams)
+
+        if (Result) then
+            local PartHit = Result.Instance
+            local Visible = (not PartHit or Instance.new("Part").IsDescendantOf(PartHit, PartDescendant))
+
+            return Visible
+        end
+    end
+    return false
+end
+
+local function GetClosestPlayerFOV()
+    local Player = nil
+    local Distance = FoVCircle.Radius
+
+    for i, v in pairs(Players:GetPlayers()) do
+        if (v == Client) then continue end
+
+        local Character = v.Character
+        local RootPart  = Character and Character:FindFirstChild('HumanoidRootPart')
+
+
+        if Settings.Combat.Checks.WallCheck then
+            if Camera:WorldToScreenPoint(v.Character[Settings.Combat.TargetLock.HitParts].Position) and VisibleCheck(v.Character[Settings.Combat.TargetLock.HitParts], v.Character) then
+                if (Character and RootPart) then
+                    local Pos = Workspace.CurrentCamera:WorldToViewportPoint(RootPart.Position)
+                    local Mag = (Vector2.new(Pos.x, Pos.y) - UserInputService:GetMouseLocation()).magnitude
+
+                    if (Mag < Distance) then
+                        Distance = Mag
+                        Player = v
+                    end
+                end
+            end
+        else
+            if (Character and RootPart) then
+                local Pos = Workspace.CurrentCamera:WorldToViewportPoint(RootPart.Position)
+                local Mag = (Vector2.new(Pos.x, Pos.y) - UserInputService:GetMouseLocation()).magnitude
+
+                if (Mag < Distance) then
+                    Distance = Mag
+                    Player = v
+                end
+            end
+        end
+    end
+
+    return Player
+end
+
+local function KeybindHandler(Index, Texting)
+
+    if not Texting and Index.KeyCode == Settings['Destroy Cheaters'].Keybind then
+        DestroyCheaters()
+        Notifications:New('CFrame Desync: ' .. tostring(Settings['Destroy Cheaters'].Enabled), 1.5, MainColor)
+    end
+
+    if not Texting and Index.KeyCode == Settings.Combat.TargetLock.KeyBind and Settings.Combat.TargetLock.Enabled then
+        if Keybind and enabled then
+            Keybind = false
+            enabled = false
+            if Target ~= nil then
+                Target = nil
+                ENABLEDHIGHTLIGHTCHECK = false
+                if Settings.Visuals.Notifications then
+                    Notifications:New('Unlocked... haha!', 1.5, MainColor)
+                end
+                if Settings.Combat.Stuff.Spectate then
+                    game.Workspace.CurrentCamera.CameraSubject = Client.Character
+                end
+            end
+        else
+            Keybind = true
+            enabled = true
+            Target  = GetClosestPlayerFOV();
+            if Settings.Visuals.Notifications then
+                Notifications:New('Target : ' .. tostring(Target), 1.5, MainColor)
+            end
+            ENABLEDHIGHTLIGHTCHECK = true
+            if Settings.Combat.Stuff.Spectate and Target then
+                game.Workspace.CurrentCamera.CameraSubject = Target.Character
+            end
+            task.spawn(function ()
+                while enabled do
+                    wait()
+                    BacktrackPlayer(Target)
+                end
+            end)
+        end
+    end
+end
+
+local function ChattedAdmin(Chat)
+    if Client and Client.Character then
+        local PrefixFound = Chat:sub(1, 1) == "$"
+
+        if (PrefixFound) then
+            local SplitChat = Chat:split(' ')
+            if (SplitChat[1]:lower():find('target')) then 
+                enabled = true
+                Target = FindPlayer(SplitChat[2])
+
+                if Settings.Visuals.Notifications then
+                    Notifications:New('Target : ' .. tostring(Target), 1.5, MainColor)
+                end
+
+                ENABLEDHIGHTLIGHTCHECK = true
+
+                if Settings.Combat.Stuff.Spectate and Target then
+                    game.Workspace.CurrentCamera.CameraSubject = Target.Character
+                end
+
+                task.spawn(function ()
+                    while enabled do
+                        wait()
+                        BacktrackPlayer(Target)
+                    end
+                end)
+                
+            elseif (SplitChat[1]:lower():find('goto')) then
+                local GotoPlayer = FindPlayer(SplitChat[2])
+    
+                if (GotoPlayer) then
+                    Client.Character.HumanoidRootPart.CFrame = GotoPlayer.Character.HumanoidRootPart.CFrame
+                end
+            end
+        end
+    end
+end
+
+local function PostSimulation(Delta)
+    if Settings['Destroy Cheaters'].Enabled then
+        local LocalCharacter = Client.Character
+        local LocalRootPart = Client and LocalCharacter:FindFirstChild("HumanoidRootPart")
+
+        if not LocalRootPart then return end
+
+        Desync.ClientLocation = LocalRootPart.CFrame
+
+        if (Desync.cframe) then 
+            LocalRootPart.CFrame = Desync.cframe
+        end
+
+        RunService.PreRender:Wait()
+
+        LocalRootPart.CFrame = Desync.ClientLocation
+        Desync.ClientLocation = nil
+    end
+end
+
+RunService.PostSimulation:Connect(PostSimulation);
+
+Client.Chatted:Connect(ChattedAdmin)
+
+function UpdateFov() -- connect to heartbeat loop
+    FoVCircle.Position = Vector2.new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
+    FoVCircle.Visible = false
+end
+
+
+--// Loops
+task.spawn(function() while task.wait() do UpdateBuiltVelocity() end end)
+
+
+--// Hooking Aimbot --// CREDITS FOR THE HOOK TO CALLS
+local AimMetaTable = getrawmetatable(game); makewriteable(AimMetaTable)
+local OldMetaTable = AimMetaTable.__namecall; AimMetaTable.__namecall = newcclosure(function(...)
+    local Arguments = {...};
+    if Settings.Combat.TargetLock.Enabled and getnamecallmethod() == 'FireServer' and Arguments[2] == MousePos and Target and Target.Character then
+        local TargetCharacter = Target.Character
+        if (Settings.Combat.Checks.Resolver) then
+            Arguments[3] = TargetCharacter[Settings.Combat.TargetLock.HitParts].Position + (BuiltVelocity * Vector3.new(Settings.Combat.TargetLock.Prediction, Settings.Combat.TargetLock.Prediction, Settings.Combat.TargetLock.Prediction))
+        else
+            Arguments[3] = TargetCharacter[Settings.Combat.TargetLock.HitParts].Position + (TargetCharacter[Settings.Combat.TargetLock.HitParts].Velocity * Vector3.new(Settings.Combat.TargetLock.Prediction, Settings.Combat.TargetLock.Prediction, Settings.Combat.TargetLock.Prediction))
+        end
+
+        return OldMetaTable(unpack(Arguments))
+    end
+    return OldMetaTable(...)
+end)
+
+local index; index = hookmetamethod(game, '__index', function(Obj, Prop)
+
+    if Prop == 'CFrame' and index(Obj, 'Name') == 'HumanoidRootPart' and index(Obj, 'Parent') == index(Client, 'Character') and Desync.ClientLocation then
+        return Desync.ClientLocation
+    end
+
+    return index(Obj, Prop)
+end)
+
+ 
+  
+        -- FIRE VISUALS đŸ”¥đŸ”¥đŸ”¥đŸ”¥
+  
+        Script.Drawing.Line = Drawing.new("Line")
+        Script.Drawing.Line.From = Vector2.new(0, 0)
+        Script.Drawing.Line.To = Vector2.new(0, 0)
+        Script.Drawing.Line.Visible = Settings.Combat.Visuals.Line.Visible
+        Script.Drawing.Line.Thickness = Settings.Combat.Visuals.Line.Thickness
+        Script.Drawing.Line.Color = Settings.Combat.Visuals.Line.Color
+        Script.Drawing.Line.Transparency = Settings.Combat.Visuals.Line.Transparency
+  
+  
+  
+  
+        -- backtrack
+        function BacktrackPlayer(player)
+            if Settings.Combat.Visuals.BackTrack.Enabled and Settings.Combat.TargetLock.Enabled == true and enabled and Target and Target.Character and Target.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.Archivable = true
+                local Cloned = player.Character:Clone()
+                Cloned.Name = "Player Clone"
+                for _, v in ipairs(Cloned:GetChildren()) do
+                    if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+                        v.CanCollide = false
+                        v.Anchored = true
+                        v.Material = Settings.Combat.Visuals.BackTrack.Material
+                        v.Color = Settings.Combat.Visuals.BackTrack.Color
+                        v.Transparency = Settings.Combat.Visuals.BackTrack.Transparency
+                    else
+                        v:Destroy()
+                    end
+                end
+                if Cloned:FindFirstChild("Head") and Cloned:FindFirstChild("Head"):FindFirstChild("face") then
+                    Cloned.Head.face:Destroy()
+                end
+                Cloned.Parent = game.Workspace
+                wait(Settings.Combat.Visuals.BackTrack.Delay)
+                Cloned:Destroy()
+            end
+        end
+  
+  
+        -- look at
+  
+  
+  
+    do -- prediction breaker
+  
+        if getgenv().OldKeyConnection then
+            getgenv().OldKeyConnection:Disconnect()
+            getgenv().OldKeyConnection = nil
+        end
+        getgenv().OldKeyConnection =
+        UserInputService.InputBegan:Connect(
+            function(input, isTyping)
+                if input.KeyCode == Settings.Misc.PredictionDisabler.KeyBind and isTyping == false and Settings.Misc.PredictionDisabler.Enabled == true then
+                    if Antilockhahga == false then
+                        Antilockhahga = true
+                        Menu.Keybinds.List['Prediction Breaker']:Update(true and "On" or "Off")
+                        if  Settings.Misc.PredictionDisabler.Notifications == true then
+                            Notifications:New('Prediction Breaker : TRUE.', 1.5, MainColor)
+                        end
+                    else
+                        Antilockhahga = false
+                        Menu.Keybinds.List['Prediction Breaker']:Update(false and "On" or "Off")
+                        if  Settings.Misc.PredictionDisabler.Notifications == true then
+                            Notifications:New('Prediction Breaker : FALSE.', 1.5, MainColor)
+                        end
+                    end
+                end
+            end
+        )
+        if getgenv().OldStepConnection then
+            getgenv().OldStepConnection:Disconnect()
+            getgenv().OldStepConnection = nil
+        end
+        getgenv().OldStepConnection = RunService.Stepped:Connect(function(_, Delta)
+                local success, err = pcall(function()
+                        if Settings.Misc.PredictionDisabler.Enabled ~= true then
+                        else
+                        local char = game.Players.LocalPlayer.Character
+                        if char and char:FindFirstChildOfClass("Humanoid") and char:FindFirstChildOfClass("Humanoid").RootPart and Antilockhahga == true then
+                            local hum = char:FindFirstChildOfClass("Humanoid")
+                            if Settings.Misc.PredictionDisabler.AutoWalkSpeed then
+                                Settings.Misc.PredictionDisabler.WalkSpeed = hum.WalkSpeed
+                            end
+                            local root = hum.RootPart
+                            root.Velocity = Vector3.new(hum.MoveDirection.x, root.Velocity.y, hum.MoveDirection.z)
+                            root.CFrame = root.CFrame + ((hum.MoveDirection * Delta) * (Settings.Misc.PredictionDisabler.WalkSpeed * 0.9))
+                            for _, Anim in next, hum:GetPlayingAnimationTracks() do
+                                local Anim3 = nil
+                                local Anim2 = Anim
+                                if Anim and Anim.Animation and Anim.Animation.Parent then
+                                    Anim3 = Anim.Animation.Parent
+                                end
+                                if
+                                    Anim3 and Anim3.Parent and Anim3.Parent.Name == "Animate" and
+                                        (string.find(Anim2.Animation.Name:lower(), "run") or
+                                            string.find(Anim2.Animation.Name:lower(), "walk"))
+                                then
+                                    Anim2:AdjustSpeed(Settings.Misc.PredictionDisabler.WalkSpeed / Settings.Misc.PredictionDisabler.AnimationSpeed)
+                                end
+                            end
+                        end
+                    end
+                    end
+                )
+                if err and Settings.Misc.PredictionDisabler.Errors and Settings.Misc.PredictionDisabler.Notifications then
+  
+                    Notifications:New('Current AntiLock Speed: <b>' .. tostring(Settings.Misc.PredictionDisabler.WalkSpeed) .. '</b>', 1.5, MainColor)
+  
+                    Antilockhahga = false
+  
+  
+                    if getgenv().OldStepConnection then
+                        getgenv().OldStepConnection:Disconnect()
+                        getgenv().OldStepConnection = nil
+                    end
+  
+                    if getgenv().OldKeyConnection then
+                        getgenv().OldKeyConnection:Disconnect()
+                        getgenv().OldKeyConnection = nil
+                    end
+                end
+            end
+        )
+  
+    end
+  
+    local function GetRandomCFrame(Boolean, Min, Max)
+      if Boolean then
+          return CFrame.new(math.random(Min, Max), math.random(0, 5), math.random(Min, Max))
+      else
+          return CFrame.new(-math.random(Min, Max), math.random(0, 5), -math.random(Min, Max))
+      end
+  end
+
+  function Utility:GetPlayers()
+    return Players:GetPlayers()
+  end
+
+  function TeleportPlace(PlaceId, JobId)
+    if JobId == game.JobId and #Utility:GetPlayers() <= 1 then
+        Client:Kick("Misery: Current Server has 0 players, Rejoining.")
+        --
+        Wait()
+        --
+        TeleportService:Teleport(PlaceId, Client)
+    else
+        TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Client)
+    end
+end
+  
+  local function VisualzeMovement()
+      local Character = Client and (Client.Character or Client.CharacterAdded:Wait())
+      local RootPart = Character and Character.HumanoidRootPart
+  
+      local Ball = Instance.new('Part') do
+          Ball.Anchored = true
+          Ball.Size = Vector3.new(0.5, 0.5, 0.5)
+          Ball.Shape = Enum.PartType.Ball
+          Ball.Color = MainColor
+          Ball.Material = Enum.Material.ForceField
+          Ball.Parent = Workspace
+          Ball.CFrame = RootPart.CFrame
+          Ball.CanCollide = false
+      end;
+  
+      Debris:AddItem(Ball, 2)
+  end
+  
+  do-- // Target Strafe
+      angle_Y = 0
+      
+      RunService.Stepped:Connect(function (param,FPS)
+          local Random = math.random(1, 6)
+          local Gun = GetTool()
+  
+          if enabled and Gun and Target and Target.Character and Settings.Misc.TargetStrafe.Enabled == true and Settings.Misc.TargetStrafe.Method == 'Strafe' then
+              if Settings.Misc.TargetStrafe.Visualize_Circle then
+                  nigganiggaXD.CFrame = Target.Character.HumanoidRootPart.CFrame
+  
+                  spawn(function()
+                      nigganiggaXD.Size = Vector3.new(Settings.Misc.TargetStrafe.Distance * 0.7, 0.01, Settings.Misc.TargetStrafe.Distance * 0.7)
+                      nigganiggaXD.Color = Settings.Misc.TargetStrafe.Color
+                  end)
+                  
+                  spawn(function ()
+                      if Settings.Misc.TargetStrafe.Visualize_Circle == false or Settings.Misc.TargetStrafe.Enabled == false then
+                          nigganiggaXD.CFrame = CFrame.new(0,9999,0)
+                      end
+                  end)
+  
+              end
+          else
+              nigganiggaXD.CFrame = CFrame.new(0,9999,0)
+          end
+  
+          if Gun and Settings.Misc.TargetStrafe.Enabled and Settings.Misc.TargetStrafe.Method == 'Strafe' then
+            if (Target.Character.HumanoidRootPart.CFrame.x > 5000 or Target.Character.HumanoidRootPart.CFrame.y > 5000 or Target.Character.HumanoidRootPart.CFrame.z > 5000 or Target.Character.HumanoidRootPart.CFrame.x < -5000 or Target.Character.HumanoidRootPart.CFrame.y < -5000 or Target.Character.HumanoidRootPart.CFrame.z < -5000) then return end 
+
+              if enabled then
+                  if Settings.Combat.Stuff.LookAt == true then
+                      Settings.Combat.Stuff.LookAt = false
+                      wait()
+                      Settings.Combat.Stuff.LookAt = true
+                  end
+  
+                  angle_Y = angle_Y + FPS / Settings.Misc.TargetStrafe.Speed % 1
+                  Client.Character.HumanoidRootPart.CFrame = CFrame.new(Target.Character.HumanoidRootPart.Position) * CFrame.Angles(0, 2 * math.pi * angle_Y, 0) * CFrame.new(0, Settings.Misc.TargetStrafe.Height, Settings.Misc.TargetStrafe.Distance)
+              end
+          elseif Gun and Settings.Misc.TargetStrafe.Enabled and Settings.Misc.TargetStrafe.Method == 'Randomize' and enabled then
+            if (Target.Character.HumanoidRootPart.CFrame.x > 5000 or Target.Character.HumanoidRootPart.CFrame.y > 5000 or Target.Character.HumanoidRootPart.CFrame.z > 5000 or Target.Character.HumanoidRootPart.CFrame.x < -5000 or Target.Character.HumanoidRootPart.CFrame.y < -5000 or Target.Character.HumanoidRootPart.CFrame.z < -5000) then return end 
+
+              if Random <= 3 then
+                  Client.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * GetRandomCFrame(true, Settings.Misc.TargetStrafe.RandomizeMin, Settings.Misc.TargetStrafe.RandomizeMax)
+                  if Settings.Misc.TargetStrafe.Visualize_Circle then
+                      VisualzeMovement()
+                  end
+              elseif Random > 3 then
+                  Client.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * GetRandomCFrame(false, Settings.Misc.TargetStrafe.RandomizeMin, Settings.Misc.TargetStrafe.RandomizeMax)
+                  if Settings.Misc.TargetStrafe.Visualize_Circle then
+                      VisualzeMovement()
+                  end
+              end
+  
+          end
+      end)
+  end
+
+  local function Reload(Object)
+    local KOValue = Client.Character:WaitForChild('BodyEffects')['K.O'].Value
+
+    if Object and KOValue ~= true then
+        ReplicatedStorage:FindFirstChild('MainEvent'):FireServer('Reload', Object)
+    end
+end
+
+
+  task.spawn(function()
+    while task.wait(0.07) do
+
+        if (enabled and Target and Target.Character and Settings.Misc.TargetStrafe.Enabled and Settings.Misc.TargetStrafe.AutoFire) then 
+
+            local Gun = GetTool()
+            if (Gun and Target) then 
+                Gun:Activate()
+            end
+        end
+
+        if (enabled and Target and Target.Character and Settings.Misc.TargetStrafe.Enabled and Settings.Misc.TargetStrafe.AutoReload) then
+
+            local Gun = GetTool()
+            if (Gun and Gun.Ammo.Value == 0) then
+                Reload(Gun)
+            end
+        end
+        
+    end
+  end)
+  
+    do -- walkspeed Cframe
+        UserInputService.InputBegan:Connect(function(input, isTyping)
+            if not isTyping and input.KeyCode == Settings.Misc.WalkSpeed.KeyBind and Settings.Misc.WalkSpeed.Enabled == true then
+                if CFrameSpeedKeyBind then
+                    CFrameSpeedKeyBind = false
+                    Menu.Keybinds.List['CFrame']:Update(false and "On" or "Off")
+                    if  Settings.Misc.WalkSpeed.Notifications == true then
+                        Notifications:New('WalkSpeed disabled', 1.5, MainColor)
+                    end
+                else
+                    Menu.Keybinds.List['CFrame']:Update(true and "On" or "Off")
+                    CFrameSpeedKeyBind = true
+                    if  Settings.Misc.WalkSpeed.Notifications == true then
+                        Notifications:New('WalkSpeed enabled', 1.5, MainColor)
+                    end
+                end
+            end
+        end)
+    end
+  
+    do -- fly
+        UserInputService.InputBegan:Connect(function(input, isTyping)
+            if not isTyping and input.KeyCode == Settings.Misc.Fly.KeyBind and Settings.Misc.Fly.Enabled then
+                if flyvariableshit then
+                    flyvariableshit = false
+                    Menu.Keybinds.List['Fly']:Update(false and "On" or "Off")
+                    if  Settings.Misc.Fly.Notification == true then
+                        Notifications:New('fly disabled', 1.5, MainColor)
+                    end
+                else
+                    flyvariableshit = true
+                    Menu.Keybinds.List['Fly']:Update(true and "On" or "Off")
+                    if  Settings.Misc.Fly.Notification == true then
+                        Notifications:New('fly enabled', 1.5, MainColor)
+                    end
+                end
+            end
+        end)
+    end
+  
+    do -- trash talk
+        local function toggle_script(input, t)
+            if not t and input.KeyCode == Settings.Misc.TrashTalk.Use.KeyBind and Settings.Misc.TrashTalk.Use.UsekeyBind then
+                if Settings.Misc.TrashTalk.Use.Notification then
+                    if not Settings.Misc.TrashTalk.Use.Enabled then
+                        Notifications:New('trash talking', 1.5, MainColor)
+                        if tick() >= chatSpamTick + 1 then
+                            sayMessage(getgenv().MethodBeingUsed[math.random(1, #getgenv().MethodBeingUsed)])
+                            chatSpamTick = tick()
+                        end
+                    else
+                        Notifications:New('disabled "enabled" if you want to use', 1.5, MainColor)
+                    end
+                end
+            end;
+        end;
+  
+        UserInputService.InputBegan:Connect(toggle_script);
+    end
+  
+    do -- // Anti Aim
+        getgenv().xd = 0
+  
+        local function toggleScript()
+        print("working")
+        Settings.Misc.NetworkAnti.Enabled = not Settings.Misc.NetworkAnti.Enabled
+            if Settings.Misc.NetworkAnti.Enabled then
+                if Settings.Misc.NetworkAnti.Notification then
+                    Notifications:New('Network enabled', 1.5, MainColor)
+                end
+            else
+                if Settings.Misc.NetworkAnti.Notification then
+                    Notifications:New('Network disabled', 1.5, MainColor)
+                end
+            end
+        end
+  
+        UserInputService.InputBegan:Connect(function(input, t)
+            if not t and input.KeyCode == Settings.Misc.NetworkAnti.Keybind then
+                toggleScript()
+            end
+        end)
+  
+    task.spawn(function()
+        while true do
+            task.wait()
+            if Settings.Misc.NetworkAnti.Enabled then
+                local loop = RunService.Heartbeat:Connect(function()
+                    sethiddenproperty(Client.Character.HumanoidRootPart, "NetworkIsSleeping", true)
+                    task.wait()
+                    sethiddenproperty(Client.Character.HumanoidRootPart, "NetworkIsSleeping", false)
+                end)
+                task.wait(getgenv().xd)
+                if loop then
+                    loop:Disconnect()
+                end
+            end
+        end
+    end)
+  
+    end
+
+  
+  local EtherealParts = Instance.new('Folder', workspace)
+  EtherealParts.Name  = 'EtherealParts'
+  
+  local function HitEffect(Player, Type)
+      local Character = Player.Character
+      local RootPart  = Character and Character:FindFirstChild('HumanoidRootPart')
+  
+      if Character and RootPart then
+
+        if Type == 'Pulse' then
+			local Attachment = Instance.new('Attachment', RootPart)
+			local Particle1  = Instance.new('ParticleEmitter', Attachment) do
+				Particle1.Name          = 'Particle1'
+				Particle1.LightEmission = 3
+				Particle1.Transparency  = NumberSequence.new(0)
+                Particle1.Color         = ColorSequence.new(MainColor)
+				Particle1.Size          = NumberSequence.new{NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 6, 1.2)}
+				Particle1.Rotation      = NumberRange.new(0)
+				Particle1.RotSpeed      = NumberRange.new(0)
+				Particle1.Enabled       = false
+				Particle1.Rate          = 2
+				Particle1.Lifetime      = NumberRange.new(0.25)
+				Particle1.Speed         = NumberRange.new(0.1)
+				Particle1.Squash        = NumberSequence.new(0)
+				Particle1.ZOffset       = 1
+				Particle1.Texture       = 'rbxassetid://2916153928'
+				Particle1.Orientation   = 'VelocityPerpendicular'
+				Particle1.Shape         = 'Box'
+				Particle1.ShapeInOut    = 'Outward'
+				Particle1.ShapeStyle    = 'Volume'
+			end
+			local Particle2  = Instance.new('ParticleEmitter', Attachment) do
+				Particle2.Name          = 'Particle1'
+				Particle2.LightEmission = 3
+				Particle2.Transparency  = NumberSequence.new(0)
+                Particle2.Color         = ColorSequence.new(MainColor)
+				Particle2.Size          = NumberSequence.new{NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 6, 1.2)}
+				Particle2.Rotation      = NumberRange.new(0)
+				Particle2.RotSpeed      = NumberRange.new(0)
+				Particle2.Enabled       = false
+				Particle2.Rate          = 2
+				Particle2.Lifetime      = NumberRange.new(0.25)
+				Particle2.Speed         = NumberRange.new(0.1)
+				Particle2.Squash        = NumberSequence.new(0)
+				Particle2.ZOffset       = 1
+				Particle2.Texture       = 'rbxassetid://2916153928'
+				Particle2.Orientation   = 'FacingCamera'
+				Particle2.Shape         = 'Box'
+				Particle2.ShapeInOut    = 'Outward'
+				Particle2.ShapeStyle    = 'Volume'
+			end
+
+			Particle1:Emit(1);
+			Particle2:Emit(1);
+
+			Debris:AddItem(Attachment, 1)
+        elseif Type == 'Clone' then
+  
+              Character.Archivable  = true
+  
+              local Clone = Character:Clone()
+              Clone.Parent = EtherealParts
+              Clone.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+  
+              for _, v in pairs(Clone:GetDescendants()) do
+                  if (v:IsA('BasePart')) then
+                      v.Material = Enum.Material.ForceField
+                      v.Color = MainColor
+                      v.CanCollide = false
+                      v.Anchored = true
+                      v.CanQuery = false
+                      v.CanTouch = false
+                  end
+  
+                  if (v:IsA('Accessory') or v:IsA('Tool')) then
+                      v:Destroy()
+                  end
+              end
+  
+              for i,v in pairs(Character:GetDescendants()) do
+                  if (v:IsA('BasePart')) then
+                      local ClonePart = Clone:FindFirstChild(v.Name)
+  
+                      if (ClonePart) then
+                          ClonePart.CFrame = v.CFrame
+                      end
+                  end
+              end
+  
+              Clone:PivotTo(Character.PrimaryPart.CFrame + Vector3.new(Client.Character.HumanoidRootPart.CFrame.lookVector.x * 1.5, 0, Client.Character.HumanoidRootPart.CFrame.lookVector.z * 1.5))
+  
+              CharacterArchivable = false
+              Debris:AddItem(Clone, 2)
+  
+          end
+      end
+  end
+  
+  local function FindTargetOnPart(Part)
+      local Target = nil;
+      local HitPart = nil;
+      local Distance = 2;
+  
+      for _, Player in pairs(Players:GetPlayers()) do
+          if (Player == Client) then continue end
+  
+          local Char = Player.Character
+          local Root = Char and Char:FindFirstChild('HumanoidRootPart')
+  
+          for _, Obj in pairs(Char:GetChildren()) do
+              if (not Obj:IsA('BasePart')) then continue end
+  
+              local Mag = (Obj.Position - Part.Position).magnitude
+              if (Mag < Distance) then
+                  Distance = Mag
+                  Target = Player
+                  HitPart = Obj
+              end
+          end
+      end
+  
+      return Target, HitPart
+  end
+  
+  local function SirenAdded(Obj)
+      local Character = Client.Character
+      local RootPart  = Character and Character:FindFirstChild('HumanoidRootPart')
+  
+      local function VerifyBullet(obj)
+          return (obj.Name == 'BULLET_RAYS' or obj.Name:lower():find('bullet') or obj:WaitForChild('Attachment', 1) or obj:WaitForChild('GunBeam', 1)) and obj
+      end 
+  
+      local PlayerChecks = {
+          PlayerGun = false
+      }
+  
+      local BulletRay = VerifyBullet(Obj)
+      if (BulletRay and RootPart) then
+          local Mag = (RootPart.Position - BulletRay.Position).magnitude
+          local MagCheck = nil;
+          if (Settings.Visuals.Hit_Detection.Enabled) then
+              MagCheck = 13
+          else
+              MagCheck = 13
+          end
+  
+          if (Mag <= MagCheck) then
+              PlayerChecks.PlayerGun = true
+          end
+  
+          if (PlayerChecks.PlayerGun) then -- Shot from client
+              local GunBeam = BulletRay:WaitForChild('GunBeam', 1)
+              local Attachment0 = GunBeam.Attachment0 -- closest to player
+              local Attachment1 = GunBeam.Attachment1 -- mousepos 
+  
+              if Settings.Visuals.Bullet_Trails.Enabled then
+                  task.wait()
+                  GunBeam.Texture        = AssetTable.Textures[Settings.Visuals.Bullet_Trails.Texture]
+                  GunBeam.LightEmission  = 5
+                  GunBeam.Segments       = 10
+                  GunBeam.LightInfluence = 0
+                  GunBeam.TextureSpeed   = Settings.Visuals.Bullet_Trails.Speed
+                  GunBeam.Brightness     = Settings.Visuals.Bullet_Trails.Brightness
+                  GunBeam.Color          = Settings.Visuals.Bullet_Trails.Color
+                  GunBeam.Width0         = Settings.Visuals.Bullet_Trails.Width
+                  GunBeam.Width1         = Settings.Visuals.Bullet_Trails.Width
+                  GunBeam.Transparency   = NumberSequence.new({NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 0)})
+              end
+  
+              if Settings.Visuals.Hit_Detection.Enabled then
+                  local Part = Instance.new('Part', Workspace); do
+                      Part.Anchored = true
+                      Part.Size = Vector3.new(0.25, 0.25, 0.25)
+                      Part.Position = Attachment1.WorldCFrame.Position
+                      Part.Material = Enum.Material.Neon
+                      Part.Color = MainColor
+                      Part.CanCollide = false
+                      Part.Transparency = 1
+                  end
+  
+                  Debris:AddItem(Part, 2)
+  
+                  local Target, HitPart = FindTargetOnPart(Part)
+                  if (Target ~= nil) then
+  
+                      if Settings.Visuals.Hit_Detection.Notify then
+                          Menu.Notify('Misery<font color="#' .. tostring(MainColor:ToHex()) .. '">.cc</font>  >  ' .. '+1 Hit | ' .. tostring(HitPart) .. ' | Target : ' .. Target.DisplayName .. '', 1.5)
+                      end
+  
+                      if Settings.Visuals.Hit_Detection.Clone then
+                          HitEffect(Target, 'Clone')
+                      end
+
+                      if Settings.Visuals.Hit_Detection.Pulse then
+                        HitEffect(Target, 'Pulse')
+                    end
+  
+                      if Settings.Visuals.Hit_Detection.Sound then
+                          local Sound = Instance.new('Sound', Obj); do
+                              Sound.SoundId = AssetTable.Sounds[Settings.Visuals.Hit_Detection.HitSound]
+                              Sound.Volume = 1
+                              Sound:Play()
+                          end
+                      end
+  
+                  end
+              end
+  
+          end
+      end
+  
+  end
+  
+  -- aim viewer
+  do
+    AntiAimViewer_Target = Client
+    print(AntiAimViewer_Target)
+  
+  
+      function getgun()
+        for i, v in pairs(AntiAimViewer_Target.Character:GetChildren()) do
+            if v and (v:FindFirstChild("Default") or v:FindFirstChild("Handle")) then
+                return v
+            end
+        end
+      end
+  
+      local a = Instance.new("Beam")
+      a.Segments = 1
+      a.Width0 = 0.2
+      a.Width1 = 0.2
+      a.Color = ColorSequence.new(AntiAimViewer_Color)
+      a.FaceCamera = true
+      local b = Instance.new("Attachment")
+      local c = Instance.new("Attachment")
+      a.Attachment0 = b
+      a.Attachment1 = c
+      a.Parent = workspace.Terrain
+      b.Parent = workspace.Terrain
+      c.Parent = workspace.Terrain
+  
+      task.spawn(
+        function()
+            RunService.RenderStepped:Connect(
+                function()
+                    local character = Client.Character
+                    if not character then
+                        a.Enabled = false
+                        return
+                    end
+  
+                    if
+                        AntiAimViewer_Enabled and getgun() and
+                            AntiAimViewer_Target.Character:FindFirstChild("BodyEffects") and
+                            AntiAimViewer_Target.Character:FindFirstChild("Head") and
+                            AntiAimViewer_Target.Character:FindFirstChildWhichIsA("Tool")
+                    then
+                        a.Enabled = true
+                        b.Position = AntiAimViewer_Target.Character:FindFirstChild("Head").Position
+                        c.Position = AntiAimViewer_Target.Character.BodyEffects[AntiAimViewer_Method].Value
+                        a.Color = ColorSequence.new(AntiAimViewer_Color)
+                    else
+                        a.Enabled = false
+                    end
+                end
+            )
+        end
+      )
+  
+  end
+  
+  
+  
+  local HightLightT = Instance.new("Highlight")
+  local AimViewerHighLight = Instance.new("Highlight")
+  local Framework = Client.PlayerGui:FindFirstChild('Framework')
+  
+  local newindex; newindex = hookmetamethod(game, '__newindex', LPH_NO_VIRTUALIZE(function(self, key, value)
+      local calling_script = getcallingscript()
+  
+      if (Framework and calling_script == Framework and self:IsA('Camera') and key == 'CFrame' and Settings.Misc.Random.NoRecoil) then 
+          return 
+      end
+  
+      if (key == 'WalkSpeed' and value < 16 and Settings.Misc.Random.NoSlow) then 
+          value = 16
+      end
+  
+      return newindex(self, key, value)
+  end))
+  
+  local function Heartbeat()
+
+    UpdateFov()
+
+    if Settings.Misc.Random.AntiBag then
+        Client.Character["Christmas_Sock"]:Destroy()
+    end
+    if Settings.Misc.Random.AutoStomp then
+        game.ReplicatedStorage.MainEvent:FireServer("Stomp")
+    end
+    if Settings.Misc.Cash.AutoDrop == true then
+        game.ReplicatedStorage.MainEvent:FireServer("DropMoney", Settings.Misc.Cash.Amount)
+    end
+    if Settings.Misc.Cash.AutoPick == true then
+        pcall(
+            function()
+                for _, v in pairs(Workspace.Ignored.Drop:GetChildren()) do
+                    if v.Name == "MoneyDrop" then
+                        local MoneyMagnitude =
+                            (v.Position - Client.Character.HumanoidRootPart.Position).magnitude
+                        if MoneyMagnitude < 25 then
+                            fireclickdetector(v.ClickDetector)
+                        end
+                    end
+                end
+            end
+        )
+    end
+  
+    if ENABLEDHIGHTLIGHTCHECK == true and Settings.Combat.Visuals.HighLight.Enabled == true and Settings.Combat.TargetLock.Enabled == true and Target then
+        HightLightT.Parent = Target.Character
+        HightLightT.FillColor = Settings.Combat.Visuals.HighLight.FillColor
+        HightLightT.OutlineColor = Settings.Combat.Visuals.HighLight.OutLineColor
+    else
+        HightLightT.Parent = game.CoreGui
+    end
+  
+    if AntiAimViewer_Enabled and AntiAimViewer_HighLight and AntiAimViewer_Target and AntiAimViewer_Target.Character and AntiAimViewer_Target.Character:FindFirstChild("HumanoidRootPart") then
+        AimViewerHighLight.Parent = AntiAimViewer_Target.Character
+        AimViewerHighLight.FillColor = AntiAimViewer_HighLight_FillColor
+        AimViewerHighLight.OutlineColor = AntiAimViewer_HighLight_OutLineColor
+    else
+        AimViewerHighLight.Parent = game.CoreGui
+    end
+  
+    if Settings.Combat.Visuals.Line.Enabled == true and Settings.Combat.TargetLock.Enabled == true and enabled and Target and Target.Character and Target.Character:FindFirstChild("HumanoidRootPart") then
+        local mousePos = game:GetService("UserInputService"):GetMouseLocation()
+        local ClosestPoint = Players[tostring(Target)].Character[Settings.Combat.TargetLock.HitParts]
+        local ClosestPoint2D = Camera:WorldToViewportPoint(ClosestPoint.Position)
+        Script.Drawing.Line.From = Vector2.new(ClosestPoint2D.X, ClosestPoint2D.Y)
+        Script.Drawing.Line.To = Vector2.new(mousePos.X, mousePos.Y)
+        Script.Drawing.Line.Visible = Settings.Combat.Visuals.Line.Visible
+        Script.Drawing.Line.Thickness = Settings.Combat.Visuals.Line.Thickness
+        Script.Drawing.Line.Color = Settings.Combat.Visuals.Line.Color
+        Script.Drawing.Line.Transparency = Settings.Combat.Visuals.Line.Transparency
+    else
+        Script.Drawing.Line.To = Vector2.new(9999, 9999)
+        Script.Drawing.Line.From = Vector2.new(9999, 9999)
+        Script.Drawing.Line.Visible = Settings.Combat.Visuals.Line.Visible
+        Script.Drawing.Line.Thickness = Settings.Combat.Visuals.Line.Thickness
+        Script.Drawing.Line.Color = Settings.Combat.Visuals.Line.Color
+        Script.Drawing.Line.Transparency = Settings.Combat.Visuals.Line.Transparency
+    end
+  
+  
+  
+  
+    if enabled and Target and Target.Character and Target.Character:FindFirstChild("LowerTorso") and Settings.Combat.Stuff.LookAt then
+        Client.Character.HumanoidRootPart.CFrame = CFrame.new(Client.Character.HumanoidRootPart.CFrame.Position, Vector3.new(Target.Character.HumanoidRootPart.CFrame.X, Client.Character.HumanoidRootPart.CFrame.Position.Y, Target.Character.HumanoidRootPart.CFrame.Z))
+    end
+    if enabled and Target and Target.Character and Target.Character:FindFirstChild("LowerTorso") and Settings.Combat.Checks.Knocked == true then
+        local KOd = Target.Character:WaitForChild("BodyEffects")["K.O"].Value
+        local Grabbed = Target.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+        if KOd or Grabbed then
+            print("knocked")
+            ENABLEDHIGHTLIGHTCHECK = false
+            enabled = false
+            Target = nil
+        end
+    end
+  
+    if Settings.Combat.Stuff.AutoPrediction == true then
+        pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+        split = string.split(pingvalue,'(')
+        ping = tonumber(split[1])
+       if ping < 130 then
+            Settings.Combat.TargetLock.Prediction = 0.151
+       elseif ping < 125 then
+            Settings.Combat.TargetLock.Prediction = 0.149
+       elseif ping < 110 then
+            Settings.Combat.TargetLock.Prediction = 0.146
+       elseif ping < 105 then
+            Settings.Combat.TargetLock.Prediction = 0.138
+       elseif ping < 90 then
+            Settings.Combat.TargetLock.Prediction = 0.136
+       elseif ping < 80 then
+            Settings.Combat.TargetLock.Prediction = 0.134
+       elseif ping < 70 then
+            Settings.Combat.TargetLock.Prediction = 0.131
+       elseif ping < 60 then
+            Settings.Combat.TargetLock.Prediction = 0.1229
+       elseif ping < 50 then
+            Settings.Combat.TargetLock.Prediction = 0.1225
+       elseif ping < 40 then
+            Settings.Combat.TargetLock.Prediction = 0.1256
+       end
+   end
+  
+   if CFrameSpeedKeyBind and Settings.Misc.WalkSpeed.Enabled then
+        if Client.Character.Humanoid.MoveDirection.Magnitude > 0 then
+            for i = 1, Settings.Misc.WalkSpeed.Speed do
+                Client.Character:TranslateBy(Client.Character.Humanoid.MoveDirection)
+            end
+        end
+    end
+  
+    if Settings.Misc.Fly.Enabled and flyvariableshit then
+        spawn(function()
+            pcall(function()
+                local speed = Settings.Misc.Fly.Speed
+                local velocity = Vector3.new(0, 1, 0)
+                if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+                    velocity = velocity + (workspace.CurrentCamera.CoordinateFrame.lookVector * speed)
+                end
+                if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+                    velocity = velocity + (workspace.CurrentCamera.CoordinateFrame.rightVector * -speed)
+                end
+                if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+                    velocity = velocity + (workspace.CurrentCamera.CoordinateFrame.lookVector * -speed)
+                end
+                if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                    velocity = velocity + (workspace.CurrentCamera.CoordinateFrame.rightVector * speed)
+                end
+  
+                Client.Character.HumanoidRootPart.Velocity = velocity
+                Client.Character.Humanoid:ChangeState("Freefall")
+            end)
+        end)
+    else
+        Client.Character.Humanoid:ChangeState("Landing")
+    end
+  
+    if Settings.Misc.TrashTalk.Use.Enabled == true then
+        if tick() >= chatSpamTick + 1 then
+            sayMessage(getgenv().MethodBeingUsed[math.random(1, #getgenv().MethodBeingUsed)])
+            chatSpamTick = tick()
+        end
+    end
+  
+  end
+  
+  
+  --\\ Initialize Function
+  local function Initialize()
+    Menu.Watermark:SetVisible(true)
+    Menu:SetTab("Main")
+    Menu:SetVisible(true)
+    Menu:Init()
+    UserInputService.InputBegan:Connect(KeybindHandler)
+    RunService.Heartbeat:Connect(Heartbeat)
+    Workspace.Ignored.Siren.DescendantAdded:Connect(SirenAdded)
+    ContextAction:BindAction('menuToggle', MenuToggle, false, Settings.Configs.Menu.Keybind)
+  end
+  do Initialize() end
+  
+  game:GetService("RunService").RenderStepped:Connect(function()
+
+    local Character = Client and (Client.Character or Client.CharacterAdded:Wait())
+    local Gun = GetTool(Gun)
+
+    if Settings.Combat.Visuals.Line.Circle and Target and Target.Character then
+        TargetCircle.Visible  = true
+        TargetCircle.Position = Target.Character.UpperTorso and Target.Character.UpperTorso.Position
+        TargetCircle.Color    = MainColor
+        TargetCircle.Radius   = 2
+        TargetCircle.Sides    = 2
+    else
+        TargetCircle.Visible  = false
+    end
+    
+    if Settings.Visuals.Character_Chams.Enabled and Character then
+        for i, v in pairs(Character:GetDescendants()) do
+            if (v.Parent:IsA('Tool') and (v:IsA('MeshPart') or v:IsA('BasePart'))) then continue end 
+
+            if v:IsA('MeshPart') then
+                v.Material = Settings.Visuals.Character_Chams.Material
+                v.Color = Settings.Visuals.Character_Chams.Color
+                v.TextureID = ''
+            end
+
+            if v:IsA('BasePart') then
+                v.Material = Settings.Visuals.Character_Chams.Material
+                v.Color = Settings.Visuals.Character_Chams.Color
+            end
+        end
+    end
+
+    if Settings.Visuals.Weapon_Chams.Enabled and Character and Gun then
+        for i, v in pairs(Gun:GetChildren()) do
+
+            if v:IsA('MeshPart') then
+                v.Material = Settings.Visuals.Weapon_Chams.Material
+                v.Color = Settings.Visuals.Weapon_Chams.Color
+                v.TextureID = ''
+            end
+
+            if v:IsA('BasePart') then
+                v.Material = Settings.Visuals.Weapon_Chams.Material
+                v.Color = Settings.Visuals.Weapon_Chams.Color
+            end
+
+        end
+    end
+
+    local Bars = Client.PlayerGui:FindFirstChild('MainScreenGui') and Client.PlayerGui.MainScreenGui:FindFirstChild('Bar')
+
+    if (Bars) then 
+        if Settings.Visuals.World_Customization.Bars then
+            Bars.Energy.bar.BackgroundColor3 = Settings.Visuals.World_Customization.BarsColor
+            Bars.Armor.bar.BackgroundColor3 = Settings.Visuals.World_Customization.BarsColor
+            Bars.HP.bar.BackgroundColor3 = Settings.Visuals.World_Customization.BarsColor
+            Bars.Armor.firebar.BackgroundColor3 = Settings.Visuals.World_Customization.BarsColor
+        elseif not Settings.Visuals.World_Customization.Bars then
+            Bars.Energy.bar.BackgroundColor3 = Color3.fromRGB(182, 182, 9)
+            Bars.Armor.bar.BackgroundColor3 = Color3.fromRGB(0, 136, 194)
+            Bars.HP.bar.BackgroundColor3 = Color3.fromRGB(36, 182, 3)
+            Bars.Armor.firebar.BackgroundColor3 = Color3.fromRGB(253, 121, 33)
+        end
+    end
+
+    UpdateIndicators()
+
+    cam = workspace.CurrentCamera
+end)
+
+for i, v in next, (Players:GetChildren()) do
+    if (v == Client) then continue end 
+    
+    local player = getgenv().esp.NewPlayer(v)
+end
+
+Players.PlayerAdded:Connect(function(v)
+    local player = getgenv().esp.NewPlayer(v)
+end)
