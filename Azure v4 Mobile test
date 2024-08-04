@@ -1,12 +1,7 @@
 
 -- Azure V4 Mobile Working Version
--- Bir Turk Tarafindan Yapıldı
+-- Bir Turk Tarafindan YapÄ±ldÄ±
 -- modified by $hit Talker
-
-
-
-
-
     
 if (not LPH_OBFUSCATED) then
     LPH_NO_VIRTUALIZE = function(...) return (...) end;
@@ -54,6 +49,7 @@ end
                 PreviousAmmo = 999,
                 Shotguns = {"[Double-Barrel SG]", "[TacticalShotgun]", "[Shotgun]"}
             },
+            PlayerHealth = {},
             JumpOffset = 0,
             BulletPath = {
                 [4312377180] = Workspace:FindFirstChild("MAP") and Workspace.MAP:FindFirstChild("Ignored") or nil,
@@ -905,12 +901,12 @@ end
                         FakeCFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position) * CFrame.Angles(0, 2 * math.pi * CurrentTime * Settings.AntiAim.CSync.TargetStrafe.Speed % (2 * math.pi), 0) * CFrame.new(0, Settings.AntiAim.CSync.TargetStrafe.Height, Settings.AntiAim.CSync.TargetStrafe.Distance)
                     elseif Type == "Random" then
                         FakeCFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(math.rad(math.random(0, 360)), math.rad(math.random(0, 360)), math.rad(math.random(0, 360)))
-                      elseif Type == "KillCheaters" then
-                        FakeCFrame = FakeCFrame * CFrame.new(9e9, math.huge, 0/0)
                     elseif Type == "Random Target" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
                         FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(math.rad(math.random(0, 360)), math.rad(math.random(0, 360)), math.rad(math.random(0, 360)))
-                    elseif Type == "BoxRandom" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
-                      FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(0, 0, 0)
+                    elseif Type == "2DBox" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
+                      FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), 0, math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(math.rad(math.random(0, 1)), 0, math.rad(math.random(0, 1)))
+                    elseif Type == "3DBox" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
+                      FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-15, 15), math.random(-8, 8), math.random(-15, 15))) * CFrame.Angles(math.rad(math.random(0, 1)), math.rad(math.random(0, 1)), math.rad(math.random(0, 1)))
                     end
 
                     Script.Utility.Drawings["CFrameVisualize"]:SetPrimaryPartCFrame(FakeCFrame)
@@ -1136,6 +1132,7 @@ end
 
         Script.Utility.Drawings["CFrameVisualize"] = game:GetObjects("rbxassetid://9474737816")[1]; Script.Utility.Drawings["CFrameVisualize"].Head.Face:Destroy(); for _, v in pairs(Script.Utility.Drawings["CFrameVisualize"]:GetChildren()) do v.Transparency = v.Name == "HumanoidRootPart" and 1 or 0.70; v.Material = "Neon"; v.Color = Settings.AntiAim.CSync.Visualize.Color; v.CanCollide = false; v.Anchored = false end
     end
+
     --// Hit Effects
     do
         --// Nova
@@ -1334,7 +1331,7 @@ end
     end
 
 
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Sigma-3131/Scripts/main/Orion%20Optimized')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Azure V4 Mobile Version", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 
@@ -1382,7 +1379,7 @@ Tab:AddToggle({
 })
 
 Tab:AddBind({
-	Name = "Lock Bind (Dont Try To Change İt)",
+	Name = "Lock Bind",
 	Default = Enum.KeyCode.E,
 	Hold = false,
 	Callback = function()
@@ -1393,15 +1390,11 @@ Tab:AddBind({
                         Script.Locals.Target = Script.Locals.IsTargetting and NewTarget.Character and NewTarget or nil
 
                         if Settings.Combat.Alerts then
-                         print('sigma')
+                            Library:Notify(string.format("Targetting: %s", Script.Locals.Target.Character.Humanoid.DisplayName))
                         end
                     end
 	end    
 })
-
-
-
-
 
 
 Tab:AddToggle({
@@ -1434,7 +1427,7 @@ Tab:AddDropdown({
 	Default = "HumanoidRootPart",
 	Options = {"Head", "HumanoidRootPart", "UpperTorso", "LowerTorso"},
 	Callback = function(Value)
-		Settings.Combat.AimPart = Value
+		print(Value)
 	end    
 })
 
@@ -1447,18 +1440,15 @@ Tab:AddToggle({
 })
 
 
-
-Tab:AddSlider({
-	Name = "Reflesh Rate",
-	Min = 0,
-	Max = 200,
-	Default = 200,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
+		
+	
+Tab:AddTextbox({
+	Name = "Rate",
+	Default = "100",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Combat.Resolver.RefreshRate = Value
-	end    
+	end	  
 })
 
 
@@ -1535,41 +1525,6 @@ Tab:AddToggle({
 })
 
 local Section = Tab:AddSection({
-	Name = "Smoothing"
-})
-
-
-Tab:AddSlider({
-	Name = "Horizonal",
-	Min = 0,
-	Max = 50,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Smoothing.Horizontal = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Vertical",
-	Min = 0,
-	Max = 50,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Smoothing.Vertical = Value
-	end    
-})
-
-
-
-
-
-local Section = Tab:AddSection({
 	Name = "Jump Offset"
 })
 
@@ -1589,35 +1544,28 @@ Tab:AddToggle({
 	end    
 })
 
-Tab:AddSlider({
+
+Tab:AddTextbox({
 	Name = "Offset",
-	Min = -10,
-	Max = 10,
-	Default = 0.09,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.1,
-	ValueName = "Sigma",
+	Default = "0.09",
+	TextDisappear = false,
 	Callback = function(Value)
-Settings.Combat.Air.JumpOffset.Offset = Value		
-	end    
+		Settings.Combat.Air.JumpOffset.Offset = Value
+	end	  
 })
 
-
-
 local CSection = Tab:AddSection({
-	Name = "C-SYNC"
+	Name = "Strafe"
 })
 
 
 Tab:AddToggle({
 	Name = "Enable",
 	Default = false,
-	Callback = function(Value,sigmalockenable)
+	Callback = function(Value)
 		Settings.AntiAim.CSync.Enabled = Value
 	end    
 })
-
-
 
 Tab:AddToggle({
 	Name = "Visualize",
@@ -1638,28 +1586,23 @@ Tab:AddColorpicker({
 Tab:AddDropdown({
 	Name = "Type",
 	Default = "Custom",
-	Options = {"Custom", "Random", "Random Target", "Target Strafe", "Local Strafe", "BoxRandom", "KillCheaters"},
+	Options = {"Custom", "Random", "Random Target", "Target Strafe", "Local Strafe", "3DBox", "2DBox"},
 	Callback = function(Value)
 Settings.AntiAim.CSync.Type = Value
 	end    
 })
 
 
-Tab:AddSlider({
-	Name = "Random Distance",
-	Min = 0,
-	Max = 30,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "Sigma",
+
+
+Tab:AddTextbox({
+	Name = "Random",
+	Default = "0",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.AntiAim.CSync.RandomDistance = Value
-	end    
+	end	  
 })
-
-
-
 
 Tab:AddTextbox({
 	Name = "Custom X",
@@ -1688,49 +1631,32 @@ Tab:AddTextbox({
 	end	  
 })
 
-
-
-Tab:AddSlider({
+Tab:AddTextbox({
 	Name = "Speed",
-	Min = 0,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
+	Default = "20",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.AntiAim.CSync.TargetStrafe.Speed = Value
-	end    
+	end	  
 })
 
-Tab:AddSlider({
+Tab:AddTextbox({
 	Name = "Heigh",
-	Min = -10,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "ohio",
+	Default = "5",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.AntiAim.CSync.TargetStrafe.Height = Value
-	end    
+	end	  
 })
 
-Tab:AddSlider({
+Tab:AddTextbox({
 	Name = "Distance",
-	Min = 0,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "skibidi",
+	Default = "13",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.AntiAim.CSync.TargetStrafe.Distance = Value
-	end    
+	end	  
 })
-
-
-
 
 
 local Section = Tab:AddSection({
@@ -1763,22 +1689,14 @@ Tab:AddColorpicker({
 })
 
 
-
-
-Tab:AddSlider({
+Tab:AddTextbox({
 	Name = "Tracer Thickness",
-	Min = 0,
-	Max = 3,
-	Default = 2,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "bananas",
+	Default = "2",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Combat.Visuals.Tracer.Thickness = Value
-	end    
+	end	  
 })
-
-
 
 
 Tab:AddToggle({
@@ -1805,21 +1723,14 @@ Tab:AddColorpicker({
 	end	  
 })
 
-
-
-Tab:AddSlider({
+Tab:AddTextbox({
 	Name = "Dot Size",
-	Min = 0,
-	Max = 10,
-	Default = 3,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "bananas",
+	Default = "5",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Combat.Visuals.Dot.Size = Value
-	end    
+	end	  
 })
-
 
 
 Tab:AddToggle({
@@ -1900,7 +1811,7 @@ ATab:AddTextbox({
 
 
 local Section = ATab:AddSection({
-	Name = "Bullet İmpacts"
+	Name = "Bullet Ä°mpacts"
 })
 
 ATab:AddToggle({
@@ -2092,36 +2003,23 @@ ATab:AddColorpicker({
 	end	  
 })
 
-
-
-ATab:AddSlider({
-	Name = "Fog End",
-	Min = 0,
-	Max = 2000,
-	Default = 500,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Visuals.World.Fog.End = Value
-	end    
-})
-
-ATab:AddSlider({
+ATab:AddTextbox({
 	Name = "Fog Start",
-	Min = 0,
-	Max = 2000,
-	Default = 500,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
+	Default = "1000",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Visuals.World.Fog.Start = Value
-	end    
+	end	  
 })
 
-
-
+ATab:AddTextbox({
+	Name = "Fog End",
+	Default = "1000",
+	TextDisappear = false,
+	Callback = function(Value)
+		Settings.Visuals.World.Fog.End = Value
+	end	  
+})
 
 ATab:AddToggle({
 	Name = "Ambient",
@@ -2165,19 +2063,13 @@ ATab:AddToggle({
 	end    
 })
 
-
-
-ATab:AddSlider({
+ATab:AddTextbox({
 	Name = "Time",
-	Min = 0,
-	Max = 24,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "sigma",
+	Default = "1",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Visuals.World.ClockTime.Value = Value
-	end    
+	end	  
 })
 
 ATab:AddToggle({
@@ -2307,20 +2199,14 @@ BTab:AddToggle({
 	end    
 })
 
-BTab:AddSlider({
-	Name = "Speed Amount",
-	Min = 0,
-	Max = 20,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "Sigma",
+BTab:AddTextbox({
+	Name = "Amount",
+	Default = "5",
+	TextDisappear = false,
 	Callback = function(Value)
 		Settings.Misc.Movement.Speed.Amount = Value
-	end    
+	end	  
 })
-
-
 
 local Section = BTab:AddSection({
 	Name = "Exploits"
