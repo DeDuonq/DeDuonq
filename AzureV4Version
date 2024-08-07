@@ -1343,8 +1343,8 @@ end
     end
 
 
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/DeDuonq/DeDuonq/main/AzureLibrary"))()
-local Window = OrionLib:MakeWindow({Name = "Azure V4 Mobile Version", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local LinoriaLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/Example.lua"))()
+local Window = LinoriaLib:MakeWindow({Name = "Azure V4 Mobile By DFMod", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 
 local Tab = Window:MakeTab({
