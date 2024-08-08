@@ -1343,7 +1343,7 @@ end
     end
 
 
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Sigma-3131/Scripts/main/Orion%20Optimized')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')()
 local Window = OrionLib:MakeWindow({Name = "Azure V4 Mobile Version", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 
