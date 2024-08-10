@@ -1,5 +1,9 @@
 
-    
+
+-- # all credits go to linemaster, ignore horrid source
+
+
+
 if (not LPH_OBFUSCATED) then
     LPH_NO_VIRTUALIZE = function(...) return (...) end;
     LPH_JIT_MAX = function(...) return (...) end;
@@ -7,8 +11,8 @@ if (not LPH_OBFUSCATED) then
 end
 
 
-
-  -- Serv
+function load()
+    --// Services
     local Players = game:GetService("Players")
     local UserInputService = game:GetService("UserInputService")
     local Workspace = game:GetService("Workspace")
@@ -30,7 +34,7 @@ end
             IsTargetting = false,
             Resolver = {
                 OldTick = tick(),
-                OldPos = Vector3.new(0, 0, 0),
+                OldPos = Vector3.new(25, 100, 25),
                 ResolvedVelocity = Vector3.new(0, 0, 0)
             },
             AutoSelectTick = tick(),
@@ -46,6 +50,7 @@ end
                 PreviousAmmo = 999,
                 Shotguns = {"[Double-Barrel SG]", "[TacticalShotgun]", "[Shotgun]"}
             },
+            PlayerHealth = {},
             JumpOffset = 0,
             BulletPath = {
                 [4312377180] = Workspace:FindFirstChild("MAP") and Workspace.MAP:FindFirstChild("Ignored") or nil,
@@ -64,9 +69,11 @@ end
                 ClockTime = Lighting.ClockTime,
                 ExposureCompensation = Lighting.ExposureCompensation
             },
-            SavedCFrame = nil,
+        
             NetworkPreviousTick = tick(),
             NetworkShouldSleep = false,
+            FFlags = {
+           },
             OriginalVelocity = {},
             RotationAngle = 0
         },
@@ -84,7 +91,7 @@ end
     local Settings = {
         Combat = {
             Enabled = false,
-            AimPart = "UpperTorso",
+            AimPart = "HumanoidRootPart",
             Silent = false,
             Mouse = false,
             Alerts = false,
@@ -111,42 +118,42 @@ end
                 Vertical = 1
             },
             Prediction = {
-                Horizontal = 0,
-                Vertical = 0.160126357
+                Horizontal = 0.134,
+                Vertical = 0.134
             },
             Resolver = {
                 Enabled = false,
-                RefreshRate = 100
+                RefreshRate = 0
             },
             Fov = {
-                Enabled = true,
+                Enabled = false,
                 Visualize = {
                     Enabled = false,
                     Color = Color3.new(1, 1, 1)
                 },
-                Radius = 180
+                Radius = 80
             },
             Visuals = {
                 Enabled = false,
                 Tracer = {
                     Enabled = false,
-                    Color = Color3.new(255, 255, 15),
+                    Color = Color3.new(1, 1, 1),
                     Thickness = 2
                 },
                 Dot = {
                     Enabled = false,
-                    Color = Color3.new(255, 255, 255),
+                    Color = Color3.new(1, 1, 1),
                     Filled = false,
-                    Size = 5
+                    Size = 6
                 },
                 Chams = {
                     Enabled = false,
                     Fill = {
-                        Color = Color3.new(255, 154, 244),
+                        Color = Color3.new(1, 1, 1),
                         Transparency = 0.5
                     },
                     Outline = {
-                        Color = Color3.new(255, 154, 244),
+                        Color = Color3.new(1, 1, 1),
                         Transparency = 0.5
                     }
                 }
@@ -170,27 +177,27 @@ end
                     Enabled = false,
                     Filled = {
                         Enabled = false,
-                        Color = Color3.new(1, 1, 255),
+                        Color = Color3.new(1, 1, 1),
                         Transparency = 0.3
                     },
-                    Color = Color3.new(1, 1, 255)
+                    Color = Color3.new(1, 1, 1)
                 }
             },
             BulletTracers = {
                 Enabled = false,
                 Color = {
-                    Gradient1 = Color3.new(255, 255, 255),
-                    Gradient2 = Color3.new(255, 154, 244)
+                    Gradient1 = Color3.new(1, 1, 1),
+                    Gradient2 = Color3.new(0, 0, 0)
                 },
                 Duration = 1,
                 Fade = {
                     Enabled = false,
-                    Duration = 0.2
+                    Duration = 0.5
                 }
             },
             BulletImpacts = {
                 Enabled = false,
-                Color = Color3.new(1, 1, 255),
+                Color = Color3.new(1, 1, 1),
                 Duration = 1,
                 Size = 1,
                 Material = "SmoothPlastic",
@@ -203,7 +210,7 @@ end
                 Enabled = false,
                 Effect = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255)
+                    Color = Color3.new(1, 1, 1)
                 },
                 Sound = {
                     Enabled = false,
@@ -212,7 +219,7 @@ end
                 },
                 Chams = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255),
+                    Color = Color3.new(1, 1, 1),
                     Material = "ForceField",
                     Duration = 1
                 }
@@ -221,13 +228,13 @@ end
                 Enabled = false,
                 Fog = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255),
+                    Color = Color3.new(1, 1, 1),
                     End = 1000,
                     Start = 10000
                 },
                 Ambient = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255)
+                    Color = Color3.new(1, 1, 1)
                 },
                 Brightness = {
                     Enabled = false,
@@ -244,7 +251,7 @@ end
             },
             Crosshair = {
                 Enabled = false,
-                Color = Color3.new(1, 1, 255),
+                Color = Color3.new(1, 1, 1),
                 Size = 10,
                 Gap = 2,
                 Rotation = {
@@ -258,7 +265,7 @@ end
                 Enabled = false,
                 Visualize = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255),
+                    Color = Color3.new(1, 1, 1),
                     Prediction = 0.134
                 },
                 Type = "Underground",
@@ -268,21 +275,21 @@ end
             },
             CSync = {
                 Enabled = false,
-                Type = "TargetStrafe",
+                Type = "Custom",
                 Visualize = {
                     Enabled = false,
-                    Color = Color3.new(1, 1, 255)
+                    Color = Color3.new(1, 1, 1)
                 },
-                RandomDistance = 0,
+                RandomDistance = 16,
                 Custom = {
                     X = 0,
                     Y = 0,
                     Z = 0
                 },
                 TargetStrafe = {
-                    Speed = 20,
-                    Distance = 13,
-                    Height = 5
+                    Speed = 1,
+                    Distance = 1,
+                    Height = 1
                 }
             },
             Network = {
@@ -292,7 +299,7 @@ end
             },
             VelocityDesync = {
                 Enabled = false,
-                Range = 5
+                Range = 1
             },
             FFlagDesync = {
                 Enabled = false,
@@ -892,14 +899,8 @@ end
                         FakeCFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position) * CFrame.Angles(0, 2 * math.pi * CurrentTime * Settings.AntiAim.CSync.TargetStrafe.Speed % (2 * math.pi), 0) * CFrame.new(0, Settings.AntiAim.CSync.TargetStrafe.Height, Settings.AntiAim.CSync.TargetStrafe.Distance)
                     elseif Type == "Random" then
                         FakeCFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(math.rad(math.random(0, 360)), math.rad(math.random(0, 360)), math.rad(math.random(0, 360)))
-                      elseif Type == "KillCheaters" then
-                        FakeCFrame = FakeCFrame * CFrame.new(9e9, math.huge, 0/0)
                     elseif Type == "Random Target" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
                         FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(math.rad(math.random(0, 360)), math.rad(math.random(0, 360)), math.rad(math.random(0, 360)))
-                      elseif Type == "Test" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
-                        FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-10, 10), 0, math.random(-15, 15))) * CFrame.Angles(math.rad(math.random(-180, 20)), math.rad(math.random(-10, 500)), math.rad(math.random(0, 100)))
-                    elseif Type == "BoxRandom" and Script.Locals.IsTargetting and Script.Locals.Target and Settings.Combat.Enabled then
-                      FakeCFrame = CFrame.new(Script.Locals.Target.Character.HumanoidRootPart.Position + Vector3.new(math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance), math.random(-Settings.AntiAim.CSync.RandomDistance, Settings.AntiAim.CSync.RandomDistance))) * CFrame.Angles(0, 0, 0)
                     end
 
                     Script.Utility.Drawings["CFrameVisualize"]:SetPrimaryPartCFrame(FakeCFrame)
@@ -918,8 +919,10 @@ end
                 if Settings.AntiAim.Network.Enabled then
                     if (tick() - Script.Locals.NetworkPreviousTick) >= ((Settings.AntiAim.Network.Amount / math.pi) / 10000) or (Settings.AntiAim.Network.WalkingCheck and LocalPlayer.Character.Humanoid.MoveDirection.Magnitude > 0) then
                         Script.Locals.NetworkShouldSleep = not Script.Locals.NetworkShouldSleep
-                        Script.Locals.NetworkPreviousTick = tick()
-                        sethiddenproperty(LocalPlayer.Character.HumanoidRootPart, "NetworkIsSleeping", Script.Locals.NetworkShouldSleep)
+                        Script.Locals.NetworkPreviousTick = tick()               
+                         sethiddenproperty(LocalPlayer.Character.HumanoidRootPart, "NetworkIsSleeping", Script.Locals.NetworkShouldSleep)
+
+
                     end
                 end
             end
@@ -1338,1072 +1341,1600 @@ end
                 Script.Locals.World[Property] = Value
             end
 
+            --// No Recoil
+            if CallingScript.Name == "Framework" and Self == Camera and Property == "CFrame" and Settings.Misc.Exploits.Enabled and Settings.Misc.Exploits.NoRecoil then
+                return
+            end
+
+            --// No Jump Cooldown
+            if CallingScript.Name == "Framework" and Self == LocalPlayer.Character.Humanoid and Property == "JumpPower" and Settings.Misc.Exploits.Enabled and Settings.Misc.Exploits.NoJumpCooldown then
+                return
+            end
+
             return __newindex(Self, Property, Value)
         end))
     end
 
-
-local AzureLibrary = loadstring(game:HttpGet("loadstring(game:HttpGet("https://raw.githubusercontent.com/DeDuonq/DeDuonq/main/AzureLibrary"))()
-local Window = AzureLibrary:MakeWindow({Name = "Azure V4 Mobile By DFMod", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
-
-
-local Tab = Window:MakeTab({
-	Name = "Aiming",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local ATab = Window:MakeTab({
-	Name = "Visual",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local BTab = Window:MakeTab({
-	Name = "Misc",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local CTab = Window:MakeTab({
-	Name = "Anti Aim",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-
-
-local Section = Tab:AddSection({
-	Name = "Main"
-})
-
-
-
-
-
-
-Tab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-	  Settings.Combat.Enabled = Value
-	  Settings.Combat.Silent = Value	  
-	end    
-})
-
-Tab:AddBind({
-	Name = "Lock Bind (Dont Try To Change İt)",
-	Default = Enum.KeyCode.E,
-	Hold = false,
-	Callback = function()
-		if getgenv().UseKey == true and Settings.Combat.Enabled then
-		  Script.Locals.IsTargetting = not Script.Locals.IsTargetting
-		  
-		  local NewTarget = Script.Functions.GetClosestPlayer()
-		  Script.Locals.Target = Script.Locals.IsTargetting and NewTarget.Character and NewTarget or nil
-		  
-		  if Settings.Combat.Alerts then
-		    OrionLib:MakeNotification({
-		      Name = "Locked",
-		      Content = "Target: "..Script.Locals.Target.Character.Humanoid.DisplayName,
-		      Image = "rbxassetid://4483345998",
-		      Time = 3
-		    })
-		  end
-		end
-	end    
-})
-
-local tool = Instance.new("Tool")
-tool.RequiresHandle = false
-tool.Name = "Lock Tool"
-tool.Activated:Connect(function()
-  if Settings.Combat.Enabled then
-    Script.Locals.IsTargetting = not Script.Locals.IsTargetting
-    
-    local NewTarget = Script.Functions.GetClosestPlayer()
-    Script.Locals.Target = Script.Locals.IsTargetting and NewTarget.Character and NewTarget or nil
-    
-    if Settings.Combat.Alerts then
-      OrionLib:MakeNotification({
-        Name = "Locked",
-        Content = "Target: "..Script.Locals.Target.Character.Humanoid.DisplayName,
-        Image = "rbxassetid://4483345998",
-        Time = 3
-      })
-    end
-  end
-end)
-tool.Parent = game.Players.LocalPlayer.Backpack
-
-game.Players.LocalPlayer.CharacterAdded:Connect(function()
-    tool.Parent = game.Players.LocalPlayer.Backpack
-end)
-
-
-
-
-Tab:AddToggle({
-	Name = "Enable Keybind",
-	Default = false,
-	Callback = function(Value)
-		getgenv().UseKey = Value
-	end    
-})
-
-
-Tab:AddToggle({
-	Name = "Alerts",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Alerts = Value
-	end    
-})
-
-
-Tab:AddToggle({
-	Name = "Spectate",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Spectate = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Look At",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.LookAt = Value
-	end    
-})
-
-Tab:AddDropdown({
-	Name = "Hit Part",
-	Default = "HumanoidRootPart",
-	Options = {"Head", "HumanoidRootPart", "UpperTorso", "LowerTorso"},
-	Callback = function(Value)
-		Settings.Combat.AimPart = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Resolver",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Resolver.Enabled = Value
-	end    
-})
-
-
-
-Tab:AddSlider({
-	Name = "Reflesh Rate",
-	Min = 0,
-	Max = 200,
-	Default = 200,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Resolver.RefreshRate = Value
-	end    
-})
-
-
-Tab:AddTextbox({
-	Name = "Vertical Perd",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Combat.Prediction.Vertical = Value
-	end	  
-})
-
-Tab:AddTextbox({
-	Name = "Horizonal Pred",
-	Default = "0.160126357",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Combat.Prediction.Horizontal = Value
-	end	  
-})
-
-
-
-local BSection = Tab:AddSection({
-	Name = "Checks"
-})
-
-Tab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Enabled = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Knock",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Knocked = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Crew",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Crew = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Vehicle",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Vehicle = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Wall",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Wall = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Grabbed",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Checks.Grabbed = Value
-	end    
-})
-
---[[
-local Section = Tab:AddSection({
-	Name = "Smoothing"
-})
-
-
-Tab:AddSlider({
-	Name = "Horizonal",
-	Min = 0,
-	Max = 50,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Smoothing.Horizontal = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Vertical",
-	Min = 0,
-	Max = 50,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Smoothing.Vertical = Value
-	end    
-})
---]]
-
-
-
-
-local Section = Tab:AddSection({
-	Name = "Jump Offset"
-})
-
-Tab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Air.Enabled = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Jump Offset",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Air.JumpOffset.Enabled = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Offset",
-	Min = -10,
-	Max = 10,
-	Default = 0.09,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.01,
-	ValueName = "Sigma",
-	Callback = function(Value)
-Settings.Combat.Air.JumpOffset.Offset = Value		
-	end    
-})
-
-
-
-local CSection = Tab:AddSection({
-	Name = "C-SYNC"
-})
-
-
-Tab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value,sigmalockenable)
-		Settings.AntiAim.CSync.Enabled = Value
-	end    
-})
-
-
-
-Tab:AddToggle({
-	Name = "Visualize",
-	Default = false,
-	Callback = function(Value)
-		Settings.AntiAim.CSync.Visualize.Enabled = Value
-	end    
-})
-
-Tab:AddColorpicker({
-	Name = "Visualize Color",
-	Default = Color3.fromRGB(255, 255, 255),
-	Callback = function(Value)
-		Settings.AntiAim.CSync.Visualize.Color = Value
-	end	  
-})
-
-Tab:AddDropdown({
-	Name = "Type",
-	Default = "Custom",
-	Options = {"Custom", "Random", "Random Target", "Target Strafe", "Local Strafe", "BoxRandom", "Test", "KillCheaters"},
-	Callback = function(Value)
-Settings.AntiAim.CSync.Type = Value
-	end    
-})
-
-
-Tab:AddSlider({
-	Name = "Random Distance",
-	Min = 0,
-	Max = 30,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "Sigma",
-	Callback = function(Value)
-		Settings.AntiAim.CSync.RandomDistance = Value
-	end    
-})
-
-
-
-
-Tab:AddTextbox({
-	Name = "Custom X",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.CSync.Custom.X = Value
-	end	  
-})
-
-Tab:AddTextbox({
-	Name = "Custom Y",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.CSync.Custom.Y = Value
-	end	  
-})
-
-Tab:AddTextbox({
-	Name = "Custom Z",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.CSync.Custom.Z = Value
-	end	  
-})
-
-
-
-Tab:AddSlider({
-	Name = "Speed",
-	Min = 0,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.AntiAim.CSync.TargetStrafe.Speed = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Heigh",
-	Min = -10,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "ohio",
-	Callback = function(Value)
-		Settings.AntiAim.CSync.TargetStrafe.Height = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Distance",
-	Min = 0,
-	Max = 40,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "skibidi",
-	Callback = function(Value)
-		Settings.AntiAim.CSync.TargetStrafe.Distance = Value
-	end    
-})
-
-
-
-
-
-local Section = Tab:AddSection({
-	Name = "Target Visual"
-})
-
-
-Tab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Visuals.Enabled = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Tracer",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Visuals.Tracer.Enabled = Value
-	end    
-})
-
-Tab:AddColorpicker({
-	Name = "Color",
-	Default = Color3.fromRGB(240, 255, 150),
-	Callback = function(Value)
-		Settings.Combat.Visuals.Tracer.Color = Value
-	end	  
-})
-
-
-
-
-Tab:AddSlider({
-	Name = "Tracer Thickness",
-	Min = 0,
-	Max = 3,
-	Default = 2,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Visuals.Tracer.Thickness = Value
-	end    
-})
-
-
-
-
-Tab:AddToggle({
-	Name = "Dot",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Visuals.Dot.Enabled = Value
-	end    
-})
-
-Tab:AddToggle({
-	Name = "Dot Filled",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Visuals.Dot.Filled = Value
-	end    
-})
-
-Tab:AddColorpicker({
-	Name = "Dot Color",
-	Default = Color3.fromRGB(255, 255, 255),
-	Callback = function(Value)
-		Settings.Combat.Visuals.Dot.Color = Value
-	end	  
-})
-
-
-
-Tab:AddSlider({
-	Name = "Dot Size",
-	Min = 0,
-	Max = 10,
-	Default = 3,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Combat.Visuals.Dot.Size = Value
-	end    
-})
-
-
-
-Tab:AddToggle({
-	Name = "Chams",
-	Default = false,
-	Callback = function(Value)
-		Settings.Combat.Visuals.Chams.Enabled = Value
-	end    
-})
-
-Tab:AddColorpicker({
-	Name = "Cham Color",
-	Default = Color3.fromRGB(255, 154, 244),
-	Callback = function(Value)
-Settings.Combat.Visuals.Chams.Outline.Color = Value
-Settings.Combat.Visuals.Chams.Fill.Color = Value
-	end	  
-})
-
---Settings.Combat.Visuals.Chams.Outline.Transparency = Value
---Settings.Combat.Visuals.Chams.Fill.Transparency = Value		
-
-
-
-local Section = ATab:AddSection({
-	Name = "Bullet Tracers"
-})
-
-ATab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Enabled = Value
-	end    
-})
-
-ATab:AddToggle({
-	Name = "Fade",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Fade.Enabled = Value
-	end    
-})
-
-ATab:AddColorpicker({
-	Name = "Bullet Tracers Color Gradient 1",
-	Default = Color3.fromRGB(255, 255, 255),
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Color.Gradient1 = Value
-	end	  
-})
-
-ATab:AddColorpicker({
-	Name = "Bullet Tracers Color Gradient 2",
-	Default = Color3.fromRGB(255, 154, 244),
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Color.Gradient2 = Value
-	end	  
-})
-
-ATab:AddTextbox({
-	Name = "Duration",
-	Default = "1",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Duration = Value
-	end	  
-})
-
-ATab:AddTextbox({
-	Name = "Fade Duration",
-	Default = "0.5",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletTracers.Fade.Duration = Value
-	end	  
-})
-
-
-local Section = ATab:AddSection({
-	Name = "Bullet İmpacts"
-})
-
-ATab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Enabled = Value
-	end    
-})
-
-ATab:AddColorpicker({
-	Name = "Color",
-	Default = Color3.fromRGB(255, 255, 255),
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Color = Value
-	end	  
-})
-
-ATab:AddToggle({
-	Name = "Fade",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Fade.Enabled = Value
-	end    
-})
-
-ATab:AddDropdown({
-	Name = "Material",
-	Default = "SmoothPlastic",
-	Options = {"SmoothPlastic", "Neon", "ForceField"},
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Material = Value
-	end    
-})
-
-ATab:AddTextbox({
-	Name = "Size",
-	Default = "1",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Size = Value
-	end	  
-})
-
-ATab:AddTextbox({
-	Name = "Duration",
-	Default = "1",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Duration = Value
-	end	  
-})
-
-ATab:AddTextbox({
-	Name = "Fade Duration",
-	Default = "0.5",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.BulletImpacts.Fade.Duration = Value
-	end	  
-})
-
-local Section = ATab:AddSection({
-	Name = "One Shoot"
-})
-
-
-ATab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Enabled = Value
-	end    
-})
-
-ATab:AddToggle({
-	Name = "Effect",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Effect.Enabled = Value
-	end    
-})
-
-ATab:AddColorpicker({
-	Name = "Effect Color",
-	Default = Color3.fromRGB(149, 150, 255),
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Effect.Color = Value
-	end	  
-})
-
-ATab:AddToggle({
-	Name = "Sound",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Sound.Enabled = Value
-	end    
-})
-
-ATab:AddSlider({
-	Name = "Sound Volume",
-	Min = 0,
-	Max = 10,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Sound.Volume = Value
-	end    
-})
-
-local Sounds = {}
+    do
+        --// UI
+        local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/JaelMarc/Azure-/main/RealUI.txt"))()
+        local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
+        local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/caIIed/Linoria-Rewrite/main/Theme%20Manager.lua"))()
+
+        --// Main Window
+        local Window = Library:CreateWindow({
+            Title = "Azure V4 Mob",
+            Center = true,
+            AutoShow = true,
+            TabPadding = 8,
+            MenuFadeTime = 0.2
+        })
+
+        local Tabs = {
+            Combat = Window:AddTab("Combat"),
+            Visuals = Window:AddTab("Visuals"),
+            AntiAim = Window:AddTab("Anti Aim"),
+            Misc = Window:AddTab("Misc"),
+            Settings = Window:AddTab("Settings")
+        }
+
+        local Sections = {
+            Combat = {
+                Main = Tabs.Combat:AddLeftGroupbox("Main"),
+                Checks = Tabs.Combat:AddRightGroupbox("Checks"),
+                AutoSelect = Tabs.Combat:AddRightGroupbox("Auto Select"),
+                Visuals = Tabs.Combat:AddRightGroupbox("Visuals"),
+                Smoothing = Tabs.Combat:AddLeftGroupbox("Smoothing"),
+                Resolver = Tabs.Combat:AddLeftGroupbox("Resolver"),
+                FieldOfView = Tabs.Combat:AddLeftGroupbox("Field Of View"),
+                Air = Tabs.Combat:AddRightGroupbox("Air")
+            },
+            Visuals = {
+                --// Esp = Tabs.Visuals:AddLeftGroupbox("Esp"),
+                Atmosphere = Tabs.Visuals:AddLeftGroupbox("Atmosphere"),
+                Crosshair = Tabs.Visuals:AddLeftGroupbox("Crosshair"),
+                BulletTracers = Tabs.Visuals:AddRightGroupbox("Bullet Tracers"),
+                BulletImpacts = Tabs.Visuals:AddRightGroupbox("Bullet Impacts"),
+                OnHit = Tabs.Visuals:AddRightGroupbox("On Hit")
+            },
+            AntiAim = {
+                CSync = Tabs.AntiAim:AddLeftGroupbox("C-Sync"),
+                Network = Tabs.AntiAim:AddLeftGroupbox("Network"),
+                VelocitySpoofer = Tabs.AntiAim:AddRightGroupbox("Velocity Spoofer"),
+                VelocityDesync = Tabs.AntiAim:AddRightGroupbox("Velocity Desync"),
+                FFlag = Tabs.AntiAim:AddRightGroupbox("FFlag Desync"),
+            },
+            Misc = {
+                Speed = Tabs.Misc:AddLeftGroupbox("CFrame Speed"),
+                Exploits = Tabs.Misc:AddRightGroupbox("Exploits")
+            }
+        }
+
+        --// Combat Tab
+        do
+            --// Main
+            do
+                Sections.Combat.Main:AddToggle("CombatMainEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                }):AddKeyPicker("CombatMainToggle", {
+                    Default = "C",
+                    SyncToggleState = false,
+                    Mode = "Toggle",
+                    Text = "Targetting",
+                    NoUI = false,
+                })
+
+                Toggles.CombatMainEnabled:OnChanged(function()
+                    Settings.Combat.Enabled = Toggles.CombatMainEnabled.Value
+                end)
+
+                Options.CombatMainToggle:OnClick(function()
+                    if Settings.Combat.Enabled then
+                        Script.Locals.IsTargetting = not Script.Locals.IsTargetting
+
+                        local NewTarget = Script.Functions.GetClosestPlayer()
+                        Script.Locals.Target = Script.Locals.IsTargetting and NewTarget.Character and NewTarget or nil
+
+                        if Settings.Combat.Alerts then
+                            Library:Notify(string.format("Targetting: %s", Script.Locals.Target.Character.Humanoid.DisplayName))
+                        end
+                    end
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatSilentEnabled", {
+                    Text = "Silent",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatSilentEnabled:OnChanged(function()
+                    Settings.Combat.Silent = Toggles.CombatSilentEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatMouseEnabled", {
+                    Text = "Mouse",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatMouseEnabled:OnChanged(function()
+                    Settings.Combat.Mouse = Toggles.CombatMouseEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatAlertsEnabled", {
+                    Text = "Alerts",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatAlertsEnabled:OnChanged(function()
+                    Settings.Combat.Alerts = Toggles.CombatAlertsEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatLookAtEnabled", {
+                    Text = "Look At",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatLookAtEnabled:OnChanged(function()
+                    Settings.Combat.LookAt = Toggles.CombatLookAtEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatSpectatEnabled", {
+                    Text = "Spectate",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatSpectatEnabled:OnChanged(function()
+                    Settings.Combat.Spectate = Toggles.CombatSpectatEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddToggle("CombatAntiAimViewerEnabled", {
+                    Text = "Anti AimViewer",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatAntiAimViewerEnabled:OnChanged(function()
+                    Settings.Combat.AntiAimViewer = Toggles.CombatAntiAimViewerEnabled.Value
+                end)
+
+                Sections.Combat.Main:AddDropdown("CombatHitPartDropdown", {
+                    Values = {"Head","UpperTorso","HumanoidRootPart","LowerTorso","LeftHand","RightHand","LeftLowerArm","RightLowerArm","LeftUpperArm","RightUpperArm","LeftFoot","LeftLowerLeg","UpperTorso","LeftUpperLeg","RightFoot","RightLowerLeg","LowerTorso","RightUpperLeg"},
+                    Default = 1,
+                    Multi = false,
+
+                    Text = "Aim Part",
+                    Tooltip = nil
+                })
+
+                Options.CombatHitPartDropdown:OnChanged(function()
+                    Settings.Combat.AimPart = Options.CombatHitPartDropdown.Value
+                end)
+
+                Sections.Combat.Main:AddInput("CombatVerticalPrediction", {
+                    Default = 0.1568785467327825768238914423,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "Vertical Prediction",
+                    Tooltip = nil,
+
+                    Placeholder = "Vertical Prediction Amount"
+                })
+
+                Options.CombatVerticalPrediction:OnChanged(function()
+                    Settings.Combat.Prediction.Vertical = tonumber(Options.CombatVerticalPrediction.Value)
+                end)
+
+                Sections.Combat.Main:AddInput("CombatHorizontalPrediction", {
+                    Default = 0.1537794051309922478907856875967573,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "Horizontal Prediction",
+                    Tooltip = nil,
+
+                    Placeholder = "Horizontal Prediction Amount"
+                })
+
+
+                Options.CombatHorizontalPrediction:OnChanged(function()
+                    Settings.Combat.Prediction.Horizontal = tonumber(Options.CombatHorizontalPrediction.Value)
+                end)
+            end
+
+            --// Checks
+            do
+                Sections.Combat.Checks:AddToggle("CombatChecksEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Enabled = Toggles.CombatChecksEnabled.Value
+                end)
+
+                Sections.Combat.Checks:AddToggle("CombatChecksKnockedEnabled", {
+                    Text = "Knocked",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksKnockedEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Knocked = Toggles.CombatChecksKnockedEnabled.Value
+                end)
+
+                Sections.Combat.Checks:AddToggle("CombatChecksGrabbedEnabled", {
+                    Text = "Grabbed",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksGrabbedEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Grabbed = Toggles.CombatChecksGrabbedEnabled.Value
+                end)
+
+                Sections.Combat.Checks:AddToggle("CombatChecksCrewEnabled", {
+                    Text = "Crew",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksCrewEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Crew = Toggles.CombatChecksCrewEnabled.Value
+                end)
+
+                Sections.Combat.Checks:AddToggle("CombatChecksVehicleEnabled", {
+                    Text = "Vehicle",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksVehicleEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Vehicle = Toggles.CombatChecksVehicleEnabled.Value
+                end)
+
+                Sections.Combat.Checks:AddToggle("CombatChecksWallEnabled", {
+                    Text = "Wall",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatChecksWallEnabled:OnChanged(function()
+                    Settings.Combat.Checks.Wall = Toggles.CombatChecksWallEnabled.Value
+                end)
+            end
+
+            --// Auto Select
+            do
+                Sections.Combat.AutoSelect:AddToggle("CombatAutoSelectEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatAutoSelectEnabled:OnChanged(function()
+                    Settings.Combat.AutoSelect.Enabled = Toggles.CombatAutoSelectEnabled.Value
+                end)
+
+                Sections.Combat.AutoSelect:AddToggle("CombatAutoSelectCooldownEnabled", {
+                    Text = "Cooldown",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatAutoSelectCooldownEnabled:OnChanged(function()
+                    Settings.Combat.AutoSelect.Cooldown.Enabled = Toggles.CombatAutoSelectCooldownEnabled.Value
+                end)
+
+                Sections.Combat.AutoSelect:AddSlider("CombatAutoSelectCooldownAmount", {
+                    Text = "Cooldown Amount (MS)",
+                    Default = 0.1,
+                    Min = 0,
+                    Max = 1,
+                    Rounding = 3,
+                    Compact = false
+                })
+
+                Options.CombatAutoSelectCooldownAmount:OnChanged(function()
+                    Settings.Combat.AutoSelect.Cooldown.Amount = Options.CombatAutoSelectCooldownAmount.Value
+                end)
+            end
+
+            --// Smoothing
+            do
+                Sections.Combat.Smoothing:AddSlider("CombatSmoothingVertical", {
+                    Text = "Vertical Smoothing",
+                    Default = 10,
+                    Min = 1,
+                    Max = 50,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Options.CombatSmoothingVertical:OnChanged(function()
+                    Settings.Combat.Smoothing.Vertical = Options.CombatSmoothingVertical.Value
+                end)
+
+                Sections.Combat.Smoothing:AddSlider("CombatSmoothingHorizontal", {
+                    Text = "Horizontal Smoothing",
+                    Default = 10,
+                    Min = 1,
+                    Max = 50,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Options.CombatSmoothingHorizontal:OnChanged(function()
+                    Settings.Combat.Smoothing.Horizontal = Options.CombatSmoothingHorizontal.Value
+                end)
+            end
+
+            --// Resolver
+            do
+                Sections.Combat.Resolver:AddToggle("CombatResolverEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatResolverEnabled:OnChanged(function()
+                    Settings.Combat.Resolver.Enabled = Toggles.CombatResolverEnabled.Value
+                end)
+
+                Sections.Combat.Resolver:AddSlider("CombatResolverRefreshRate", {
+                    Text = "Refresh Rate",
+                    Default = 200,
+                    Min = 1,
+                    Max = 200,
+                    Rounding = 1,
+                    Compact = false
+                })
+
+                Options.CombatResolverRefreshRate:OnChanged(function()
+                    Settings.Combat.Resolver.RefreshRate = Options.CombatResolverRefreshRate.Value
+                end)
+            end
+
+            --// Field Of View
+            do
+                Sections.Combat.FieldOfView:AddToggle("CombatFovEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatFovEnabled:OnChanged(function()
+                    Settings.Combat.Fov.Enabled = Toggles.CombatFovEnabled.Value
+                end)
+
+                Sections.Combat.FieldOfView:AddToggle("CombatFovVisualizeEnabled", {
+                    Text = "Visualize",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("CombatFovVisualizeColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Fov Visualize Color",
+                    Transparency = nil
+                })
+
+                Toggles.CombatFovVisualizeEnabled:OnChanged(function()
+                    Settings.Combat.Fov.Visualize.Enabled = Toggles.CombatFovVisualizeEnabled.Value
+                end)
+
+                Options.CombatFovVisualizeColor:OnChanged(function()
+                    Settings.Combat.Fov.Visualize.Color = Options.CombatFovVisualizeColor.Value
+                end)
+
+                Sections.Combat.FieldOfView:AddSlider("CombatFieldOfViewRadius", {
+                    Text = "Radius",
+                    Default = 80,
+                    Min = 1,
+                    Max = 800,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Options.CombatFieldOfViewRadius:OnChanged(function()
+                    Settings.Combat.Fov.Radius = Options.CombatFieldOfViewRadius.Value
+                end)
+            end
+
+            --// Visuals
+            do
+                Sections.Combat.Visuals:AddToggle("CombatVisualsEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatVisualsEnabled:OnChanged(function()
+                    Settings.Combat.Visuals.Enabled = Toggles.CombatVisualsEnabled.Value
+                end)
+
+                Sections.Combat.Visuals:AddToggle("CombatVisualsTracerEnabled", {
+                    Text = "Tracer",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("CombatVisualsTracerColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Tracer Color",
+                    Transparency = nil
+                })
+
+                Toggles.CombatVisualsTracerEnabled:OnChanged(function()
+                    Settings.Combat.Visuals.Tracer.Enabled = Toggles.CombatVisualsTracerEnabled.Value
+                end)
+
+                Options.CombatVisualsTracerColor:OnChanged(function()
+                    Settings.Combat.Visuals.Tracer.Color = Options.CombatVisualsTracerColor.Value
+                end)
+
+                Sections.Combat.Visuals:AddSlider("CombatVisualsTracerThickness", {
+                    Text = "Thickness",
+                    Default = 2,
+                    Min = 1,
+                    Max = 10,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Options.CombatVisualsTracerThickness:OnChanged(function()
+                    Settings.Combat.Visuals.Tracer.Thickness = Options.CombatVisualsTracerThickness.Value
+                end)
+
+                Sections.Combat.Visuals:AddToggle("CombatVisualsDotEnabled", {
+                    Text = "Dot",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("CombatVisualsDotColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Dot Color",
+                    Transparency = nil
+                })
+
+                Toggles.CombatVisualsDotEnabled:OnChanged(function()
+                    Settings.Combat.Visuals.Dot.Enabled = Toggles.CombatVisualsDotEnabled.Value
+                end)
+
+                Options.CombatVisualsDotColor:OnChanged(function()
+                    Settings.Combat.Visuals.Dot.Color = Options.CombatVisualsDotColor.Value
+                end)
+
+                Sections.Combat.Visuals:AddToggle("CombatVisualsDotFilled", {
+                    Text = "Dot Filled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatVisualsDotFilled:OnChanged(function()
+                    Settings.Combat.Visuals.Dot.Filled = Toggles.CombatVisualsDotFilled.Value
+                end)
+
+                Sections.Combat.Visuals:AddSlider("CombatVisualsDotSize", {
+                    Text = "Size",
+                    Default = 6,
+                    Min = 1,
+                    Max = 20,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Options.CombatVisualsDotSize:OnChanged(function()
+                    Settings.Combat.Visuals.Dot.Size = Options.CombatVisualsDotSize.Value
+                end)
+
+                local TargetChamsToggle = Sections.Combat.Visuals:AddToggle("CombatVisualsChamsEnabled", {
+                    Text = "Chams",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                TargetChamsToggle:AddColorPicker("CombatVisualsChamsFillColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Fill Color",
+                    Transparency = 0.5
+                })
+
+                TargetChamsToggle:AddColorPicker("CombatVisualsChamsOutlineColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Outline Color",
+                    Transparency = 0.5
+                })
+
+                Toggles.CombatVisualsChamsEnabled:OnChanged(function()
+                    Settings.Combat.Visuals.Chams.Enabled = Toggles.CombatVisualsChamsEnabled.Value
+                end)
+
+                Options.CombatVisualsChamsFillColor:OnChanged(function()
+                    Settings.Combat.Visuals.Chams.Fill.Color = Options.CombatVisualsChamsFillColor.Value
+                    Settings.Combat.Visuals.Chams.Fill.Transparency = Options.CombatVisualsChamsFillColor.Transparency
+                end)
+
+                Options.CombatVisualsChamsOutlineColor:OnChanged(function()
+                    Settings.Combat.Visuals.Chams.Outline.Color = Options.CombatVisualsChamsOutlineColor.Value
+                    Settings.Combat.Visuals.Chams.Outline.Transparency = Options.CombatVisualsChamsOutlineColor.Transparency
+                end)
+            end
+
+            --// Air
+            do
+                Sections.Combat.Air:AddToggle("CombatAirEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatAirEnabled:OnChanged(function()
+                    Settings.Combat.Air.Enabled = Toggles.CombatAirEnabled.Value
+                end)
+
+                Sections.Combat.Air:AddToggle("CombatJumpOffsetEnabled", {
+                    Text = "Jump Offset",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.CombatJumpOffsetEnabled:OnChanged(function()
+                    Settings.Combat.Air.JumpOffset.Enabled = Toggles.CombatJumpOffsetEnabled.Value
+                end)
+
+                Sections.Combat.Air:AddInput("CombatJumpOffSet", {
+                    Default = 0.09,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "Offset",
+                    Tooltip = nil,
+
+                    Placeholder = "Amount"
+                })
+
+                Options.CombatJumpOffSet:OnChanged(function()
+                    Settings.Combat.Air.JumpOffset.Offset = Options.CombatJumpOffSet.Value
+                end)
+            end
+        end
+
+        --// Visuals tab
+        do
+ 
+            --// Bullet Tracers
+            do
+
+                local BulletTracersToggle = Sections.Visuals.BulletTracers:AddToggle("VisualsBulletTracersEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                BulletTracersToggle:AddColorPicker("VisualsBulletTracersColor1", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Bullet Tracers Color Gradient 1",
+                    Transparency = nil
+                })
+
+                BulletTracersToggle:AddColorPicker("VisualsBulletTracersColor2", {
+                    Default = Color3.new(0, 0, 0),
+                    Title = "Bullet Tracers Color Gradient 2",
+                    Transparency = nil
+                })
+
+                Sections.Visuals.BulletTracers:AddToggle("VisualsBulletTracersFadeEnabled", {
+                    Text = "Fade",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Toggles.VisualsBulletTracersEnabled:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Enabled = Toggles.VisualsBulletTracersEnabled.Value
+                end)
+
+                Toggles.VisualsBulletTracersFadeEnabled:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Fade.Enabled = Toggles.VisualsBulletTracersFadeEnabled.Value
+                end)
+
+                Options.VisualsBulletTracersColor1:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Color.Gradient1 = Options.VisualsBulletTracersColor1.Value
+                end)
+
+                Options.VisualsBulletTracersColor2:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Color.Gradient2 = Options.VisualsBulletTracersColor2.Value
+                end)
+
+                Sections.Visuals.BulletTracers:AddSlider("VisualsBulletTracersDuration", {
+                    Text = "Duration",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 1,
+                    Compact = false
+                })
+
+                Sections.Visuals.BulletTracers:AddSlider("VisualsBulletTracersFadeDuration", {
+                    Text = "Fade Duration",
+                    Default = 0.5,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 1,
+                    Compact = false
+                })
+
+
+                Options.VisualsBulletTracersDuration:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Duration = Options.VisualsBulletTracersDuration.Value
+                end)
+
+                Options.VisualsBulletTracersFadeDuration:OnChanged(function()
+                    Settings.Visuals.BulletTracers.Fade.Duration = Options.VisualsBulletTracersFadeDuration.Value
+                end)
+            end
+
+            --// Bullet Impacts
+            do
+                Sections.Visuals.BulletImpacts:AddToggle("VisualsBulletImpactsEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("VisualsBulletImpactsColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Bullet Impact Color",
+                    Transparency = nil
+                })
+
+                Sections.Visuals.BulletImpacts:AddToggle("VisualsBulletImpactsFadeEnabled", {
+                    Text = "Fade",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Sections.Visuals.BulletImpacts:AddDropdown("VisualsBulletImpactsMaterial", {
+                    Values = {"SmoothPlastic", "ForceField", "Neon"},
+                    Default = 1,
+                    Multi = false,
+
+                    Text = "Material",
+                    Tooltip = nil
+                })
+
+                Options.VisualsBulletImpactsMaterial:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Material = Options.VisualsBulletImpactsMaterial.Value
+                end)
+
+                Sections.Visuals.BulletImpacts:AddSlider("VisualsBulletImpactsSize", {
+                    Text = "Size",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                Sections.Visuals.BulletImpacts:AddSlider("VisualsBulletImpactsDuration", {
+                    Text = "Duration",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 1,
+                    Compact = false
+                })
+
+                Sections.Visuals.BulletImpacts:AddSlider("VisualsBulletImpactsFadeDuration", {
+                    Text = "Fade Duration",
+                    Default = 0.5,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 1,
+                    Compact = false
+                })
+
+
+                Options.VisualsBulletImpactsDuration:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Duration = Options.VisualsBulletImpactsDuration.Value
+                end)
+
+                Options.VisualsBulletImpactsSize:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Size = Options.VisualsBulletImpactsSize.Value
+                end)
+
+                Options.VisualsBulletImpactsFadeDuration:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Fade.Duration = Options.VisualsBulletImpactsFadeDuration.Value
+                end)
+
+                Toggles.VisualsBulletImpactsEnabled:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Enabled = Toggles.VisualsBulletImpactsEnabled.Value
+                end)
+
+                Toggles.VisualsBulletImpactsFadeEnabled:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Fade.Enabled = Toggles.VisualsBulletImpactsFadeEnabled.Value
+                end)
+
+                Options.VisualsBulletImpactsColor:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Color = Options.VisualsBulletImpactsColor.Value
+                end)
+            end
+
+            --// On Hit
+            do
+                Sections.Visuals.OnHit:AddToggle("VisualsOnHitEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Sections.Visuals.OnHit:AddToggle("VisualsOnHitEffectEnabled", {
+                    Text = "Effect",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("VisualsOnHitEffectColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Bullet Impact Color",
+                    Transparency = nil
+                })
+
+                Sections.Visuals.OnHit:AddToggle("VisualsOnHiSoundEnabled", {
+                    Text = "Sound",
+                    Default = false,
+                    Tooltip = nil
+                })
+
+                Sections.Visuals.OnHit:AddSlider("VisualsOnHitSoundVolume", {
+                    Text = "Sound Volume",
+                    Default = 5,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 2,
+                    Compact = false
+                })
+
+                local Sounds = {}
 
                 for Sound, _ in pairs(Hitsounds) do
                     table.insert(Sounds, Sound)
                 end
 
-
-ATab:AddDropdown({
-	Name = "Sounds",
-	Default = "1",
-	Options = Sounds,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Sound.Value = Value
-	end    
-})
+                Sections.Visuals.OnHit:AddDropdown("VisualsOnHitSound", {
+                    Values = Sounds,
+                    Default = 1,
+                    Multi = false,
+                    Text = "Sound To Play",
+                    Tooltip = nil
+                })
 
 
-ATab:AddToggle({
-	Name = "Hit Chams",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Chams.Enabled = Value
-	end    
-})
+                Sections.Visuals.OnHit:AddToggle("VisualsOnHitChamsEnabled", {
+                    Text = "Chams",
+                    Default = false,
+                    Tooltip = nil
+                }):AddColorPicker("VisualsOnHitChamsColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Hit Chams Color",
+                    Transparency = nil
+                })
 
-ATab:AddColorpicker({
-	Name = "Hit Chams Color",
-	Default = Color3.fromRGB(255, 255, 255),
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Chams.Color = Value
-	end	  
-})
+                Sections.Visuals.OnHit:AddSlider("VisualsOnHitChamsDuration", {
+                    Text = "Duration",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 2,
+                    Compact = false
+                })
 
-ATab:AddTextbox({
-	Name = "Cham Duration",
-	Default = "1",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Chams.Duration = Value
-	end	  
-})
+                Sections.Visuals.OnHit:AddDropdown("VisualsOnHitChamsMaterial", {
+                    Values = {"ForceField", "Neon"},
+                    Default = 1,
+                    Multi = false,
+                    Text = "Material",
+                    Tooltip = nil
+                })
 
-ATab:AddDropdown({
-	Name = "Cham Material",
-	Default = "1",
-	Options = {"ForceField", "Neon"},
-	Callback = function(Value)
-		Settings.Visuals.OnHit.Chams.Material = Value
-	end    
-})
+                Options.VisualsOnHitChamsDuration:OnChanged(function()
+                    Settings.Visuals.OnHit.Chams.Duration = Options.VisualsOnHitChamsDuration.Value
+                end)
 
-local Section = ATab:AddSection({
-	Name = "World"
-})
+                Options.VisualsOnHitChamsMaterial:OnChanged(function()
+                    Settings.Visuals.OnHit.Chams.Material = Options.VisualsOnHitChamsMaterial.Value
+                end)
 
-ATab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.Enabled = Value
-	end    
-})
+                Options.VisualsBulletImpactsMaterial:OnChanged(function()
+                    Settings.Visuals.BulletImpacts.Material = Options.VisualsBulletImpactsMaterial.Value
+                end)
 
-ATab:AddToggle({
-	Name = "Fog",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.Fog.Enabled = Value
-	end    
-})
+                Toggles.VisualsOnHitEnabled:OnChanged(function()
+                    Settings.Visuals.OnHit.Enabled = Toggles.VisualsOnHitEnabled.Value
+                end)
 
-ATab:AddColorpicker({
-	Name = "Fog Color",
-	Default = Color3.fromRGB(255, 1, 1),
-	Callback = function(Value)
-		Settings.Visuals.World.Fog.Color = Value
-	end	  
-})
+                Toggles.VisualsOnHitChamsEnabled:OnChanged(function()
+                    Settings.Visuals.OnHit.Chams.Enabled = Toggles.VisualsOnHitChamsEnabled.Value
+                end)
 
+                Options.VisualsOnHitChamsColor:OnChanged(function()
+                    Settings.Visuals.OnHit.Chams.Color = Options.VisualsOnHitChamsColor.Value
+                end)
 
+                Toggles.VisualsOnHitEffectEnabled:OnChanged(function()
+                    Settings.Visuals.OnHit.Effect.Enabled = Toggles.VisualsOnHitEffectEnabled.Value
+                end)
 
-ATab:AddSlider({
-	Name = "Fog End",
-	Min = 0,
-	Max = 2000,
-	Default = 500,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Visuals.World.Fog.End = Value
-	end    
-})
+                Options.VisualsOnHitEffectColor:OnChanged(function()
+                    Settings.Visuals.OnHit.Effect.Color = Options.VisualsOnHitEffectColor.Value
+                end)
 
-ATab:AddSlider({
-	Name = "Fog Start",
-	Min = 0,
-	Max = 2000,
-	Default = 500,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "bananas",
-	Callback = function(Value)
-		Settings.Visuals.World.Fog.Start = Value
-	end    
-})
+                Toggles.VisualsOnHiSoundEnabled:OnChanged(function()
+                    Settings.Visuals.OnHit.Sound.Enabled = Toggles.VisualsOnHiSoundEnabled.Value
+                end)
+
+                Options.VisualsOnHitSoundVolume:OnChanged(function()
+                    Settings.Visuals.OnHit.Sound.Volume = Options.VisualsOnHitSoundVolume.Value
+                end)
+
+                Options.VisualsOnHitSound:OnChanged(function()
+                    Settings.Visuals.OnHit.Sound.Value = Options.VisualsOnHitSound.Value
+                end)
+            end
+
+            --// Atmosphere
+            do
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
 
+                Toggles.VisualsAtmosphereEnabled:OnChanged(function()
+                    Settings.Visuals.World.Enabled = Toggles.VisualsAtmosphereEnabled.Value
+                end)
 
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereFogEnabled", {
+                    Text = "Fog",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddColorPicker("VisualsAtmosphereFogColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Fog Color",
+                    Transparency = nil,
+                })
 
-ATab:AddToggle({
-	Name = "Ambient",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.Ambient.Enabled = Value
-	end    
-})
+                Toggles.VisualsAtmosphereFogEnabled:OnChanged(function()
+                    Settings.Visuals.World.Fog.Enabled = Toggles.VisualsAtmosphereFogEnabled.Value
+                end)
 
-ATab:AddColorpicker({
-	Name = "Ambient Color",
-	Default = Color3.fromRGB(1, 255, 1),
-	Callback = function(Value)
-		Settings.Visuals.World.Ambient.Color = Value
-	end	  
-})
+                Options.VisualsAtmosphereFogColor:OnChanged(function()
+                    Settings.Visuals.World.Fog.Color = Options.VisualsAtmosphereFogColor.Value
+                end)
 
-ATab:AddToggle({
-	Name = "Brightness Changer",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.Brightness.Enabled = Value
-	end    
-})
+                Sections.Visuals.Atmosphere:AddSlider("VisualsAtmosphereFogStart", {
+                    Text = "Fog Start",
+                    Default = 1000,
+                    Min = 1,
+                    Max = 10000,
+                    Rounding = 0,
+                    Compact = false,
+                })
 
-ATab:AddTextbox({
-	Name = "Brightness Value",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.World.Brightness.Value = Value
-	end	  
-})
+                Sections.Visuals.Atmosphere:AddSlider("VisualsAtmosphereFogEnd", {
+                    Text = "Fog End",
+                    Default = 1000,
+                    Min = 1,
+                    Max = 10000,
+                    Rounding = 0,
+                    Compact = false,
+                })
 
+                Options.VisualsAtmosphereFogStart:OnChanged(function()
+                    Settings.Visuals.World.Fog.Start = Options.VisualsAtmosphereFogStart.Value
+                end)
 
-ATab:AddToggle({
-	Name = "Clock Time",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.ClockTime.Enabled = Value
-	end    
-})
+                Options.VisualsAtmosphereFogEnd:OnChanged(function()
+                    Settings.Visuals.World.Fog.End = Options.VisualsAtmosphereFogEnd.Value
+                end)
 
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereAmbientEnabled", {
+                    Text = "Ambient",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddColorPicker("VisualsAtmosphereAmbientColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Ambient Color",
+                    Transparency = nil,
+                })
 
+                Toggles.VisualsAtmosphereAmbientEnabled:OnChanged(function()
+                    Settings.Visuals.World.Ambient.Enabled = Toggles.VisualsAtmosphereAmbientEnabled.Value
+                end)
 
-ATab:AddSlider({
-	Name = "Time",
-	Min = 0,
-	Max = 24,
-	Default = 10,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "sigma",
-	Callback = function(Value)
-		Settings.Visuals.World.ClockTime.Value = Value
-	end    
-})
+                Options.VisualsAtmosphereAmbientColor:OnChanged(function()
+                    Settings.Visuals.World.Ambient.Color = Options.VisualsAtmosphereAmbientColor.Value
+                end)
 
-ATab:AddToggle({
-	Name = "Exposure Changer",
-	Default = false,
-	Callback = function(Value)
-		Settings.Visuals.World.WorldExposure.Enabled = Value
-	end    
-})
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereBrightnessChangerEnabled", {
+                    Text = "Brightness Changer",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
-ATab:AddTextbox({
-	Name = "Exposure",
-	Default = "1",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.Visuals.World.WorldExposure.Value = Value
-	end	  
-})
+                Sections.Visuals.Atmosphere:AddSlider("VisualsAtmosphereBrightnessChangerValue", {
+                    Text = "Brightness Value",
+                    Default = 0,
+                    Min = 0,
+                    Max = 10,
+                    Rounding = 2,
+                    Compact = false,
+                })
 
-local Section = CTab:AddSection({
-	Name = "Velocity Spoofer"
-})
+                Toggles.VisualsAtmosphereBrightnessChangerEnabled:OnChanged(function()
+                    Settings.Visuals.World.Brightness.Enabled = Toggles.VisualsAtmosphereBrightnessChangerEnabled.Value
+                end)
 
+                Options.VisualsAtmosphereBrightnessChangerValue:OnChanged(function()
+                    Settings.Visuals.World.Brightness.Value = Options.VisualsAtmosphereBrightnessChangerValue.Value
+                end)
 
-CTab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Enabled = Value
-	end    
-})
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereTimeChangerEnabled", {
+                    Text = "Clock Time",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
-CTab:AddDropdown({
-	Name = "Type",
-	Default = "Underground",
-	Options = {"Underground", "Sky", "Multiplier", "Prediction Breaker", "Custom"},
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Type = Value
-	end    
-})
+                Sections.Visuals.Atmosphere:AddSlider("VisualsAtmosphereTimeChangerValue", {
+                    Text = "Time",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 24,
+                    Rounding = 1,
+                    Compact = false,
+                })
 
-CTab:AddToggle({
-	Name = "Visualizer",
-	Default = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Visualize.Enabled = Value
-	end    
-})
+                Toggles.VisualsAtmosphereTimeChangerEnabled:OnChanged(function()
+                    Settings.Visuals.World.ClockTime.Enabled = Toggles.VisualsAtmosphereTimeChangerEnabled.Value
+                end)
 
-CTab:AddColorpicker({
-	Name = "Visualizer Color",
-	Default = Color3.fromRGB(240, 144, 255),
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Visualize.Color = Value
-	end	  
-})
+                Options.VisualsAtmosphereTimeChangerValue:OnChanged(function()
+                    Settings.Visuals.World.ClockTime.Value = Options.VisualsAtmosphereTimeChangerValue.Value
+                end)
 
-CTab:AddTextbox({
-	Name = "Visualizer Prediction",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Visualize.Prediction = Value
-	end	  
-})
+                Sections.Visuals.Atmosphere:AddToggle("VisualsAtmosphereExposureChangerEnabled", {
+                    Text = "Exposure Changer",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
+                Sections.Visuals.Atmosphere:AddSlider("VisualsAtmosphereExposureChangerValue", {
+                    Text = "Exposure",
+                    Default = 1,
+                    Min = -3,
+                    Max = 3,
+                    Rounding = 1,
+                    Compact = false,
+                })
 
-CTab:AddTextbox({
-	Name = "Yaw",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Yaw = Value
-	end	  
-})
+                Toggles.VisualsAtmosphereExposureChangerEnabled:OnChanged(function()
+                    Settings.Visuals.World.WorldExposure.Enabled = Toggles.VisualsAtmosphereExposureChangerEnabled.Value
+                end)
 
-CTab:AddTextbox({
-	Name = "Pitch",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Pitch = Value
-	end	  
-})
+                Options.VisualsAtmosphereExposureChangerValue:OnChanged(function()
+                    Settings.Visuals.World.WorldExposure.Value = Options.VisualsAtmosphereExposureChangerValue.Value
+                end)
+            end
 
-CTab:AddTextbox({
-	Name = "Roll",
-	Default = "0",
-	TextDisappear = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocitySpoofer.Roll = Value
-	end	  
-})
+            --// Crosshair
+            do
+                Sections.Visuals.Crosshair:AddToggle("VisualsCrosshairEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddColorPicker("VisualsCrossahairColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Crosshair Color",
+                    Transparency = nil,
+                })
 
-local Section = CTab:AddSection({
-	Name = "Velocity Desync"
-})
+                Toggles.VisualsCrosshairEnabled:OnChanged(function()
+                    Settings.Visuals.Crosshair.Enabled = Toggles.VisualsCrosshairEnabled.Value
+                end)
 
-CTab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.AntiAim.VelocityDesync.Enabled = Value
-	end    
-})
+                Options.VisualsCrossahairColor:OnChanged(function()
+                    Settings.Visuals.Crosshair.Color = Options.VisualsCrossahairColor.Value
+                end)
 
-CTab:AddTextbox({
-	Name = "Range",
-	Default = "5",
-	TextDisappear = true,
-	Callback = function(Value)
-		Settings.AntiAim.VelocityDesync.Range = Value
-	end	  
-})
+                Sections.Visuals.Crosshair:AddSlider("VisualsCrosshairSize", {
+                    Text = "Size",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 30,
+                    Rounding = 3,
+                    Compact = false,
+                })
 
+                Options.VisualsCrosshairSize:OnChanged(function()
+                    Settings.Visuals.Crosshair.Size = Options.VisualsCrosshairSize.Value
+                end)
 
+                Sections.Visuals.Crosshair:AddSlider("VisualsCrosshairGap", {
+                    Text = "Gap",
+                    Default = 2,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 3,
+                    Compact = false,
+                })
 
-local Section = BTab:AddSection({
-	Name = "CFrame Speed"
-})
+                Options.VisualsCrosshairGap:OnChanged(function()
+                    Settings.Visuals.Crosshair.Gap = Options.VisualsCrosshairGap.Value
+                end)
 
-BTab:AddToggle({
-	Name = "CFrame Speed",
-	Default = false,
-	Callback = function(Value)
-	Settings.Misc.Movement.Speed.Enabled = Value	
-	end    
-})
+                Sections.Visuals.Crosshair:AddToggle("VisualsCrosshairRotateEnabled", {
+                    Text = "Rotate",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
-BTab:AddSlider({
-	Name = "Speed Amount",
-	Min = 0,
-	Max = 20,
-	Default = 5,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.5,
-	ValueName = "Sigma",
-	Callback = function(Value)
-		Settings.Misc.Movement.Speed.Amount = Value
-	end    
-})
+                Sections.Visuals.Crosshair:AddSlider("VisualsCrosshairRotateAmount", {
+                    Text = "Rotation Speed",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 3,
+                    Compact = false,
+                })
 
+                Toggles.VisualsCrosshairRotateEnabled:OnChanged(function()
+                    Settings.Visuals.Crosshair.Rotation.Enabled = Toggles.VisualsCrosshairRotateEnabled.Value
+                end)
 
+                Options.VisualsCrosshairRotateAmount:OnChanged(function()
+                    Settings.Visuals.Crosshair.Rotation.Speed = Options.VisualsCrosshairRotateAmount.Value
+                end)
+            end
+        end
 
-local Section = BTab:AddSection({
-	Name = "Exploits"
-})
+        --// Anti Aim
+        do
 
+            --// Velocity Spoofer
+            do
+                Sections.AntiAim.VelocitySpoofer:AddToggle("AntiAimVelocitySpooferEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                })
 
-BTab:AddToggle({
-	Name = "Enable",
-	Default = false,
-	Callback = function(Value)
-		Settings.Misc.Exploits.Enabled = Value
-	end    
-})
+                Toggles.AntiAimVelocitySpooferEnabled:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Enabled = Toggles.AntiAimVelocitySpooferEnabled.Value
+                end)
 
-BTab:AddToggle({
-	Name = "No JumpCooldown",
-	Default = false,
-	Callback = function(Value)
-		Settings.Misc.Exploits.NoJumpCooldown = Value
-	end    
-})
+                Sections.AntiAim.VelocitySpoofer:AddDropdown("AntiAimVelocitySpooferType", {
+                    Values = {"Underground", "Sky", "Multiplier", "Prediction Breaker", "Custom"},
+                    Default = 1,
+                    Multi = false,
 
-BTab:AddToggle({
-	Name = "No Slowdown",
-	Default = false,
-	Callback = function(Value)
-		Settings.Misc.Exploits.NoSlowDown = Value
-	end    
-})
+                    Text = "Type",
+                    Tooltip = nil
+                })
 
-BTab:AddToggle({
-	Name = "No Recoil",
-	Default = false,
-	Callback = function(Value)
-		Settings.Misc.Exploits.NoRecoil = Value
-	end    
-})
+                Options.AntiAimVelocitySpooferType:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Type = Options.AntiAimVelocitySpooferType.Value
+                end)
+
+                Sections.AntiAim.VelocitySpoofer:AddToggle("AntiAimVelocitySpooferVisualizeEnabled", {
+                    Text = "Visualize",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddColorPicker("AntiAimVelocitySpooferVisualizeColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "Velocity Visualize Color",
+                    Transparency = nil,
+                })
+
+                Sections.AntiAim.VelocitySpoofer:AddInput("AntiAimVelocitySpooferVisualizePrediction", {
+                    Default = nil,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "Visualize Prediction",
+                    Tooltip = nil,
+
+                    Placeholder = "Visualize Prediction Amount"
+                })
+
+                Options.AntiAimVelocitySpooferVisualizePrediction:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Visualize.Prediction = tonumber(Options.AntiAimVelocitySpooferVisualizePrediction.Value)
+                end)
+
+                Toggles.AntiAimVelocitySpooferVisualizeEnabled:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Visualize.Enabled = Toggles.AntiAimVelocitySpooferVisualizeEnabled.Value
+                end)
+
+                Options.AntiAimVelocitySpooferVisualizeColor:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Visualize.Color = Options.AntiAimVelocitySpooferVisualizeColor.Value
+                end)
+
+                Sections.AntiAim.VelocitySpoofer:AddSlider("AntiAimVelocitySpooferYaw", {
+                    Text = "Yaw",
+                    Default = 0,
+                    Min = 0,
+                    Max = 100,
+                    Rounding = 3,
+                    Compact = false
+                })
+
+                Options.AntiAimVelocitySpooferYaw:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Yaw = Options.AntiAimVelocitySpooferYaw.Value
+                end)
+
+                Sections.AntiAim.VelocitySpoofer:AddSlider("AntiAimVelocitySpooferPitch", {
+                    Text = "Pitch",
+                    Default = 0,
+                    Min = 0,
+                    Max = 100,
+                    Rounding = 3,
+                    Compact = false
+                })
+
+                Options.AntiAimVelocitySpooferPitch:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Pitch = Options.AntiAimVelocitySpooferPitch.Value
+                end)
+
+                Sections.AntiAim.VelocitySpoofer:AddSlider("AntiAimVelocitySpooferRoll", {
+                    Text = "Roll",
+                    Default = 0,
+                    Min = 0,
+                    Max = 100,
+                    Rounding = 3,
+                    Compact = false
+                })
+
+                Options.AntiAimVelocitySpooferRoll:OnChanged(function()
+                    Settings.AntiAim.VelocitySpoofer.Roll = Options.AntiAimVelocitySpooferRoll.Value
+                end)
+            end
+
+            --// C-Sync
+            do
+                Sections.AntiAim.CSync:AddToggle("CSyncAntiAimEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddKeyPicker("CSyncAntiAimKeyPicker", {
+                    Default = "X",
+                    SyncToggleState = true,
+                    Mode = "Toggle",
+
+                    Text = "C-Sync",
+                    NoUI = false,
+                })
+
+                Toggles.CSyncAntiAimEnabled:OnChanged(function()
+                    Settings.AntiAim.CSync.Enabled = Toggles.CSyncAntiAimEnabled.Value
+                end)
+
+                Sections.AntiAim.CSync:AddToggle("CSyncAntiAimVisualizeEnabled", {
+                    Text = "Visualize",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddColorPicker("CSyncAntiAimVisualizeColor", {
+                    Default = Color3.new(1, 1, 1),
+                    Title = "CFrame Visualize Color",
+                    Transparency = nil,
+                })
+
+                Sections.AntiAim.CSync:AddDropdown("CSyncAntiAimType", {
+                    Values = {"Custom", "Random", "Random Target", "Target Strafe", "Local Strafe"},
+                    Default = 1,
+                    Multi = false,
+                    Text = "Type",
+                    Tooltip = nil,
+                })
+
+                Toggles.CSyncAntiAimVisualizeEnabled:OnChanged(function()
+                    Settings.AntiAim.CSync.Visualize.Enabled = Toggles.CSyncAntiAimVisualizeEnabled.Value
+                end)
+
+                Options.CSyncAntiAimVisualizeColor:OnChanged(function()
+                    Settings.AntiAim.CSync.Visualize.Color = Options.CSyncAntiAimVisualizeColor.Value
+                end)
+
+                Options.CSyncAntiAimType:OnChanged(function()
+                    Settings.AntiAim.CSync.Type = Options.CSyncAntiAimType.Value
+                end)
+
+                Sections.AntiAim.CSync:AddInput("CSyncAntiAimRandomRange", {
+                    Default = 50,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "CSyncAntiAimRandomRange",
+                    Tooltip = nil,
+
+                    Placeholder = " Amount"
+                })
+
+                Options.CSyncAntiAimRandomRange:OnChanged(function()
+                    Settings.AntiAim.CSync.RandomDistance = Options.CSyncAntiAimRandomRange.Value
+                end)
+
+                Sections.AntiAim.CSync:AddSlider("CSyncAntiAimCustomX", {
+                    Text = "Custom X",
+                    Default = 0.1,
+                    Min = 0,
+                    Max = 500,
+                    Rounding = 1,
+                    Compact = false,
+                })
+
+                Options.CSyncAntiAimCustomX:OnChanged(function()
+                    Settings.AntiAim.CSync.Custom.X = Options.CSyncAntiAimCustomX.Value
+                end)
+
+                Sections.AntiAim.CSync:AddSlider("CSyncAntiAimCustomY", {
+                    Text = "Custom Y",
+                    Default = 0.1,
+                    Min = 0,
+                    Max = 500,
+                    Rounding = 1,
+                    Compact = false,
+                })
+
+                Options.CSyncAntiAimCustomY:OnChanged(function()
+                    Settings.AntiAim.CSync.Custom.Y = Options.CSyncAntiAimCustomY.Value
+                end)
+
+                Sections.AntiAim.CSync:AddSlider("CSyncAntiAimCustomZ", {
+                    Text = "Custom Z",
+                    Default = 0.1,
+                    Min = 0,
+                    Max = 500,
+                    Rounding = 1,
+                    Compact = false,
+                })
+
+                Options.CSyncAntiAimCustomZ:OnChanged(function()
+                    Settings.AntiAim.CSync.Custom.Z = Options.CSyncAntiAimCustomZ.Value
+                end)
+
+                Sections.AntiAim.CSync:AddInput("CSyncAntiAimTargetStrafeSpeed", {
+                Default = 9999999,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "CSyncAntiAimTargetStrafeHeight",
+                    Tooltip = nil,
+
+                    Placeholder = "Amount"
+                })
+
+                Options.CSyncAntiAimTargetStrafeSpeed:OnChanged(function()
+                    Settings.AntiAim.CSync.TargetStrafe.Speed = Options.CSyncAntiAimTargetStrafeSpeed.Value
+                end)
+
+                Sections.AntiAim.CSync:AddInput("CSyncAntiAimTargetStrafeDistance", {
+                Default = 30,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "CSyncAntiAimTargetStrafeDistance",
+                    Tooltip = nil,
+
+                    Placeholder = "Amount"
+                })
+
+                Options.CSyncAntiAimTargetStrafeDistance:OnChanged(function()
+                    Settings.AntiAim.CSync.TargetStrafe.Distance = Options.CSyncAntiAimTargetStrafeDistance.Value
+                end)
+
+                Sections.AntiAim.CSync:AddInput("CSyncAntiAimTargetStrafeHeight", {
+                Default = 5,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "CSyncAntiAimTargetStrafeHeight",
+                    Tooltip = nil,
+
+                    Placeholder = " Amount"
+                })
+
+                Options.CSyncAntiAimTargetStrafeHeight:OnChanged(function()
+                    Settings.AntiAim.CSync.TargetStrafe.Height = Options.CSyncAntiAimTargetStrafeHeight.Value
+                end)
+            end
+
+            --// Fake Lag
+            do
+                Sections.AntiAim.Network:AddToggle("AntiAimNetworkEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddKeyPicker("AntiAimNetworkKeyPicker", {
+                    Default = "B",
+                    SyncToggleState = true,
+                    Mode = "Toggle",
+
+                    Text = "Network",
+                    NoUI = false,
+                })
+
+                Toggles.AntiAimNetworkEnabled:OnChanged(function()
+                    Settings.AntiAim.Network.Enabled = Toggles.AntiAimNetworkEnabled.Value
+                end)
+
+                Sections.AntiAim.Network:AddToggle("AntiAimNetworkWalkingCheck", {
+                    Text = "Walking Check",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.AntiAimNetworkWalkingCheck:OnChanged(function()
+                    Settings.AntiAim.Network.WalkingCheck = Toggles.AntiAimNetworkWalkingCheck.Value
+                end)
+
+                Sections.AntiAim.Network:AddSlider("AntiAimNetworkAmount", {
+                    Text = "Amount",
+                    Default = 0.1,
+                    Min = -500,
+                    Max = 500,
+                    Rounding = 3,
+                    Compact = false,
+                })
+
+                Options.AntiAimNetworkAmount:OnChanged(function()
+                    Settings.AntiAim.Network.Amount = Options.AntiAimNetworkAmount.Value
+                end)
+            end
+
+            --// Velocity Desync
+            do
+                Sections.AntiAim.VelocityDesync:AddToggle("AntiAimVelocityDesyncEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddKeyPicker("AntiAimVelocityDesyncKeyPicker", {
+                    Default = "P",
+                    SyncToggleState = true,
+                    Mode = "Toggle",
+
+                    Text = "Velocity Desync",
+                    NoUI = false,
+                })
+
+                Toggles.AntiAimVelocityDesyncEnabled:OnChanged(function()
+                    Settings.AntiAim.VelocityDesync.Enabled = Toggles.AntiAimVelocityDesyncEnabled.Value
+                end)
+
+                Sections.AntiAim.VelocityDesync:AddSlider("AntiAimVelocityDesyncRange", {
+                    Text = "Range",
+                    Default = 1,
+                    Min = 0.1,
+                    Max = 10,
+                    Rounding = 3,
+                    Compact = false,
+                })
+
+                Options.AntiAimVelocityDesyncRange:OnChanged(function()
+                    Settings.AntiAim.VelocityDesync.Range = Options.AntiAimVelocityDesyncRange.Value
+                end)
+            end
+
+            --// FFlag Desync
+            do
+                Sections.AntiAim.FFlag:AddToggle("AntiAimFFlagDesyncEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddKeyPicker("AntiAimFFlagDesyncKeyPicker", {
+                    Default = "N",
+                    SyncToggleState = true,
+                    Mode = "Toggle",
+
+                    Text = "FFlag Desync",
+                    NoUI = false,
+                })
+
+                Toggles.AntiAimFFlagDesyncEnabled:OnChanged(function()
+                    Settings.AntiAim.FFlagDesync.Enabled = Toggles.AntiAimFFlagDesyncEnabled.Value
+
+                    if not Settings.AntiAim.FFlagDesync.Enabled then
+                        for FFlag, Value in pairs(Script.Locals.FFlags) do
+                            setfflag(FFlag, Value)
+                        end
+                    end
+                end)
+
+                Sections.AntiAim.FFlag:AddToggle("AntiAimFFlagDesyncSetNew", {
+                    Text = "Set New",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.AntiAimFFlagDesyncSetNew:OnChanged(function()
+                    Settings.AntiAim.FFlagDesync.SetNew = Toggles.AntiAimFFlagDesyncSetNew.Value
+                end)
+
+                Sections.AntiAim.FFlag:AddDropdown("AntiAimFFlagDesyncFFlags", {
+                    Values = {"S2PhysicsSenderRate", "PhysicsSenderMaxBandwidthBps", "DataSenderMaxJoinBandwidthBps"},
+                    Default = {"S2PhysicsSenderRate"},
+                    Multi = true,
+                    Text = "FFlags",
+                    Tooltip = nil,
+                })
+
+                Options.AntiAimFFlagDesyncFFlags:OnChanged(function()
+                    Settings.AntiAim.FFlagDesync.FFlags = Options.AntiAimFFlagDesyncFFlags.Value
+                end)
+
+                Sections.AntiAim.FFlag:AddInput("AntiAimFFlagDesyncAmount", {
+                Default = 0,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "AntiAimFFlagDesyncAmount",
+                    Tooltip = nil,
+
+                    Placeholder = "Amount"
+                }) 
+
+                Options.AntiAimFFlagDesyncAmount:OnChanged(function()
+                    Settings.AntiAim.FFlagDesync.Amount = Options.AntiAimFFlagDesyncAmount.Value
+                end)
+
+                Sections.AntiAim.FFlag:AddInput("AntiAimFFlagDesyncSetnewAmount", {
+                Default = 19.9,
+                    Numeric = false,
+                    Finished = false,
+
+                    Text = "AntiAimFFlagDesyncAmount",
+                    Tooltip = nil,
+
+                    Placeholder = " Amount"
+                })
+
+                Options.AntiAimFFlagDesyncSetnewAmount:OnChanged(function()
+                    Settings.AntiAim.FFlagDesync.SetNewAmount = Options.AntiAimFFlagDesyncSetnewAmount.Value
+                end)
+            end
+
+            --// Invisible Desync
+        end
+
+        --// Misc
+        do
+
+            --// Speed
+            do
+                Sections.Misc.Speed:AddToggle("MiscCFrameSpeedEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                }):AddKeyPicker("MiscCFrameSpeedKeybind", {
+                    Default = "Z",
+                    SyncToggleState = true,
+                    Mode = "Toggle",
+
+                    Text = "Speed",
+                    NoUI = false,
+                })
+
+                Toggles.MiscCFrameSpeedEnabled:OnChanged(function()
+                    Settings.Misc.Movement.Speed.Enabled = Toggles.MiscCFrameSpeedEnabled.Value
+                end)
+
+                Sections.Misc.Speed:AddSlider("MiscCFrameSpeedAmount", {
+                    Text = "Amount",
+                    Default = 0.1,
+                    Min = 0,
+                    Max = 10,
+                    Rounding = 3,
+                    Compact = false,
+                })
+
+                Options.MiscCFrameSpeedAmount:OnChanged(function()
+                    Settings.Misc.Movement.Speed.Amount = Options.MiscCFrameSpeedAmount.Value
+                end)
+            end
+
+            --// Exploits
+            do
+                Sections.Misc.Exploits:AddToggle("MiscExploitsEnabled", {
+                    Text = "Enabled",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.MiscExploitsEnabled:OnChanged(function()
+                    Settings.Misc.Exploits.Enabled = Toggles.MiscExploitsEnabled.Value
+                end)
+
+                Sections.Misc.Exploits:AddToggle("MiscExploitsNoRecoil", {
+                    Text = "No Recoil",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.MiscExploitsNoRecoil:OnChanged(function()
+                    Settings.Misc.Exploits.NoRecoil = Toggles.MiscExploitsNoRecoil.Value
+                end)
+
+                Sections.Misc.Exploits:AddToggle("MiscExploitsNoJumpCooldown", {
+                    Text = "No Jumpcooldown",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.MiscExploitsNoJumpCooldown:OnChanged(function()
+                    Settings.Misc.Exploits.NoJumpCooldown = Toggles.MiscExploitsNoJumpCooldown.Value
+                end)
+
+                Sections.Misc.Exploits:AddToggle("MiscExploitsNoSlowdown", {
+                    Text = "No Slowdown",
+                    Default = false,
+                    Tooltip = nil,
+                })
+
+                Toggles.MiscExploitsNoSlowdown:OnChanged(function()
+                    Settings.Misc.Exploits.NoSlowDown = Toggles.MiscExploitsNoSlowdown.Value
+                end)
+            end
+        end
+
+        --// Settings Tab
+        do
+            local MenuGroup = Tabs.Settings:AddLeftGroupbox("Menu")
+
+            Library.KeybindFrame.Visible = true
+
+            MenuGroup:AddToggle("KeybindsListEnabled", {
+                Text = "Keybinds List",
+                Default = true,
+                Tooltip = nil,
+            })
+
+            Toggles.KeybindsListEnabled:OnChanged(function()
+                Library.KeybindFrame.Visible = Toggles.KeybindsListEnabled.Value
+            end)
+
+            MenuGroup:AddButton("Unload", function() Library:Unload() end)
+            MenuGroup:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", { Default = "V", NoUI = true, Text = "Menu keybind" })
+            Library.ToggleKeybind = Options.MenuKeybind
+
+            ThemeManager:SetLibrary(Library)
+            SaveManager:SetLibrary(Library)
+
+            ThemeManager:SetFolder("Azure")
+            SaveManager:SetFolder("Azure/Hood")
+
+            SaveManager:BuildConfigSection(Tabs.Settings)
+            ThemeManager:ApplyToTab(Tabs.Settings)
+        end
+    end
+end
+
+load()
+
+getgenv().keytoclick = "C"
+tool = Instance.new("Tool")
+tool.RequiresHandle = false
+tool.Name = keytoclick
+tool.Activated:connect(function()
+    local vim = game:service("VirtualInputManager")
+vim:SendKeyEvent(true, keytoclick, false, game)
+end)
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local player = game.Players.LocalPlayer
+
+local function connectCharacterAdded()
+    player.CharacterAdded:Connect(onCharacterAdded)
+end
+
+connectCharacterAdded()
+
+player.CharacterRemoving:Connect(function()
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end)
