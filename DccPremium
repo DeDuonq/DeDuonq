@@ -1,0 +1,4549 @@
+local banned_userid = {1016315586}
+local banned_hwid = {}
+
+local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+
+if table.find(banned_userid,game.Players.LocalPlayer.UserId) then
+game.Players.LocalPlayer:Kick("You have been banned from DarkCheatClient! Reason: Bypassing Premium Script [UserId]") 
+elseif table.find(banned_hwid, hwid) then
+game.Players.LocalPlayer:Kick("You have been banned from DarkCheatClient! Reason: Bypassing Premium Script [HWID]")
+end
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local RS = game:GetService("RunService")
+local mouse = game.Players.LocalPlayer:GetMouse()
+local lp = game.Players.LocalPlayer
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local HttpService = game:GetService("HttpService")
+local camera = game.Workspace.CurrentCamera
+local VirtualUser = game:GetService("VirtualUser")
+local TweenService  = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RbxAnalService = game:GetService("RbxAnalyticsService")
+
+local function moveto(obj, speed, metod)
+    local info = TweenInfo.new(speed,Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, info, {CFrame = obj})
+        tween:Play()
+end
+
+local function getdistancefc(part)
+    return (part.Position - camera.CFrame.Position).Magnitude
+end
+
+local function gplr(String)
+	local Found = {}
+	local strl = String:lower()
+	if strl == "all" then
+		for i,v in pairs(game:FindService("Players"):GetPlayers()) do
+			table.insert(Found,v)
+		end
+	elseif strl == "others" then
+		for i,v in pairs(game:FindService("Players"):GetPlayers()) do
+			if v.Name ~= lp.Name then
+				table.insert(Found,v)
+			end
+		end 
+	elseif strl == "me" then
+		for i,v in pairs(game:FindService("Players"):GetPlayers()) do
+			if v.Name == lp.Name then
+				table.insert(Found,v)
+			end
+		end 
+	else
+		for i,v in pairs(game:FindService("Players"):GetPlayers()) do
+			if v.Name:lower():sub(1, #String) == String:lower() then
+				table.insert(Found,v)
+			end
+		end 
+	end
+	return Found 
+end
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Images = {
+["Successful"] = "rbxassetid://12900311435",
+["Warning"] = "rbxassetid://11745872952",
+["Error"] = "rbxassetid://2592670449"
+}
+
+local Sounds = {
+["Notify"] = "7025414509",
+["Warning"] = "4094488012",
+["Error"] = "8974678286"
+}
+
+local function SendNotification(title, description, time, soundid)
+OrionLib:MakeNotification({
+	Name = title,
+	Content = description,
+	Image = "rbxassetid://4483345998",
+	Time = time
+})
+
+local sound = Instance.new("Sound", game:GetService("SoundService"))
+sound.SoundId = "rbxassetid://"..soundid
+sound:Play()
+end
+
+local function suc(str,dur)
+	SendNotification("[DarkCheatClient]",str, dur or 10, Sounds.Notify)
+end
+
+local function warn(str,dur)
+SendNotification("[DarkCheatClient | Warning]", str, dur or 10, Sounds.Warning)
+end
+
+local function error(str,dur)
+	SendNotification("[DarkCheatClient | Error]", str, dur or 10, Sounds.Error)
+end
+
+local function notif(str,dur)
+	SendNotification("[DarkCheatClient | Notification]",str, dur or 10, Sounds.Notify)
+end
+
+
+function LoadLoader()
+local loadeddccmm2 = Instance.new("Folder", game.CoreGui)
+loadeddccmm2.Name = "DCCMM2"
+
+local loader = Instance.new("ScreenGui")
+loader.Name = "LoaderDarkCheatClient"
+loader.Parent = game.CoreGui
+
+local loadermain = Instance.new("Frame")
+loadermain.Size = UDim2.new(0, 1, 0, 1)
+loadermain.Position = UDim2.new(0.5, 0, 0.5, 0)
+loadermain.AnchorPoint = Vector2.new(0.5, 0.5)
+loadermain.BackgroundColor3 = Color3.fromRGB(30,30,30)
+loadermain.BackgroundTransparency = 0
+loadermain.BorderColor3 = Color3.fromRGB(30,30,30)
+loadermain.BorderSizePixel = 1
+loadermain.Active = true
+loadermain.Visible = true
+loadermain.Draggable = false
+loadermain.Parent = loader
+
+local uicorn = Instance.new("UICorner", loadermain)
+uicorn.CornerRadius = UDim.new(0, 10)
+wait(0.1)
+game:GetService("TweenService"):Create(loadermain, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 517, 0, 1)}):Play()
+wait(0.8)
+game:GetService("TweenService"):Create(loadermain, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 517, 0, 237)}):Play()
+wait(0.4)
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0, 500, 0, 50)
+title.Position = UDim2.new(0, 10, 0, 20)
+title.BackgroundColor3 = Color3.fromRGB(29,29,29)
+title.BorderColor3 = Color3.new(0, 0, 0)
+title.BorderSizePixel = 0
+title.Transparency = 1
+title.Active = true
+title.Draggable = false
+title.Parent = loadermain
+title.Font = Enum.Font.SourceSansBold
+title.Text = "DarkCheatClient Loader"
+title.TextStrokeTransparency = 0.9
+title.TextColor3 = Color3.fromRGB(255,255,255) title.TextSize = 24
+wait(0.3)
+game:GetService("TweenService"):Create(title, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency=0}):Play()
+wait(0.2)
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(0, 500, 0, 50)
+status.Position = UDim2.new(0, 10, 0, 75)
+status.BackgroundColor3 = Color3.fromRGB(29,29,29)
+status.BorderColor3 = Color3.new(0, 0, 0)
+status.BorderSizePixel = 0
+status.Transparency = 1
+status.Active = true
+status.Draggable = false
+status.Parent = loadermain
+status.Font = Enum.Font.SourceSansBold
+status.Text = "Status: Starting Loading.." 
+status.TextStrokeTransparency = 0.9
+status.TextColor3 = Color3.fromRGB(255,255,255)
+status.TextSize = 16
+
+local loadedline = Instance.new("Frame")
+loadedline.Name = "Slider"
+loadedline.Parent = loadermain
+loadedline.BackgroundColor3 = Color3.fromRGB(0,255,255)
+loadedline.Size = UDim2.new(0, 10, 0, 25)
+loadedline.Position = UDim2.new(0, 10, 0, 190)
+loadedline.Transparency = 1
+
+game:GetService("TweenService"):Create(status, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency=0}):Play()
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Transparency=0}):Play()
+wait(0.6)
+status.Text = "Status: Getting Services.." 
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 50, 0, 25)}):Play()
+wait(1.4)
+status.Text = "Status: Getting Scripts.." 
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 70, 0, 25)}):Play()
+wait(0.9)
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 100, 0, 25)}):Play()
+wait(0.9)
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 120, 0, 25)}):Play()
+wait(0.5)
+status.Text = "Status: Getting Workspace.."
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 230, 0, 25)}):Play()
+wait(0.6)
+status.Text = "Status: Getting Players.."
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 420, 0, 25)}):Play()
+wait(0.8)
+status.Text = "Status: Fencing Discord Link.."
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.9, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 480, 0, 25)}):Play()
+wait(0.9)
+status.Text = "Status: Successful Loaded!"
+game:GetService("TweenService"):Create(loadedline, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 495, 0, 25)}):Play()
+wait(0.9)
+title.Visible = false
+loadedline.Visible = false
+status.Visible = false
+game:GetService("TweenService"):Create(loadermain, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 557, 0, 277)}):Play()
+wait(0.7)
+game:GetService("TweenService"):Create(loadermain, TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size=UDim2.new(0, 1, 0, 1)}):Play()
+wait(0.9)
+loader:Destroy()
+loadermain:Destroy()
+title:Destroy()
+status:Destroy()
+loadedline:Destroy()
+
+local Sound = Instance.new("Sound",game:GetService("SoundService"))
+Sound.SoundId = "rbxassetid://826129174"
+Sound:Play()
+end
+
+if game.PlaceId == 142823291 then
+if  not game.Workspace:FindFirstChild("DCC_MurderMystery2") then
+local file = Instance.new("Folder", game.Workspace)
+file.Name = "DCC_MurderMystery2"
+
+LoadLoader()
+
+local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+local apiRequest = request or http_request or (http and http.request) or (syn and syn.request)
+local response = apiRequest(
+    {
+        Url = "https://discord.com/api/webhooks/1209255439704002621/eegflnsqGZ0c0Vo4y74JTuEFe61Pn7Pst-yGtzYcMGgDhAdC6fjgYBmVrdD5PMFpcfwo",
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = game:GetService("HttpService"):JSONEncode(
+            {
+                content = "",
+                embeds = {
+                    {
+                        title = "API Fetched By User!",
+                        description = "Someones Got Detected By Using DarkCheatClient!",
+                        type = "rich",
+                        color = 0xffffff,
+                        url = "https://web.roblox.com/users/" .. lp.UserId .. "/profile",
+                         fields = {
+                         {
+                    name = "User:",
+                    value = lp.Name.." (" ..lp.DisplayName.. ")",
+                    inline = true,
+                },
+                {
+                    name = "HWID:",
+                    value = hwid,
+                    inline = true,
+                },
+                {
+                    name = "Game: ",
+                    value = "Murder Mystery 2",
+                    inline = true,
+                }            
+                  }
+              }
+              }
+            }
+        )
+    }
+)
+
+
+local Client = game.Players.LocalPlayer
+local Interface = "null"
+local UserInputService = game.UserInputService
+
+function lay()
+local Human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+	if not Human then
+		return
+	end
+	Human.Sit = true
+	task.wait(.1)
+	Human.RootPart.CFrame = Human.RootPart.CFrame * CFrame.Angles(math.pi * .5, 0, 0)
+	for _, v in ipairs(Human:GetPlayingAnimationTracks()) do
+		v:Stop()
+	end
+end
+
+local roles
+
+function CreateChams()
+	for i, v in pairs(Players:GetChildren()) do
+		if v ~= lp and v.Character then pcall(function()
+		for i, BodyPart in pairs(v.Character:GetChildren()) do
+		if not BodyPart:FindFirstChildOfClass("BoxHandleAdornment") then
+			local ChamsTorso = Instance.new("BoxHandleAdornment", BodyPart)
+			ChamsTorso.AlwaysOnTop = true
+			ChamsTorso.Transparency = 0.55
+			ChamsTorso.ZIndex = 0
+			ChamsTorso.Size = BodyPart.Size
+			ChamsTorso.Adornee = BodyPart
+			ChamsTorso.Name = "ChamsEsp"
+				end
+				end
+		end)
+	  end
+	end
+end
+ 
+function UpdateChams() -- Get Current Role Colors (messy)
+	for _, v in pairs(Players:GetChildren()) do
+		if v ~= lp and v.Character then pcall(function()
+		  for i, BodyPart in pairs(v.Character:GetChildren()) do
+			ChamsTorso = BodyPart:FindFirstChildOfClass("BoxHandleAdornment")
+			if v.Name == Sheriff and IsAlive(v) then
+				ChamsTorso.Color3 = Color3.fromRGB(0, 0, 225)
+			elseif v.Name == Murder and IsAlive(v) then
+				ChamsTorso.Color3 = Color3.fromRGB(225, 0, 0)
+			elseif v.Name == Hero and IsAlive(v) and not IsAlive(game.Players[Sheriff]) then
+				ChamsTorso.Color3 = Color3.fromRGB(255, 250, 0)
+			else
+				ChamsTorso.Color3 = Color3.fromRGB(0, 225, 0)
+			end
+		  end
+		end)
+		end
+	end
+end	
+
+function IsAlive(Player) -- Simple sexy function
+	for i,v in pairs(roles) do
+		if Player.Name == i then
+			if not v.Killed and not v.Dead then
+				return true
+			else
+				return false
+			end
+		end
+	end
+end
+
+GetRole = RS.Heartbeat:Connect(function()
+roles = ReplicatedStorage:FindFirstChild("GetPlayerData", true):InvokeServer()
+	for i,v in pairs(roles) do
+		if v.Role == "Murderer" then
+			Murder = i
+		elseif v.Role == "Sheriff" then
+			Sheriff = i
+		elseif v.Role == "Hero" then
+			Hero = i
+		end
+	end
+end)
+
+function XrayOn(obj)
+    for _,v in pairs(obj:GetChildren()) do
+        if (v:IsA("BasePart")) and not v.Parent:FindFirstChild("Humanoid") and not v.Parent.Parent:FindFirstChild("Humanoid") then
+            v.LocalTransparencyModifier = 0.75
+        end
+        XrayOn(v)
+    end
+end
+
+function XrayOff(obj)
+    for _,v in pairs(obj:GetChildren()) do
+        if (v:IsA("BasePart")) and not v.Parent:FindFirstChild("Humanoid") and not v.Parent.Parent:FindFirstChild("Humanoid") then
+            v.LocalTransparencyModifier = 0
+        end 
+        XrayOff(v)
+    end
+end
+
+local folder = Instance.new("Folder",CoreGui)
+folder.Name = "ESP Holder"
+	
+local function AddBillboard(player)
+    local billboard = Instance.new("BillboardGui",folder)
+    billboard.Name = player.Name
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.fromOffset(200,50)
+    billboard.ExtentsOffset = Vector3.new(0,3,0)
+    billboard.Enabled = false
+
+    local textlabel = Instance.new("TextLabel",billboard)
+    textlabel.TextSize = 20
+    textlabel.Text = player.Name
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+textlabel.TextStrokeTransparency = 0
+textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+textlabel.ZIndex = 0
+    if getgenv().AllEsp then
+        billboard.Enabled = true
+    end
+    repeat
+        wait()
+        pcall(function()
+            billboard.Adornee = player.Character.Head
+            if player.Name == Murder and IsAlive(player) then
+                textlabel.TextColor3 = Color3.fromRGB(238,44,44)
+                if not billboard.Enabled and getgenv().MurderEsp then
+                    billboard.Enabled = true
+                end
+            elseif player.Name == Sheriff and IsAlive(player) then
+                textlabel.TextColor3 = Color3.fromRGB(0,0,255)
+                if not billboard.Enabled and getgenv().SheriffEsp then
+                    billboard.Enabled = true
+                end
+            elseif player.Name == Hero and IsAlive(player) and not IsAlive(game.Players[Sheriff]) then
+            textlabel.TextColor3 = Color3.fromRGB(255,255,0)
+              if not billboard.Enabled and getgenv().SheriffEsp then
+                 billboard.Enabled = true
+               end
+              else
+                textlabel.TextColor3 = Color3.fromRGB(127,255,0)
+            end
+        end)
+    until not player.Parent
+end
+
+for _,player in pairs(game:GetService("Players"):GetPlayers()) do
+    if player ~= game:GetService("Players").LocalPlayer then
+        coroutine.wrap(AddBillboard)(player)
+    end
+end
+Players.PlayerAdded:Connect(AddBillboard)
+
+Players.PlayerRemoving:Connect(function(player)
+    folder[player.Name]:Destroy()
+end)
+
+function GetMurderer()
+    for i,v in pairs(Players:GetChildren()) do 
+        if v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") and v.Name == "Tool" then
+            return v.Name
+        end
+    end
+    return nil
+end
+
+function GetSheriff()
+    for i,v in pairs(Players:GetChildren()) do 
+        if v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") and v.Name == "Tool" then
+            return v.Name
+        end
+        return nil
+    end
+end
+
+local function GetPing()
+	return (game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())/1000
+end
+
+local function GetPlayer(UserDisplay)
+	if UserDisplay ~= "" then
+        for i,v in pairs(Players:GetPlayers()) do
+            if v.Name:lower():match(UserDisplay) or v.DisplayName:lower():match(UserDisplay) then
+                return v
+            end
+        end
+		return nil
+	else
+		return nil
+    end
+end
+
+local function GetCharacter(Player)
+	if Player.Character then
+		return Player.Character
+	end
+end
+
+local function GetRoot(Player)
+	if GetCharacter(Player):FindFirstChild("HumanoidRootPart") then
+		return GetCharacter(Player).HumanoidRootPart
+	end
+end
+
+local function TeleportTO(posX,posY,posZ,player,method)
+	pcall(function()
+		if method == "safe" then
+			task.spawn(function()
+				for i = 1,30 do
+					task.wait()
+					GetRoot(lp).Velocity = Vector3.new(0,0,0)
+					if player == "pos" then
+						GetRoot(lp).CFrame = CFrame.new(posX,posY,posZ)
+					else
+						GetRoot(lp).CFrame = CFrame.new(GetRoot(player).Position)+Vector3.new(0,2,0)
+					end
+				end
+			end)
+		else
+			GetRoot(plr).Velocity = Vector3.new(0,0,0)
+			if player == "pos" then
+				GetRoot(plr).CFrame = CFrame.new(posX,posY,posZ)
+			else
+				GetRoot(plr).CFrame = CFrame.new(GetRoot(player).Position)+Vector3.new(0,2,0)
+			end
+		end
+	end)
+end
+
+local function UseKnife(Player)
+    game:GetService("ReplicatedStorage").Events.KnifeEvent:FireServer(Player)
+end
+
+local function KillPlayer(Player)
+if Player.Character and IsAlive(Player) then
+repeat
+UseKnife(Player)
+wait(0.001)
+until not Player.Character or not Player.Character:FindFirstChild("HumanoidRootPart")
+end
+end
+
+function ShootGun(second, position)
+if lp.Character:FindFirstChild("Gun") then
+lp.Character:FindFirstChild("Gun").KnifeServer.ShootGun:InvokeServer(unpack({ [1] = second,    [2] = position,    [3] = "AH"}))
+end
+end
+
+wait(0.3)
+
+local shootm = Instance.new("ScreenGui")
+shootm.Name = "SilentAimButton"
+shootm.Parent = game.CoreGui
+shootm.Enabled = false
+
+local togglesh= Instance.new("TextButton")
+togglesh.Name = "ButtonToShoot"
+togglesh.Size = UDim2.new(0, 75, 0, 75)
+togglesh.Position = UDim2.new(0.01001973976, 0, 0.343832953, 0)
+togglesh.BackgroundColor3 = Color3.fromRGB(28,28,28)
+togglesh.Active = true
+togglesh.Draggable = true
+togglesh.Parent = shootm
+togglesh.Text = "Silent Aim"
+togglesh.TextSize = 18
+togglesh.TextScaled = true
+togglesh.TextColor3 = Color3.fromRGB(255,255,255)
+togglesh.Font = Enum.Font.SourceSans
+togglesh.ZIndex = 0
+
+local uicor = Instance.new("UICorner", togglesh)
+uicor.CornerRadius = UDim.new(0, 25)
+
+ButtonForPress = togglesh.MouseButton1Click:Connect(function()
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                for i, MyTool in pairs(Players.LocalPlayer.Character:GetChildren()) do
+                                    if MyTool.Name == "Gun" and MyTool:FindFirstChild("KnifeServer") then
+                                     if getgenv().partaim == "HumanoidRootPart" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.HumanoidRootPart.Position,    [3] = "AH"}))         
+                                     elseif getgenv().partaim == "Head" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.Head.Position,    [3] = "AH"}))         
+                                    end
+                                  end
+                                end
+                            end
+                        end
+                    end
+end)
+
+local insrolenot = Instance.new("ScreenGui")
+insrolenot.Name = "InstantRN"
+insrolenot.Parent = game.CoreGui
+insrolenot.Enabled = false
+
+local insroletext = Instance.new("TextLabel")
+insroletext.Name = "TextL"
+insroletext.Size = UDim2.new(0, 270, 0, 75)
+insroletext.Position = UDim2.new(0.5, 0, 0.5, 0)
+insroletext.AnchorPoint = Vector2.new(0.5,0.5)
+insroletext.BackgroundTransparency = 1
+insroletext.Active = true
+insroletext.Draggable = false
+insroletext.Parent = insrolenot
+insroletext.Text = "nil"
+insroletext.TextSize = 24
+insroletext.TextScaled = true
+insroletext.TextTransparency = 0
+insroletext.TextColor3 = Color3.fromRGB(255,255,255)
+insroletext.Font = Enum.Font.GothamBold
+insroletext.ZIndex = 0
+
+local uicorer = Instance.new("UICorner", insroletext)
+uicorer.CornerRadius = UDim.new(0, 5)
+
+insroletext.Position = insroletext.Position + UDim2.new(0,0,0,-50)
+
+RS.Heartbeat:Connect(function()
+for i,loc in pairs(Players:GetPlayers()) do
+if loc == lp then
+if loc.Name == Murder and IsAlive(loc) then
+game.CoreGui.InstantRN.TextL.Text = "Murderer"
+game.CoreGui.InstantRN.TextL.TextColor3 = Color3.fromRGB(255,48,48)
+elseif loc.Name == Sheriff or lp.Backpack:FindFirstChild("Gun") or lp.Character:FindFirstChild("Gun") and IsAlive(loc) then
+game.CoreGui.InstantRN.TextL.Text = "Sheriff"
+game.CoreGui.InstantRN.TextL.TextColor3 = Color3.fromRGB(48,48,255)
+elseif loc.Name ~= Murder and loc.Name ~= Sheriff and IsAlive(loc) then
+game.CoreGui.InstantRN.TextL.Text = "Innocent"
+game.CoreGui.InstantRN.TextL.TextColor3 = Color3.fromRGB(48,255,48)
+end
+end
+end
+end)
+
+
+ function mobilefly(speed)
+	 local controlModule = require(game.Players.LocalPlayer.PlayerScripts:WaitForChild('PlayerModule'):WaitForChild("ControlModule"))
+	 local bv = Instance.new("BodyVelocity")
+	 bv.Name = "VelocityHandler"
+	 bv.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+	 bv.MaxForce = Vector3.new(0,0,0)
+	 bv.Velocity = Vector3.new(0,0,0)
+	 
+	 local bg = Instance.new("BodyGyro")
+	 bg.Name = "GyroHandler"
+	 bg.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+	 bg.MaxTorque = Vector3.new(9e9,9e9,9e9)
+	 bg.P = 1000
+	 bg.D = 50
+	 
+	 local Signal1
+	 Signal1 = game.Players.LocalPlayer.CharacterAdded:Connect(function(NewChar)
+	 local bv = Instance.new("BodyVelocity")
+	 bv.Name = "VelocityHandler"
+	 bv.Parent = NewChar:WaitForChild("Humanoid").RootPart
+	 bv.MaxForce = Vector3.new(0,0,0)
+	 bv.Velocity = Vector3.new(0,0,0)
+	 
+	 local bg = Instance.new("BodyGyro")
+	 bg.Name = "GyroHandler"
+	 bg.Parent = NewChar:WaitForChild("Humanoid").HumanoidRootPart
+	 bg.MaxTorque = Vector3.new(9e9,9e9,9e9)
+	 bg.P = 1000
+	 bg.D = 50
+	 end)
+	 
+	 local camera = game.Workspace.CurrentCamera
+	 
+	 local Signal2
+	 Signal2 = game:GetService"RunService".RenderStepped:Connect(function()
+	 if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid") and game.Players.LocalPlayer.Character.Humanoid.RootPart and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("VelocityHandler") and game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("GyroHandler") then
+	 
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.MaxForce = Vector3.new(9e9,9e9,9e9)
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.GyroHandler.MaxTorque = Vector3.new(9e9,9e9,9e9)
+	 game.Players.LocalPlayer.Character.Humanoid.PlatformStand = true
+	 
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.GyroHandler.CFrame = camera.CoordinateFrame
+	 local direction = controlModule:GetMoveVector()
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity = Vector3.new()
+	 if direction.X > 0 then
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity = game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity + camera.CFrame.RightVector*(direction.X*speed)
+	 end
+	 if direction.X < 0 then
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity = game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity + camera.CFrame.RightVector*(direction.X*speed)
+	 end
+	 if direction.Z > 0 then
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity = game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity - camera.CFrame.LookVector*(direction.Z*speed)
+	 end
+	 if direction.Z < 0 then
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity = game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler.Velocity - camera.CFrame.LookVector*(direction.Z*speed)
+	 end
+	 end
+	 end)
+ end
+ 
+ function unmobilefly()
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.VelocityHandler:Destroy()
+	 game.Players.LocalPlayer.Character.HumanoidRootPart.GyroHandler:Destroy()
+	 game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+	 Signal1:Disconnect()
+	 Signal2:Disconnect()
+ end
+ 
+
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/VaniaPerets/FolderGui-FolderHub/main/GloxPloitProjectLibrary_Sourse.lua", true))()
+local main = library:Main("DarkCheatClient", "Murder Mystery 2", false)
+
+local MainT = main:Tab("Main")
+local LocPl = main:Tab("LocalPlayer")
+local Visual = main:Tab("Visual")
+local Mod = main:Tab("GameModes")
+local Tp = main:Tab("Teleports")
+local Troll = main:Tab("Trolling")
+local Prem = main:Tab("Premium")
+local AutoFarm = main:Tab("Autofarm")
+local Settings = main:Tab("Settings")
+
+MainT:BioAboutPlayer(false)
+
+MainT:Label("Change Logs:")
+
+MainT:Label("[Ui Library]")
+MainT:Label("[Destroy Gui] â€” Got Added!")
+MainT:Label("[Dropdown] â€” Should working fine")
+MainT:Label("[BioAboutProfile] â€” Got Added!")
+MainT:Line(Color3.fromRGB(10,10,10), Color3.fromRGB(1,1,1))
+MainT:Label("More Informations In Discord Server!")
+
+MainT:OpenTab()
+
+LocPl:Toggle("Noclip", function(t)
+getgenv().Noclip = t
+if Noclip then
+Nclp = RS.RenderStepped:Connect(function()
+game.Players.LocalPlayer.Character.Head.CanCollide = false
+game.Players.LocalPlayer.Character.UpperTorso.CanCollide = false
+game.Players.LocalPlayer.Character.LowerTorso.CanCollide = false
+game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false
+end)
+else
+Nclp:Disconnect()
+wait(1)
+game.Players.LocalPlayer.Character.Head.CanCollide = true
+game.Players.LocalPlayer.Character.UpperTorso.CanCollide = true
+game.Players.LocalPlayer.Character.LowerTorso.CanCollide = true
+game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = true
+end
+end)
+
+LocPl:Toggle("Inf Jump", function(value)
+   if value then
+InfJump = game:GetService("UserInputService").JumpRequest:connect(function()
+if value then
+		game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
+		end
+end)
+else
+InfJump:Disconnect()
+end
+end)
+
+LocPl:Toggle("Float", function(t)
+floattoggle = t
+   if floattoggle then
+while wait(0.001) do
+pcall(function()
+if workspace:FindFirstChild("FloatExploit") then
+workspace.FloatExploit:Destroy()
+end
+local Float= Instance.new("Part", game.Workspace)
+Float.Anchored = true
+Float.Name = "FloatExploit"
+Float.Transparency = 1
+Float.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,-3.1, 0)
+Float.Size = Vector3.new(3,0,3)
+end)
+if not floattoggle then
+if workspace:FindFirstChild("FloatExploit") then
+workspace.FloatExploit:Destroy()
+end
+break
+end
+end
+end
+end)
+
+LocPl:Toggle("Click Tp", function(t)
+   if t then
+if not lp.Backpack:FindFirstChild("Click_Teleport") and not lp.Character:FindFirstChild("Click_Teleport") then
+tool = Instance.new("Tool")
+tool.RequiresHandle = false
+tool.Name = "Click_Teleport"
+tool.Activated:connect(function()
+local pos = mouse.Hit+Vector3.new(0,2.5,0)
+pos = CFrame.new(pos.X,pos.Y,pos.Z)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+end)
+tool.Parent = game.Players.LocalPlayer.Backpack
+end
+else
+if lp.Backpack:FindFirstChild("Click_Teleport") then
+lp.Backpack[("Click_Teleport")]:Destroy()
+end
+if lp.Character:FindFirstChild("Click_Teleport") then
+lp.Character[("Click_Teleport")]:Destroy()
+end
+end
+end)
+
+LocPl:Toggle("Fling", function(val)
+getgenv().fling = val
+if getgenv().fling then
+	local fixpos = GetRoot(lp).Position
+	TeleportTO(fixpos.X,fixpos.Y,fixpos.Z,"pos","safe")
+			local RVelocity = nil
+			repeat
+				pcall(function()
+					RVelocity = GetRoot(lp).Velocity 
+					GetRoot(lp).Velocity = Vector3.new(math.random(-150,150),-25000,math.random(-150,150))
+					RS.RenderStepped:wait()
+					GetRoot(lp).Velocity = RVelocity
+				end)
+				RS.Heartbeat:wait()
+			until not getgenv().fling
+	fixpos = nil
+end
+end)
+
+LocPl:Toggle("Remove Barriers", function(val)
+getgenv().bar = val
+if getgenv().bar then
+while RS.Heartbeat:Wait() do
+pcall(function()
+if game:GetService("Workspace").Lobby.MainLobby.Models.Model.GlitchProof then
+game:GetService("Workspace").Lobby.MainLobby.Models.Model.GlitchProof:Destroy()
+elseif game:GetService("Workspace").Christmas.GlitchProof[("Glitch Proof")] then
+game:GetService("Workspace").Christmas.GlitchProof[("Glitch Proof")]:Destroy()
+elseif game:GetService("Workspace").Christmas.GlitchProof[("GlitchPart")] then
+game:GetService("Workspace").Normal.GlitchProof[("Glitch Proof")]:Destroy()
+elseif game:GetService("Workspace").Normal.GlitchProof[("GlitchPart")] then
+game:GetService("Workspace").Christmas.GlitchProof[("GlitchPart")]:Destroy()
+elseif game.Workspace.Normal.GlitchProof[("KillBrick")] then
+game.Workspace.Normal.GlitchProof[("KillBrick")]:Destroy()
+end
+end)
+if not getgenv().bar then
+break
+end
+end
+end
+end)
+
+LocPl:Toggle("Loop Interact", function(val)
+getgenv().inter = val
+if getgenv().inter then 
+while wait(0.5) do
+pcall(function()
+workspace.Christmas.Door.InteractiveBox.Interact:FireServer()
+end)
+if not getgenv().inter then
+break
+end
+end
+end
+end)
+
+LocPl:Toggle("Instant Role Notify", function(val)
+getgenv().instant_role_notify = val
+end)
+
+LocPl:Toggle("Fly", function(t)
+if t then
+mobilefly(flyspee)
+else
+unmobilefly()
+end
+end)
+
+flyspee = 50
+LocPl:Slider("Fly Speed", 50,150, function(val)
+flyspee = val
+end)
+
+LocPl:Toggle("Xray", function(val)
+if val then
+XrayOn(game.Workspace)
+else
+XrayOff(game.Workspace)
+end
+end)
+
+LocPl:Toggle("Shift Run", function(val)
+if val then
+if Speed then Speed:Disconnect() end
+wait(1)
+lp.Character.Humanoid.WalkSpeed = 50
+else
+lp.Character.Humanoid.WalkSpeed = 16
+end
+end)
+
+LocPl:Toggle("Speed Toggle", function(val)
+speedt = val
+if speedt then
+while wait(0.01) do
+pcall(function()
+lp.Character.Humanoid.WalkSpeed = getgenv().ws
+end)
+if not speedt then
+lp.Character.Humanoid.WalkSpeed = 16
+break
+end
+end
+end
+end)
+
+LocPl:Textbox("Speed Value", function(val)
+getgenv().ws = val
+end)
+
+LocPl:Toggle("Jump Toggle", function(val)
+jumpt = val
+if jumpt then
+while wait(0.01) do
+pcall(function()
+lp.Character.Humanoid.JumpPower = getgenv().jp
+end)
+if not jumpt then
+lp.Character.Humanoid.JumpPower = 50
+break
+end
+end
+end
+end)
+
+LocPl:Textbox("Jump Value", function(val)
+getgenv().jp = val
+end)
+
+LocPl:Button("Notify Roles", function()
+for _,a in pairs(game.Players:GetPlayers())  do 
+if a.Character ~= nil and a.Name == Murder and IsAlive(a) then 
+notif("Murder is ".. a.Name .."!")
+end 
+end
+for _,b in pairs(game.Players:GetPlayers())  do 
+if b.Character ~= nil and b.Name == Sheriff and IsAlive(b) and not IsAlive(game.Players[Hero]) then
+notif("Sheriff is ".. b.Name .."!")
+elseif b.Name == Hero and IsAlive(b) and not IsAlive(game.Players[Sheriff]) then
+notif("Hero is ".. b.Name .."!")
+ end end
+end)
+
+LocPl:Button("Blurt Roles", function()
+for _,a in pairs(game.Players:GetPlayers())  do 
+if a.Character ~= nil and a.Name == Murder and IsAlive(a) then 
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(unpack({
+    [1] = "Murderer : ".. a.Name,
+    [2] = "normalchat"
+})) 
+end
+ end
+for _,b in pairs(game.Players:GetPlayers())  do
+ if b.Character ~= nil and b.Name == Sheriff and IsAlive(b) and not IsAlive(game.Players[Hero]) then
+ game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(unpack({
+    [1] = "Sheriff : ".. b.Name,
+    [2] = "normalchat"
+})) 
+elseif b.Name == Hero and IsAlive(b) and not IsAlive(game.Players[Sheriff]) then
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(unpack({
+    [1] = "Hero : ".. b.Name,
+    [2] = "normalchat"
+})) 
+end
+ end
+end)
+
+LocPl:Button("Respawn", function()
+lp.Character.Humanoid.Health = 0
+lp.Character.Head:Remove()
+lp.Character.Humanoid.BreakJointsOnDeath = false
+end)
+
+LocPl:Button("Lay", function()
+lay()
+end)
+
+LocPl:Button("Low Details(Boost Fps)", function()
+notif("Boosting Fps..")
+wait(2)
+local ToDisable = {
+	Textures = true,
+	VisualEffects = true,
+	Parts = true,
+	Particles = true,
+	Sky = true
+}
+
+local ToEnable = {
+	FullBright = false
+}
+
+local Stuff = {}
+
+for _, v in next, game:GetDescendants() do
+	if ToDisable.Parts then
+		if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+			v.Material = Enum.Material.SmoothPlastic
+			table.insert(Stuff, 1, v)
+		end
+	end
+	
+	if ToDisable.Particles then
+		if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+			v.Enabled = false
+			table.insert(Stuff, 1, v)
+		end
+	end
+	
+	if ToDisable.VisualEffects then
+		if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+			v.Enabled = false
+			table.insert(Stuff, 1, v)
+		end
+	end
+	
+	if ToDisable.Textures then
+		if v:IsA("Decal") or v:IsA("Texture") then
+			v.Texture = ""
+			table.insert(Stuff, 1, v)
+		end
+	end
+	
+	if ToDisable.Sky then
+		if v:IsA("Sky") then
+			v.Parent = nil
+			table.insert(Stuff, 1, v)
+		end
+	end
+end
+
+game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled "..#Stuff.." assets / effects. Settings :")
+
+for i, v in next, ToDisable do
+	print(tostring(i)..": "..tostring(v))
+end
+
+if ToEnable.FullBright then
+    local Lighting = game:GetService("Lighting")
+    
+    Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+    Lighting.FogEnd = math.huge
+    Lighting.FogStart = math.huge
+    Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    Lighting.Brightness = 5
+    Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+    Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+    Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+    Lighting.Outlines = true
+end
+wait(1)
+suc("Fps has successful boosted!")
+end)
+
+LocPl:Toggle("Auto Remove Body", function(val)
+arembd = val
+if arembd then
+for _,body in pairs(game.Workspace:GetChildren()) do
+if body.Parent.Name == "Raggy" then
+body:Destroy()
+end
+end
+DestroyBod = game.Workspace.ChildAdded:Connect(function(part)
+if part.Parent.Name == "Raggy" then
+part:Destroy()
+end
+end)
+else
+if DestroyBod then
+DestroyBod:Disconnect()
+end
+end
+end)
+
+LocPl:Toggle("Optimize Coins", function(val)
+optimcoins = val
+if optimcoins then
+for _,coin in pairs(game.Workspace:GetChildren()) do
+if coin.Name == "SpinningVisual" and coin.Parent.Name == "CollectedCoin" then
+coin:Destroy()
+end
+end
+DestroyCoin = game.Workspace.ChildAdded:Connect(function(coin)
+if coin.Name == "SpinningVisual" then
+coin:Destroy()
+end
+end)
+else
+if DestroyCoin then
+DestroyCoin:Disconnect()
+end
+end
+end)
+
+Visual:Label("Esp")
+
+Visual:Toggle("All Players", function(val)
+getgenv().AllEsp = val
+        for i, v in pairs(folder:GetChildren()) do
+            if v:IsA("BillboardGui") and game:GetService("Players")[tostring(v.Name)] then
+                if getgenv().AllEsp then
+                    v.Enabled = true
+                else
+                    v.Enabled = false
+                end
+            end
+        end
+end)
+
+Visual:Toggle("Only Murder", function(val)
+getgenv().MurderEsp = val
+        while getgenv().MurderEsp do
+            wait()
+            pcall(function()
+                for i, v in pairs(folder:GetChildren()) do
+                    if v:IsA("BillboardGui") and Players[tostring(v.Name)] then
+                        if game:GetService("Players")[tostring(v.Name)].Character:FindFirstChild("Knife") or game:GetService("Players")[tostring(v.Name)].Backpack:FindFirstChild("Knife")  then
+                            if getgenv().MurderEsp then
+                                v.Enabled = true
+                            else
+                                v.Enabled = false
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+end)
+
+Visual:Toggle("Only Sheriff", function(val)
+getgenv().SheriffEsp = val
+        while getgenv().SheriffEsp do
+            wait()
+            pcall(function()
+                for i, v in pairs(folder:GetChildren()) do
+                    if v:IsA("BillboardGui") and game:GetService("Players")[tostring(v.Name)] then
+                        if game:GetService("Players")[tostring(v.Name)].Character:FindFirstChild("Gun") or game:GetService("Players")[tostring(v.Name)].Backpack:FindFirstChild("Gun")  then
+                            if getgenv().SheriffEsp then
+                                v.Enabled = true
+                            else
+                                v.Enabled = false
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+end)
+
+EspGun = false
+
+Visual:Toggle("GunDrop", function(val)
+EspGun = val
+if EspGun then
+while wait(0.1) do
+if game.Workspace:FindFirstChild("GunDrop") and not game.Workspace.GunDrop:FindFirstChild("EspGun") then
+local bill = Instance.new("BillboardGui",game.Workspace.GunDrop)
+    bill.Name = "EspGun"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = game.Workspace.GunDrop
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 29.5
+    textlabel.Text = "[Dropped Gun]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(155,0,155)
+textlabel.TextStrokeTransparency = 0
+textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+textlabel.ZIndex = 0
+end
+if not EspGun then
+break
+end
+end
+
+repeat task.wait() until not EspGun
+
+if game.Workspace.GunDrop:FindFirstChild("EspGun") then
+game.Workspace.GunDrop.EspGun:Destroy()
+end
+
+end
+end)
+
+
+
+Visual:Label("Chams")
+
+Visual:Toggle("All Players", function(val)
+getgenv().chamsall = val
+if getgenv().chamsall then
+while wait(0.1) do
+	CreateChams()
+	UpdateChams()
+if not getgenv().chamsall then
+break
+end
+end
+
+repeat task.wait() until not getgenv().chamsall
+
+for _,ChamsAll in pairs(game:GetDescendants()) do
+if ChamsAll:IsA("BoxHandleAdornment") and ChamsAll.Name == "ChamsEsp" then
+ChamsAll:Destroy()
+end
+end
+
+end
+end)
+
+Visual:Toggle("Only Murder", function(val)
+ChamsMurder = val
+if ChamsMurder then
+while wait(0.5) do
+pcall(function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v ~= lp and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+for i, BodyPart in pairs(v.Character:GetChildren()) do
+if not BodyPart:FindFirstChildOfClass("BoxHandleAdornment")  then
+local ChamsM = Instance.new("BoxHandleAdornment", BodyPart)
+            ChamsM.Name = "MurderChams"
+			ChamsM.AlwaysOnTop = true
+			ChamsM.Transparency = 0.55
+			ChamsM.ZIndex = 0
+			ChamsM.Size = BodyPart.Size
+			ChamsM.Adornee = BodyPart
+ChamsM.Color3 = Color3.fromRGB(225,0,0)
+end
+end
+end
+end
+end)
+if not ChamsMurder then
+break
+end
+end
+
+repeat task.wait() until not ChamsMurder
+
+for _,ChamsM in pairs(game:GetDescendants()) do
+if ChamsM:IsA("BoxHandleAdornment") and ChamsM.Name == "MurderChams" then
+ChamsM:Destroy()
+end
+end
+
+end
+end)
+
+Visual:Toggle("Only Sheriff", function(val)
+ChamsSheriff = val
+if ChamsSheriff then
+while wait(0.5) do
+pcall(function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v ~= lp and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+for i, BodyPart in pairs(v.Character:GetChildren()) do
+if not BodyPart:FindFirstChildOfClass("BoxHandleAdornment") then
+local ChamsS = Instance.new("BoxHandleAdornment", BodyPart)
+            ChamsS.Name = "SheriffChams"
+			ChamsS.AlwaysOnTop = true
+			ChamsS.Transparency = 0.55
+			ChamsS.ZIndex = 0
+			ChamsS.Size = BodyPart.Size
+			ChamsS.Adornee = BodyPart
+ChamsS.Color3 = Color3.fromRGB(0,0,225)
+end
+end
+end
+end
+end)
+if not ChamsSheriff then
+break
+end
+end
+
+repeat task.wait() until not ChamsSheriff
+
+for _,ChamsS in pairs(game:GetDescendants()) do
+if ChamsS:IsA("BoxHandleAdornment") and ChamsS.Name == "SheriffChams" then
+ChamsS:Destroy()
+end
+end
+
+end
+end)
+
+Visual:Toggle("GunDrop", function(val)
+getgenv().ChamsGun = val
+if ChamsGun then
+while wait(0.1) do
+pcall(function()
+if game.Workspace:FindFirstChild("GunDrop") then
+if not game.Workspace.GunDrop:FindFirstChild("ChamsGun") then
+local Chamgun = Instance.new("BoxHandleAdornment", game.Workspace.GunDrop)
+Chamgun.Color3 = Color3.fromRGB(155,0,155)
+Chamgun.Transparency = 0.6
+Chamgun.ZIndex = 0
+Chamgun.Size = game.Workspace.GunDrop.Size
+Chamgun.AlwaysOnTop = true
+Chamgun.Name = "ChamsGun"
+Chamgun.Adornee = game.Workspace.GunDrop
+end
+end
+end)
+if not ChamsGun then
+break
+end
+end
+
+repeat task.wait() until not ChamsGun
+
+for _,Chamgun in pairs(game.Workspace.GunDrop:GetChildren()) do
+if Chamgun:IsA("BoxHandleAdornment") and Chamgun.Name == "ChamsGun" then
+Chamgun:Destroy()
+end
+end
+
+end
+end)
+
+Mod:Line(Color3.fromRGB(48,255,48), Color3.fromRGB(0,0,0))
+
+Mod:Label("Innocent Section", Color3.fromRGB(48,255,48))
+
+Mod:Button("Grab Gun", function()
+if IsAlive(lp) then
+        if game.Workspace:FindFirstChild("GunDrop") then
+ lastCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+ wait(0.1)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.GunDrop.CFrame + Vector3.new(0, -3, 0)
+    moveto(game.Workspace.GunDrop.CFrame + Vector3.new(0,5.9,0), 0.15)
+    wait(0.15)
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastCFrame
+  wait(0.1)
+ lastCFrame = nil
+  else
+ error("Gun didnt dropped yet!")
+ end
+ else
+ notif("You doesnt alive yet!")
+end
+end)
+
+Mod:Toggle("Auto Grab Gun", function(val)
+AutoGrabGun = val
+if AutoGrabGun then
+while wait(1.5) do
+if  IsAlive(lp) then
+        if game.Workspace:FindFirstChild("GunDrop") then
+ lastCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+ wait(0.1)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.GunDrop.CFrame + Vector3.new(0, -2.7,0)
+    moveto(game.Workspace.GunDrop.CFrame + Vector3.new(0,4.4,0), 0.16)
+    wait(0.17)
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastCFrame
+  wait(0.1)
+ lastCFrame = nil
+ end
+ end
+if not AutoGrabGun then
+break
+end
+end
+end
+end)
+
+Mod:Toggle("View Dropped Gun", function(val)
+ViewGun = val
+if ViewGun then
+while wait(0.5) do
+pcall(function()
+             if game.Workspace:FindFirstChild("GunDrop") then
+				game.Workspace.CurrentCamera.CameraSubject = game.Workspace.GunDrop
+			end
+		end)
+	    if not ViewGun then
+        game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+	game.Workspace.CurrentCamera.CameraType = "Custom"
+	game.Players.LocalPlayer.CameraMinZoomDistance = 0.5
+	game.Players.LocalPlayer.CameraMaxZoomDistance = 400
+	game.Players.LocalPlayer.CameraMode = "Classic"
+	game.Players.LocalPlayer.Character.Head.Anchored = false
+	break
+        end
+		end
+		end
+end)
+
+Mod:Line(Color3.fromRGB(48,48,255), Color3.fromRGB(0,0,0))
+
+Mod:Label("Sheriff Section", Color3.fromRGB(48,48, 255))
+
+Mod:Toggle("Silent Aim", function(value)
+SilentAimEnabled = value
+if SilentAimEnabled then
+for i,v in pairs(game.CoreGui:GetDescendants()) do
+if v.Name == "SilentAimButton" and v.Enabled == false then
+v.Enabled = true
+end
+end
+elseif not SilentAimEnabled then
+for i,v in pairs(game.CoreGui:GetDescendants()) do
+if v.Name == "SilentAimButton" and v.Enabled == true then
+v.Enabled = false
+end
+end
+end
+end)
+
+Mod:Label("Silent Aim Settings")
+
+Mod:Dropdown("Aim Part", {"Head", "HumanoidRootPart"}, function(val)
+getgenv().partaim = val
+end)
+
+Mod:Slider("Size X", 50,200,function(val)
+smsize1 = val
+end)
+
+Mod:Slider("Size Y", 50,200,function(val)
+smsize2 = val
+end)
+
+Mod:Button("Set Button Size", function()
+game.CoreGui.SilentAimButton.ButtonToShoot.Size = UDim2.new(0, smsize1, 0, smsize2)
+notif("Size For Silent Aim Button successfull setted!")
+end)
+
+Mod:Dropdown("Shoot Method", {"Hold", "Touch", "Press"}, function(val)
+if val == "Hold" then
+if ButtonForPress then
+ButtonForPress:Disconnect()
+elseif ButtonForTouch then
+ButtonForTouch:Disconnect()
+end
+ButtonForHold = game.CoreGui.SilentAimButton.ButtonToShoot.MouseButton1Down:Connect(function()
+if not getgenv().partaim == "Head" and not getgenv().partaim == "HumanoidRootPart" then return warn("Part not selected! Please select part from Aim Part!") end
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                for i, MyTool in pairs(Players.LocalPlayer.Character:GetChildren()) do
+                                    if MyTool.Name == "Gun" and MyTool:FindFirstChild("KnifeServer") then
+                                     if getgenv().partaim == "HumanoidRootPart" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.HumanoidRootPart.Position,    [3] = "AH"}))         
+                                     elseif getgenv().partaim == "Head" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.Head.Position,    [3] = "AH"}))         
+                                    end
+                                  end
+                                end
+                            end
+                        end
+                    end
+end)
+elseif val == "Touch" then
+if ButtonForHold then
+ButtonForHold:Disconnect()
+elseif ButtonForPress then
+ButtonForPress:Disconnect()
+end
+ButtonForTouch = game.CoreGui.SilentAimButton.ButtonToShoot.InputBegan:Connect(function()
+if not getgenv().partaim == "Head" and not getgenv().partaim == "HumanoidRootPart" then return warn("Part not selected! Please select part from Aim Part!") end
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                for i, MyTool in pairs(Players.LocalPlayer.Character:GetChildren()) do
+                                    if MyTool.Name == "Gun" and MyTool:FindFirstChild("KnifeServer") then
+                                     if getgenv().partaim == "HumanoidRootPart" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,  [2] = Player.Character.HumanoidRootPart.Position,    [3] = "AH"}))         
+                                     elseif getgenv().partaim == "Head" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.Head.Position,    [3] = "AH"}))         
+                                    end
+                                  end
+                                end
+                            end
+                        end
+                    end
+end)
+elseif val == "Press" then
+if ButtonForHold then
+ButtonForHold:Disconnect()
+elseif ButtonForTouch then
+ButtonForTouch:Disconnect()
+end
+ButtonForPress = game.CoreGui.SilentAimButton.ButtonToShoot.MouseButton1Click:Connect(function()
+if not getgenv().partaim == "Head" and not getgenv().partaim == "HumanoidRootPart" then return warn("Part not selected! Please select part from Aim Part!") end
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                for i, MyTool in pairs(Players.LocalPlayer.Character:GetChildren()) do
+                                    if MyTool.Name == "Gun" and MyTool:FindFirstChild("KnifeServer") then
+                                     if getgenv().partaim == "HumanoidRootPart" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.HumanoidRootPart.Position,    [3] = "AH"}))         
+                                     elseif getgenv().partaim == "Head" then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(unpack({ [1] = 0.1,    [2] = Player.Character.Head.Position,    [3] = "AH"}))         
+                                    end
+                                  end
+                                end
+                            end
+                        end
+                    end
+end)
+end
+end)
+
+Mod:Button("Shoot Murder", function()
+local gun = lp.Character:FindFirstChild("Gun") or lp.Backpack:FindFirstChild("Gun")
+if gun.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(gun)
+end
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                    lastCFrame = lp.Character.HumanoidRootPart.CFrame
+                                    local pos1 = CFrame.new(0, 0, 2)
+                                    local pos2 =CFrame.new(0, 0, -2)
+ wait(0.1)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastCFrame
+     ShootGun(0.01, Player.Character.HumanoidRootPart.Position)
+    RS.Heartbeat:Wait()
+ lastCFrame = nil
+ pos1 = nil
+ pos2 = nil
+end
+end
+end
+end)
+
+Mod:Toggle("Auto Shoot Murder V1", function(val)
+getgenv().autoshm1 = val
+if getgenv().autoshm1 then
+while wait(0.1) do
+pcall(function()
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                for i, MyTool in pairs(Players.LocalPlayer.Character:GetChildren()) do
+                                    if MyTool.Name == "Gun" and MyTool:FindFirstChild("KnifeServer") then
+                                     MyTool.KnifeServer.ShootGun:InvokeServer(0.01, Player.Character.HumanoidRootPart.Position, "AH")
+                                       end
+                                end
+                            end
+                        end
+                    end
+end)
+if not getgenv().autoshm1 then
+break
+end
+end
+end
+end)
+
+Mod:Toggle("Auto Shoot Murder V2", function(val)
+getgenv().autoshm2 = val
+if getgenv().autoshm2 then
+while wait(5.9) do
+pcall(function()
+local gun = lp.Character:FindFirstChild("Gun") or lp.Backpack:FindFirstChild("Gun")
+if gun.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(gun)
+end
+for _, Player in pairs(Players:GetPlayers()) do
+                        if Player.Name ~= Players.LocalPlayer.Name then
+                            if Player and Player.Character and Player.Character:FindFirstChild("Knife") or Player.Backpack:FindFirstChild("Knife") then
+                                    lastCFrame = lp.Character.HumanoidRootPart.CFrame
+                                    local pos1 = CFrame.new(0, 0, 2)
+                                    local pos2 =CFrame.new(0, 0, -2)
+ wait(0.1)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * pos1
+    RS.Heartbeat:Wait()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastCFrame
+    RS.Heartbeat:Wait()
+    
+ lastCFrame = nil
+ pos1 = nil
+ pos2 = nil
+end
+end
+end
+end)
+if not getgenv().autoshm2 then
+break
+end
+end
+end
+end)
+
+Mod:Line(Color3.fromRGB(255,48,48), Color3.fromRGB(0,0,0))
+
+Mod:Label("Murder Section", Color3.fromRGB(255,48, 48))
+
+Mod:Toggle("Kill Aura", function(val)
+getgenv().killaura = val
+if getgenv().killaura then
+while RS.Stepped:Wait() do
+pcall(function()
+if lp.Character:FindFirstChild("Knife") then
+for i, v in ipairs(Players:GetPlayers()) do
+                if v ~= lp and v.Character ~= nil then
+                    local EnemyRoot = v.Character.HumanoidRootPart
+                    local EnemyPosition = EnemyRoot.Position
+                    local Distance = (EnemyPosition - lp.Character.HumanoidRootPart.Position).Magnitude
+                    if (Distance <= getgenv().aumontforaura) then
+                        VirtualUser:ClickButton1(Vector2.new())
+                        firetouchinterest(EnemyRoot, lp.Character.Knife.Handle, 1)
+                        firetouchinterest(EnemyRoot, lp.Character.Knife.Handle, 0)
+                    end
+                end
+            end
+           end
+end)
+if not getgenv().killaura then
+break
+end
+end
+end
+end)
+
+Mod:Slider("Distance Aura", 25, 175, function(val)
+getgenv().aumontforaura = val
+end)
+
+Mod:Label("Kill Aura Only Working")
+Mod:Label("If you touch someone with a knife!")
+
+Mod:Button("Kill All", function()
+local knife = lp.Character:FindFirstChild("Knife") or lp.Backpack:FindFirstChild("Knife")
+if knife.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(knife)
+end
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+wait(0.1)
+for i,g in pairs(Players:GetPlayers()) do
+if g ~= lp and IsAlive(g) then
+g.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+g.Character.HumanoidRootPart.Anchored = true
+end
+end
+VirtualUser:ClickButton1(Vector2.new())
+wait(1.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+for i,g in pairs(Players:GetPlayers()) do
+if g ~= lp then
+g.Character.HumanoidRootPart.Anchored = false
+end
+end
+end)
+
+
+Mod:Button("Kill Sheriff", function()
+local knife = lp.Character:FindFirstChild("Knife") or lp.Backpack:FindFirstChild("Knife")
+if knife.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(knife)
+end
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+wait(0.1)
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+v.Character.HumanoidRootPart.Anchored = true
+end
+end
+VirtualUser:ClickButton1(Vector2.new())
+wait(1.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end)
+
+Mod:Textbox("Kill Player", function(val)
+local knife = lp.Character:FindFirstChild("Knife") or lp.Backpack:FindFirstChild("Knife")
+if knife.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(knife)
+end
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+for _,User in pairs(gplr(val)) do
+User.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+User.Character.HumanoidRootPart.Anchored = true
+end
+VirtualUser:ClickButton1(Vector2.new())
+wait(1.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end)
+
+Mod:Toggle("Auto Kill All", function(val)
+getgenv().killall = val
+if getgenv().killall then
+while wait(2.5) do
+pcall(function()
+local knife = lp.Character:FindFirstChild("Knife") or lp.Backpack:FindFirstChild("Knife")
+if knife.Parent.Name == "Backpack" then
+lp.Character.Humanoid:EquipTool(knife)
+end
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+wait(0.1)
+for i,g in pairs(Players:GetPlayers()) do
+if g ~= lp and IsAlive(g) then
+g.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+g.Character.HumanoidRootPart.Anchored = true
+end
+end
+VirtualUser:ClickButton1(Vector2.new())
+wait(1.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+for i,g in pairs(Players:GetPlayers()) do
+if g ~= lp then
+g.Character.HumanoidRootPart.Anchored = false
+end
+end
+end)
+if not getgenv().killall then
+break
+end
+end
+end
+end)
+
+Tp:Button("Lobby", function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-108, 138, 37)
+end)
+
+Tp:Button("Voting Room", function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-108, 141, 86)
+end)
+
+Tp:Button("Map", function()
+for _,v in pairs(game.Workspace:GetChildren()) do
+if v.Name == "Christmas" or v.Name == "Normal" and v.Spawns:FindFirstChild("Spawn") then
+lp.Character.HumanoidRootPart.CFrame = v.Spawns.Spawn.CFrame
+elseif v.Name == "Christmas" or v.Name == "Normal" and v.Spawns:FindFirstChild("PlayerSpawn") then
+lp.Character.HumanoidRootPart.CFrame = v.Spawns.PlayerSpawn.CFrame
+end
+end
+end)
+
+Tp:Button("Under Map", function()
+for i,v in pairs(game.Workspace:GetChildren()) do
+if v.Name == "Christmas" or v.Name == "Normal" and v.Spawns:FindFirstChild("Spawn") then
+lp.Character.HumanoidRootPart.CFrame = v.Spawns.Spawn.CFrame + Vector3.new(0,100,0)
+elseif v.Name == "Christmas" or v.Name == "Normal" and v.Spawns:FindFirstChild("PlayerSpawn") then
+lp.Character.HumanoidRootPart.CFrame = v.Spawns.PlayerSpawn.CFrame + Vector3.new(0,100,0)
+end
+end
+end)
+
+Tp:Button("Void (Safe)", function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+end)
+
+Tp:Button("Murder", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+end
+end
+end)
+
+Tp:Button("Sheriff", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+end
+end
+end)
+
+Tp:Textbox("Target Player", function(val)
+getgenv().targtp = val
+end)
+
+Tp:Button("Tp To Target", function()
+for _,User in pairs(gplr(getgenv().targtp)) do
+lp.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame
+end
+end)
+
+Tp:Label("Spectate")
+
+Tp:Button("Murder", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+game.Workspace.CurrentCamera.CameraSubject = v.Character.Humanoid
+end
+end
+end)
+
+Tp:Button("Sheriff", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+game.Workspace.CurrentCamera.CameraSubject = v.Character.Humanoid
+end
+end
+end)
+
+Tp:Textbox("Target Player", function(val)
+getgenv().targview = val
+end)
+
+Tp:Button("View Target", function()
+for _,User in pairs(gplr(getgenv().targview)) do
+game.Workspace.CurrentCamera.CameraSubject = User.Character.Humanoid
+end
+end)
+
+Tp:Button("Stop Spectating",function()
+game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+end)
+
+Troll:Label("With Perks", Color3.fromRGB(48,255,48))
+
+Troll:Toggle("Stealth", function(val)
+if val then
+do
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("Stealth"):FireServer(unpack({
+    [1] = true
+}))
+end
+Death = game.Players.PlayerRemoving:Connect(function(plr)
+if plr == lp then
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("Stealth"):FireServer(unpack({
+    [1] = false
+}))
+wait(4)
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("Stealth"):FireServer(unpack({
+    [1] = true
+}))
+end
+end)
+else
+Death:Disconnect()
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("Stealth"):FireServer(unpack({
+    [1] = false
+}))
+end
+end)
+
+Troll:Toggle("Fake Gun", function(val)
+if val then
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("FakeGun"):FireServer(unpack({
+    [1] = true
+}))
+else
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Gameplay"):WaitForChild("FakeGun"):FireServer(unpack({
+    [1] = false
+}))
+end
+end)
+
+Troll:Toggle("Sprint Trail", function(val)
+getgenv().sprinttrail = val
+if getgenv().sprinttrail then
+while wait(0.1) do
+game:GetService("Players").LocalPlayer.Character.SpeedTrail.Toggle:FireServer(unpack({
+    [1] = true
+}))
+if not getgenv().sprinttrail then
+game:GetService("Players").LocalPlayer.Character.SpeedTrail.Toggle:FireServer(unpack({
+    [1] = false
+}))
+break
+end
+end
+end
+end)
+
+Troll:Button("Spawn Trap", function()
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = lp.Character.HumanoidRootPart.CFrame
+}))
+end)
+
+Troll:Toggle("Loop Spawn Trap", function(val)
+getgenv().loopsptrap = val
+if getgenv().loopsptrap then
+while wait(0.15) do
+pcall(function()
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = lp.Character.HumanoidRootPart.CFrame
+}))
+end)
+if not getgenv().loopsptrap then
+break
+end
+end
+end
+end)
+
+Troll:Button("Trap Everyone", function()
+for i,x in pairs(Players:GetPlayers()) do
+if x ~= lp then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = x.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+
+Troll:Toggle("Loop Trap Everyone", function(val)
+getgenv().loopsptrapall = val
+if getgenv().loopsptrapall then
+while RS.Stepped:Wait() do
+pcall(function()
+for i,x in pairs(Players:GetPlayers()) do
+if x ~= lp then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = x.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+if not getgenv().loopsptrapall then
+break
+end
+end
+end
+end)
+
+Troll:Textbox("Target Player", function(val)
+getgenv().targtrap = val
+end)
+
+Troll:Button("Trap Target", function()
+for _,User in pairs(gplr(getgenv().targtrap)) do
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = User.Character.HumanoidRootPart.CFrame
+}))
+end
+end)
+
+Troll:Toggle("Loop Trap Target", function(val)
+getgenv().looptraptarg = val
+if getgenv().looptraptarg then
+while RS.Stepped:Wait() do
+pcall(function()
+for _,User in pairs(gplr(getgenv().targtrap)) do
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = User.Character.HumanoidRootPart.CFrame
+}))
+end
+end)
+if not getgenv().looptraptarg then
+break
+end
+end
+end
+end)
+
+Troll:Button("Trap Murder", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = v.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+
+Troll:Button("Trap Sheriff", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = v.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+
+Troll:Toggle("Loop Trap Murder", function(val)
+getgenv().looptrapmurd = val
+if getgenv().looptrapmurd then
+while RS.Stepped:Wait() do
+pcall(function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = v.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+if not getgenv().looptrapmurd then
+break
+end
+end
+end
+end)
+
+Troll:Toggle("Loop Trap Sheriff", function(val)
+getgenv().looptrapsher = val
+if getgenv().looptrapsher then
+while RS.Stepped:Wait() do
+pcall(function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+game:GetService("ReplicatedStorage"):WaitForChild("TrapSystem"):WaitForChild("PlaceTrap"):InvokeServer(unpack({
+    [1] = v.Character.HumanoidRootPart.CFrame
+}))
+end
+end
+end)
+if not getgenv().looptrapsher then
+break
+end
+end
+end
+end)
+
+Troll:Label("Without Perks", Color3.fromRGB(255,48,48))
+
+Troll:Toggle("Fake Lags", function(val)
+fakelag = val
+if fakelag then
+while wait(0.2) do
+pcall(function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+end)
+if not fakelag then
+break
+end
+end
+end
+end)
+
+Troll:Button("Get Emotes", function()
+require(game:GetService('ReplicatedStorage').Modules.EmoteModule).GeneratePage({"headless","zombie","zen","ninja","floss","dab","sit"},game:GetService("Players").LocalPlayer.PlayerGui.MainGUI.Game:FindFirstChild("Emotes"),'Free Emotes')
+end)
+
+Troll:Toggle("Get Fake Knife", function(val)
+if val then
+if lp.Backpack:FindFirstChild("Fake Knife") or lp.Character:FindFirstChild("Fake Knife") then return end
+local lp = game.Players.LocalPlayer
+local tool;local handle;local knife;
+local animation1 = Instance.new("Animation")
+animation1.AnimationId = "rbxassetid://2467567750"
+local animation2 = Instance.new("Animation")
+animation2.AnimationId = "rbxassetid://1957890538"
+local anims = {animation1,animation2}
+tool = Instance.new("Tool")
+tool.Name = "Fake Knife"
+tool.Grip = CFrame.new(0, -1.16999984, 0.0699999481, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+tool.GripForward = Vector3.new(-0, -0, -1)
+tool.GripPos = Vector3.new(0,-1.17,0.0699999)
+tool.GripRight = Vector3.new(1,0,0)
+tool.GripUp = Vector3.new(0,1,0)
+handle = Instance.new("Part")
+handle.Size = Vector3.new(0.310638815, 3.42103457, 1.08775854)
+handle.Name = "Handle"
+handle.Transparency = 1
+handle.Parent = tool
+tool.Parent = lp.Backpack
+knife=lp.Character:WaitForChild("KnifeDisplay")
+knife.Massless = true
+local animing = false
+lp:GetMouse().Button1Down:Connect(function()
+if tool and  tool.Parent == lp.Character then
+if not animing then
+animing = true
+local an = lp.Character.Humanoid:LoadAnimation(anims[math.random(1,2)])
+an:Play()
+wait(0.6)
+animing = false
+end
+end
+end)
+local aa = Instance.new("Attachment",handle)
+local ba = Instance.new("Attachment",knife)
+local hinge = Instance.new("HingeConstraint",knife)
+hinge.Attachment0=aa hinge.Attachment1=ba
+hinge.LimitsEnabled = true
+hinge.LowerAngle = 0
+hinge.Restitution = 0
+hinge.UpperAngle = 0
+for _,v in pairs(lp.Character:WaitForChild("UpperTorso"):GetChildren()) do if v:IsA"Weld" and v.Part1 == knife then v:Destroy() break end end
+knifeanim = game:GetService("RunService").Heartbeat:Connect(function()
+setsimulationradius(1/0,1/0)
+if tool.Parent == lp.Character then
+knife.CFrame = handle.CFrame
+elseif lp.Character and knife then
+knife.CFrame = lp.Character:WaitForChild"UpperTorso".CFrame * CFrame.new(-0.200027466, -0.399999619, 0.5, 3.22982669e-05, -0.707153201, 0.707060337, 1.33886933e-05, 0.707060337, 0.707153141, -1, -1.33812428e-05, 3.22982669e-05)
+end
+end)
+else
+knifeanim:Disconnect()
+if lp.Character:FindFirstChild("Fake Knife") then
+lp.Character[("Fake Knife")]:Destroy()
+end
+if lp.Backpack:FindFirstChild("Fake Knife") then
+lp.Backpack[("Fake Knife")]:Destroy()
+end
+end
+end)
+
+Troll:Label("Fling Service(Turn On Fling)")
+
+Troll:Button("Fling Everyone", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v ~= lp then
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Workspace.CurrentCamera.CameraSubject = v.Character.Humanoid
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end
+end
+end)
+
+Troll:Button("Fling Murder", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Knife") or v.Character:FindFirstChild("Knife") then
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Workspace.CurrentCamera.CameraSubject = v.Character.Humanoid
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end
+end
+end)
+
+Troll:Button("Fling Sheriff", function()
+for _,v in pairs(game.Players:GetPlayers()) do
+if v.Character ~= nil and v.Backpack:FindFirstChild("Gun") or v.Character:FindFirstChild("Gun") then
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Workspace.CurrentCamera.CameraSubject = v.Character.Humanoid
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA('Humanoid')
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end
+end
+end)
+
+Troll:Textbox("Target Player", function(val)
+getgenv().targfling = val
+end)
+
+Troll:Button("Fling Target", function()
+for _,User in pairs(gplr(getgenv().targfling)) do
+lastcfr = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+wait(0.1)
+game.Workspace.CurrentCamera.CameraSubject = User.Character.Humanoid
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.9)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,3)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -0.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0, -1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-2.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1.5)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,1)
+RS.RenderStepped:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = User.Character.HumanoidRootPart.CFrame + Vector3.new(0,0,-1)
+RS.RenderStepped:Wait()
+game.Workspace.CurrentCamera.CameraSubject = lp.Character.Humanoid
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = lastcfr
+wait(0.1)
+lastcfr = nil
+end
+end)
+Prem:Label("Buy Premium For 30 Robux!")
+
+Prem:Button("Copy Gamepass Link", function()
+setclipboard("https://www.roblox.com/game-pass/260784234/DarkCheatClient-Premium")
+notif("After Buying Premium, dm @Gregory909 in discord!")
+end)
+
+AutoFarm:Toggle("Autofarm Toggle", function(val)
+autofarm = val
+if autofarm then
+while wait(3.2) do
+pcall(function()
+if getgenv().farmmethod == "Old" then
+if getgenv().autospd == "Automatticly" then
+for _, Child in pairs(lp.PlayerGui.MainGUI:GetDescendants()) do
+    if IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "CoinBag" and Child.Parent.Parent.Name == "Dock" and Child.Parent.Parent.Parent.Name == "Lobby" and UserInputService.TouchEnabled then
+        Interface = "Mobile"
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+         if autofarm then
+        moveto(v.CFrame, 3.015)
+        wait(3.2)
+        end
+        end
+        end
+       elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and UserInputService.TouchEnabled then
+       Interface = "Tablet"
+       for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        moveto(v.CFrame, 3.015)
+        wait(3.2)
+        end
+        end
+        end
+        elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and not UserInputService.TouchEnabled then
+        Interface = "Pc"
+        for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        moveto(v.CFrame, 3.015)
+        wait(3.2)
+        end
+        end
+        end
+        end
+        end
+elseif getgenv().autospd == "Manual" then
+        for _, Child in pairs(lp.PlayerGui.MainGUI:GetDescendants()) do
+    if IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "CoinBag" and Child.Parent.Parent.Name == "Dock" and Child.Parent.Parent.Parent.Name == "Lobby" and UserInputService.TouchEnabled then
+        Interface = "Mobile"
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        moveto(v.CFrame, getgenv().manspd)
+        wait(3.2)
+        end
+        end
+        end
+       elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and UserInputService.TouchEnabled then
+       Interface = "Tablet"
+       for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        moveto(v.CFrame, getgenv().manspd)	
+        wait(3.2)
+        end
+        end
+        end
+        elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and not UserInputService.TouchEnabled then
+        Interface = "Pc"
+        for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        moveto(v.CFrame, getgenv().manspd)	
+        wait(3.2)
+        end
+        end
+        end
+        end
+        end
+        end
+        elseif getgenv().farmmethod == "New" then
+        if getgenv().autospd == "Automatticly" then
+for _, Child in pairs(lp.PlayerGui.MainGUI:GetDescendants()) do
+    if IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "CoinBag" and Child.Parent.Parent.Name == "Dock" and Child.Parent.Parent.Parent.Name == "Lobby" and UserInputService.TouchEnabled then
+        Interface = "Mobile"
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+       elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and UserInputService.TouchEnabled then
+       Interface = "Tablet"
+       for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+        elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and not UserInputService.TouchEnabled then
+        Interface = "Pc"
+        for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+        end
+        end
+elseif getgenv().autospd == "Manual" then
+        for _, Child in pairs(lp.PlayerGui.MainGUI:GetDescendants()) do
+    if IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "CoinBag" and Child.Parent.Parent.Name == "Dock" and Child.Parent.Parent.Parent.Name == "Lobby" and UserInputService.TouchEnabled then
+        Interface = "Mobile"
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+       elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and UserInputService.TouchEnabled then
+       Interface = "Tablet"
+       for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+        elseif IsAlive(lp) and Child.Name == "Full" and Child.Parent.Name == "TabletCashBag" and Child.Parent.Parent.Name == "Game" and Child.Parent.Parent.Parent.Name == "MainGUI" and not UserInputService.TouchEnabled then
+        Interface = "Pc"
+        for i,v in pairs(game.Workspace:GetDescendants()) do
+    if v.Name == "Coin_Server" then
+    if autofarm then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+        wait(1)
+        moveto(v.CFrame, 1)
+       wait(1.4)
+       moveto(CFrame.new(-74, -6, 693), 1.2)
+       wait(1.2)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-74, -6, 693)
+       lp.Character.HumanoidRootPart.Anchored = true
+       wait(0.3)
+       lp.Character.HumanoidRootPart.Anchored = false
+        end
+        end
+        end
+        end
+        end
+        end
+        end
+  end)
+  if not autofarm then
+  break 
+  end
+end
+end
+end)
+
+AutoFarm:Label("Config")
+
+getgenv().autospd = "Manual"
+AutoFarm:Dropdown("AutoFarm Speed", {"Automatticly", "Manual"}, function(val)
+getgenv().autospd = val
+end)
+
+getgenv().manspd = 1.8
+
+AutoFarm:Dropdown("Manual Speed", {"1.8", "2.3", "2.9", "3.1"}, function(val)
+getgenv().manspd = tonumber(val)
+end)
+
+AutoFarm:Dropdown("Farm Method", {"Old", "New"}, function(val)
+getgenv().farmmethod = val
+end)
+
+AutoFarm:Label("New Farm Method With Manual Speed")
+AutoFarm:Label("Will Not Working!")
+
+Settings:Button("Credits", function()
+notif("Developers: Playerhack_YT(Gregory909), YANNY | RFX")
+notif("Big thanks: Symphony Hub Team!")
+end)
+
+Settings:Button("Copy Discord", function()
+setclipboard("https://discord.com/invite/hFVGPUqq")
+notif("Copied discord link to clipboard!")
+end)
+
+Settings:Label("Server Settings")
+
+Settings:Button("Rejoin", function()
+notif("Rejoining.. Please wait..")
+-- rejoin		
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Rejoin = coroutine.create(function()
+    local Success, ErrorMessage = pcall(function()
+        TeleportService:Teleport(game.PlaceId, LocalPlayer)
+    end)
+
+    if ErrorMessage and not Success then
+        warn(ErrorMessage)
+    end
+end)
+
+coroutine.resume(Rejoin)
+end)
+
+Settings:Button("Switch Server", function()
+notif("Seeing new server..Please wait...")
+
+wait(1.5)
+--Server Hop Script cr.Magma Hub Src
+          local PlaceID = game.PlaceId
+          local AllIDs = {}
+          local foundAnything = ""
+          local actualHour = os.date("!*t").hour
+          local Deleted = false
+          --[[
+          local File = pcall(function()
+              AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+          end)
+          if not File then
+              table.insert(AllIDs, actualHour)
+              writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+          end
+          ]]
+          function TPReturner()
+              local Site;
+              if foundAnything == "" then
+                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+              else
+                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+              end
+              local ID = ""
+              if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                  foundAnything = Site.nextPageCursor
+              end
+              local num = 0;
+              for i,v in pairs(Site.data) do
+                  local Possible = true
+                  ID = tostring(v.id)
+                  if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                      for _,Existing in pairs(AllIDs) do
+                          if num ~= 0 then
+                              if ID == tostring(Existing) then
+                                  Possible = false
+                              end
+                          else
+                              if tonumber(actualHour) ~= tonumber(Existing) then
+                                  local delFile = pcall(function()
+                                      -- delfile("NotSameServers.json")
+                                      AllIDs = {}
+                                      table.insert(AllIDs, actualHour)
+                                  end)
+                              end
+                          end
+                          num = num + 1
+                      end
+                      if Possible == true then
+                          table.insert(AllIDs, ID)
+                          wait()
+                          pcall(function()
+                              -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                              wait()
+                              game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                          end)
+                          wait(4)
+                      end
+                  end
+              end
+          end
+
+          function Teleport()
+              while wait() do
+                  pcall(function()
+                      TPReturner()
+                      if foundAnything ~= "" then
+                          TPReturner()
+                      end
+                  end)
+              end
+          end
+
+          Teleport()
+end)
+
+Settings:Label("Information")
+
+Settings:Label("Username: "..lp.Name)
+
+Settings:Label("UserId: "..lp.UserId)
+
+local device = Settings:Label("Device: nil")
+
+Settings:Label("Interface Settings")
+
+Settings:Label("Title Settings")
+
+Settings:Slider("Color [1]", 0,255,function(val)
+title_color_x = val
+end)
+
+Settings:Slider("Color [2]",0,255, function(val)
+title_color_y = val
+end)
+
+Settings:Slider("Color [3]", 0,255, function(val)
+title_color_z = val
+end)
+
+Settings:Button("Set Title Color", function()
+game.CoreGui.GloxPloit.MainTitle.TextColor3 = Color3.fromRGB(title_color_x, title_color_y, title_color_z)
+notif("The color for Title has been successfully setted!")
+end)
+
+Settings:Dropdown("Fonts For Title", {"ArialBold", "Cartoon", "Gotham", "GothamBold", "Code", "Fantasy", "Roboto"}, function(val)
+for _,text in pairs(game.CoreGui.GloxPloit:GetChildren()) do
+if val == "ArialBold" then
+text.Font = Enum.Font.ArialBold
+elseif val == "Cartoon" then
+text.Font = Enum.Font.Cartoon
+elseif val == "Gotham" then
+text.Font = Enum.Font.Gotham
+elseif val == "GothamBold" then
+text.Font = Enum.Font.GothamBold
+elseif val == "Code" then
+text.Font = Enum.Font.Code
+elseif val == "Fantasy" then
+text.Font = Enum.Font.Fantasy
+elseif val == "Roboto" then
+text.Font = Enum.Font.Roboto
+end
+end
+notif("The Font for Main Title has been successfully setted!")
+end)
+
+Settings:Label("Stroke Animation")
+
+Settings:Slider("Color [1]", 0, 255, function(val)
+strokecolor1 = val
+end)
+
+Settings:Slider("Color [2]", 0, 255, function(val)
+strokecolor2 = val
+end)
+
+Settings:Slider("Color [3]", 0, 255, function(val)
+strokecolor3 = val
+end)
+
+Settings:Button("Set Stroke Color", function()
+library:ChangeStrokeColor(Color3.fromRGB(strokecolor1, strokecolor2, strokecolor3))
+notif("Color for Strokes has changed!")
+end)
+
+Settings:Toggle("Disable Ui Stroke Anim", function(val)
+if val then
+library:StopGrawing()
+else
+library:StartGrawing()
+end
+end)
+
+Settings:Label("DCC Toggle")
+
+Settings:Slider("Size X", 50,200,function(val)
+toggle_sizx = val
+end)
+
+Settings:Slider("Size Y",50,200,function(val)
+togglr_sizy = val
+end)
+
+Settings:Button("Set Size For DCC Toggle", function()
+game.CoreGui.ToggleUi.HideButton.Size = UDim2.new(0,toggle_sizx, 0, togglr_sizy)
+notif("Size for DCC Toggle has successful setted!")
+end)
+
+Settings:Button("Destroy Gui", function()
+library:DestroyGui(function()
+GetRole:Disconnect()
+insrolenot:Destroy()
+shootm:Destroy()
+toggletohide:Destroy()
+folder:Destroy()
+file:Destroy()
+if workspace:FindFirstChild("FloatExploit") then
+workspace.FloatExploit:Destroy()
+end
+end)
+end)
+
+Settings:Label("Useful Scripts")
+
+Settings:Button("Fake Tools", function()
+loadstring(game:HttpGet(('https://pastefy.app/VYIAk3o1/raw'),true))()
+end)
+
+Settings:Button("Fe Emotes", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FEmotesGui/main/FEmotesGui.lua", true))()
+end)
+
+Settings:Button("Symphony Hub (by F3ETAx)", function()
+local a,b,c,d=loadstring,request or http_request or (http and http.request) or (syn and syn.request),assert,"https://itsjidy.github.io/SymphonyHub/Loader.html"c(a and b, "Your Executor does not support.")a(b({Url=d,Method="GET"}).Body)()
+end)
+
+Settings:Button("Nameless Admin", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source"))()
+end)
+
+Settings:Button("Infinite Yield Admin", function()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'),true))()
+end)
+
+Settings:Button("Shiftlock", function()
+loadstring(game:HttpGet('https://pastebin.com/raw/CjNsnSDy'))()
+end)
+
+Settings:Button("Rtx", function()
+local find1 = game.Lighting:FindFirstChildWhichIsA("BloomEffect") if find1 then
+    game.Lighting:FindFirstChildWhichIsA("BloomEffect"):Destroy()
+end
+local find2 = game.Lighting:FindFirstChildWhichIsA("SunRaysEffect") if find2 then
+    game.Lighting:FindFirstChildWhichIsA("SunRaysEffect"):Destroy()
+end
+local find3 = game.Lighting:FindFirstChildWhichIsA("ColorCorrectionEffect") if find3 then
+    game.Lighting:FindFirstChildWhichIsA("ColorCorrectionEffect"):Destroy()
+end
+local find4 = game.Lighting:FindFirstChildWhichIsA("BlurEffect") if find4 then
+    game.Lighting:FindFirstChildWhichIsA("BlurEffect"):Destroy()
+end
+local find5 = game.Lighting:FindFirstChildWhichIsA("Sky") if find5 then
+    game.Lighting:FindFirstChildWhichIsA("Sky"):Destroy()
+end
+local blem = Instance.new("BloomEffect",game.Lighting)
+local sanrey = Instance.new("SunRaysEffect",game.Lighting)
+local color = Instance.new("ColorCorrectionEffect",game.Lighting)
+local blor = Instance.new("BlurEffect",game.Lighting)
+Instance.new("Sky",game.Lighting)
+game.Lighting.ExposureCompensation = 0.34
+game.Lighting.ShadowSoftness = 1
+game.Lighting.EnvironmentDiffuseScale = 0.343
+game.Lighting.EnvironmentSpecularScale = 1
+game.Lighting.Brightness = 2
+game.Lighting.ColorShift_Top = Color3.fromRGB(118,117,108)
+game.Lighting.OutdoorAmbient = Color3.fromRGB(141,141,141)
+game.Lighting.GeographicLatitude = 100
+game.Lighting.Ambient = Color3.fromRGB(112,112,112)
+blem.Intensity = 0.5
+blem.Size = 22
+blem.Threshold = 1.5
+sanrey.Intensity = 0.117
+sanrey.Spread = 1
+blor.Size = 2
+color.Contrast = 0.3
+color.Saturation = 0.2
+color.TintColor = Color3.fromRGB(255,252,224)
+end)
+
+if not game.Workspace:FindFirstChild("TpVoid") then
+local TpVoid = Instance.new("Part", game.Workspace)
+TpVoid.Anchored = true
+TpVoid.Name = "TpVoid"
+TpVoid.Transparency = 0.8
+TpVoid.Position = Vector3.new(-74, -9, 694)
+TpVoid.Size = Vector3.new(250,0,250)
+else
+end
+
+coroutine.wrap(function()
+    repeat wait()
+        pcall(function()
+            Murderer = GetMurderer()
+            Sheriff = GetSheriff()
+        end)
+    until Murderer and Sheriff
+end)()
+
+local deviceType
+if UserInputService.TouchEnabled then
+    deviceType = "Mobile"
+    device:UpdateLabel("Device: Mobile")
+elseif UserInputService.GamepadEnabled then
+    deviceType = "Console"
+    device:UpdateLabel("Device: Console")
+else
+    deviceType = "PC"
+    device:UpdateLabel("Device: PC")
+end
+
+local toggleguiforclose = Instance.new("ScreenGui")
+toggleguiforclose.Name = "ToggleUi"
+toggleguiforclose.Parent = game.CoreGui
+
+local toggletohideui = Instance.new("TextButton")
+toggletohideui.Name = "HideButton"
+toggletohideui.Size = UDim2.new(0, 100, 0, 50)
+toggletohideui.Position = UDim2.new(0.01001973976, 0, 0.343832953, 0)
+toggletohideui.BackgroundColor3 = Color3.fromRGB(28,28,28)
+toggletohideui.Active = true
+toggletohideui.Draggable = true
+toggletohideui.Parent = toggleguiforclose
+toggletohideui.Text = "DCC Toggle"
+toggletohideui.TextSize = 17
+toggletohideui.TextScaled = true
+toggletohideui.TextColor3 = Color3.fromRGB(255,255,255)
+toggletohideui.Font = Enum.Font.GothamBold
+toggletohideui.ZIndex = 0
+
+local uicor = Instance.new("UICorner", toggletohideui)
+uicor.CornerRadius = UDim.new(0, 25)
+
+toggletohideui.MouseButton1Click:Connect(function()
+library:ToggleUi()
+end)
+
+while wait(0.1) do
+for _,maing in pairs(lp.PlayerGui.MainGUI:GetDescendants()) do
+if maing.Name == "RoleSelector" then	
+if maing.Visible == true then
+game.CoreGui.InstantRN.Enabled = getgenv().instant_role_notify
+elseif maing.Visible == false then
+game.CoreGui.InstantRN.Enabled = false
+end
+end
+end
+end
+
+local users = {4370097338, 4351349564,4616420642, 3624677028, 1293792120, 4244252767, 1838631346, 1293792120, 4276945193, 3029063746, 2645134467, 2557518094, 4389784684, 1993687031, 1387329183, 3479579228, 2535125372, 2041989124}
+game.Players.PlayerAdded:Connect(function(premiums)
+premiums.CharacterAdded:Connect(function()
+if premiums ~= lp and table.find(users, premiums.UserId) then
+premiums.Chatted:Connect(function(msg)
+strin = msg
+if strin == ";kick_user "..gplr(lp) then
+lp:Kick("You have been kicked by "..premiums.Name)
+elseif strin == ";kill_user "..gplr(lp) then
+lp.Character.Humanoid:TakeDamage(999)
+elseif strin == ";bring_user "..gplr(lp) then
+lp.Character.HumanoidRootPart.CFrame = premiums.Character.HumanoidRootPart.CFrame
+elseif strin == ";void_user "..gplr(lp) then
+lp.Character.HumanoidRootPart.CFrame = lp.Character.HumanoidRootPart.CFrame + Vector3.new(0,-275, 0)
+end
+end)
+end
+end)
+end)
+
+else
+warn("DarkCheatClient Mm2 Was Already Loaded!")
+end
+elseif game.PlaceId == 6516141723 then
+notif("Execute It In Round/Game! Not in Lobby!")
+elseif game.PlaceId == 6839171747 then
+if not game.Workspace:FindFirstChild("DCC_Doors") then
+local file = Instance.new("Folder", game.Workspace)
+file.Name = "DCC_Doors"
+
+LoadLoader()
+
+local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+local apiRequest = request or http_request or (http and http.request) or (syn and syn.request)
+local response = apiRequest(
+    {
+        Url = "https://discord.com/api/webhooks/1209255439704002621/eegflnsqGZ0c0Vo4y74JTuEFe61Pn7Pst-yGtzYcMGgDhAdC6fjgYBmVrdD5PMFpcfwo",
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = game:GetService("HttpService"):JSONEncode(
+            {
+                content = "",
+                embeds = {
+                    {
+                        title = "API Fetched By User!",
+                        description = "Someones Got Detected By Using DarkCheatClient!",
+                        type = "rich",
+                        color = 0xffffff,
+                        url = "https://web.roblox.com/users/" .. lp.UserId .. "/profile",
+                         fields = {
+                         {
+                    ["name"] = "User:",
+                    ["value"] = lp.Name.." (" ..lp.DisplayName.. ")",
+                    ["inline"] = true,
+                },
+                {
+                    ["name"] = "HWID:",
+                    ["value"] = hwid,
+                    ["inline"] = true,
+                },
+                {
+                    ["name"] = "Game: ",
+                    ["value"] = "Doors",
+                    ["inline"] = true,
+                }            
+                  }
+              }
+              }
+            }
+        )
+    }
+)
+
+
+local Light = game:GetService("Lighting")
+
+function dofullbright()
+Light.Ambient = Color3.new(1, 1, 1)
+Light.ColorShift_Bottom = Color3.new(1, 1, 1)
+Light.ColorShift_Top = Color3.new(1, 1, 1)
+end
+
+local folder = Instance.new("Folder",game.CoreGui)
+folder.Name = "ESP Holder"
+	
+local function AddBillboard(player)
+    local billboard = Instance.new("BillboardGui",folder)
+    billboard.Name = player.Name
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.fromOffset(200,50)
+    billboard.ExtentsOffset = Vector3.new(0,3,0)
+    billboard.Enabled = false
+
+    local textlabel = Instance.new("TextLabel",billboard)
+    textlabel.TextSize = 20
+    textlabel.Text = player.Name 
+    textlabel.Font = Enum.Font.SourceSans
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+textlabel.TextStrokeTransparency = 0
+textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+textlabel.TextColor3 = Color3.fromRGB(48,255,48)
+textlabel.ZIndex = 0
+    if getgenv().AllEsp then
+        billboard.Enabled = true
+    end
+    repeat
+        wait()
+        pcall(function()
+            billboard.Adornee = player.Character.Head
+        end)
+    until not player.Parent
+end
+
+for _,player in pairs(game:GetService("Players"):GetPlayers()) do
+    if player ~= game:GetService("Players").LocalPlayer then
+        coroutine.wrap(AddBillboard)(player)
+    end
+end
+Players.PlayerAdded:Connect(AddBillboard)
+
+Players.PlayerRemoving:Connect(function(player)
+    folder[player.Name]:Destroy()
+end)
+
+local entityinfo = game.ReplicatedStorage:WaitForChild("EntityInfo")
+local screechremote = entityinfo:FindFirstChild("Screech")
+local entitynames = {"RushMoving","AmbushMoving","Snare","A60","A120"}
+local a90remote = game.ReplicatedStorage:WaitForChild("EntityInfo"):WaitForChild("A90")
+local jumpscare = lp.PlayerGui:WaitForChild("MainUI"):WaitForChild("Jumpscare"):FindFirstChild("Jumpscare_A90")
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/VaniaPerets/FolderGui-FolderHub/main/GloxPloitProjectLibrary_Sourse.lua", true))()
+local main = library:Main("DarkCheatClient", "Doors", false)
+
+local MainT = main:Tab("Main")
+local PlayerPS = main:Tab("LocalPlayer")
+local VisualPS = main:Tab("Visual")
+local ModePS = main:Tab("Modes")
+local Remover = main:Tab("Remove")
+local Notifer = main:Tab("Notifications")
+local SettingsPS = main:Tab("Settings")
+
+MainT:BioAboutPlayer(false)
+
+MainT:Label("Change Logs:")
+
+MainT:Label("[Ui Library]")
+MainT:Label("[Destroy Gui] â€” Got Added!")
+MainT:Label("[Dropdown] â€” Should working fine")
+MainT:Label("[BioAboutProfile] â€” Got Added!")
+MainT:Line(Color3.fromRGB(10,10,10), Color3.fromRGB(1,1,1))
+MainT:Label("More Informations In Discord Server!")
+
+MainT:OpenTab()
+
+SpeedValue = 16
+
+PlayerPS:Toggle("Speed Toggle", function(val)
+SpeedT = val
+if SpeedT then
+while wait(.1) do
+lp.Character.Humanoid.WalkSpeed = SpeedValue
+if not SpeedT then
+break
+end
+end
+repeat task.wait() until not SpeedT
+end
+end)
+
+PlayerPS:Slider("Speed Slider", 16, 65, function(val)
+SpeedValue = val
+end)
+
+FovValue = 70
+
+PlayerPS:Toggle("Fov Toggle", function(val)
+FovT = val
+if FovT then
+FowSet = RS.RenderStepped:Connect(function()
+camera.FieldOfView = tonumber(FovValue)
+end)
+else
+FowSet:Disconnect()
+end
+end)
+
+PlayerPS:Slider("Fov Slider", 70, 120, function(val)
+FovValue = val
+end)
+
+PlayerPS:Toggle("Fullbright", function(t)
+getgenv().fullbr = t
+if getgenv().fullbr then
+while wait(0.1) do
+task.wait(0.1)
+pcall(function()
+dofullbright()
+end)
+if not getgenv().fullbr then
+break
+end
+end
+end
+end)
+
+VisualPS:Label("Some Esp Can Have Bugs")
+
+VisualPS:Label("Like Esp Spot, Figure, etc...")
+
+VisualPS:Toggle("Esp Players", function(val)
+getgenv().AllEsp = val
+        for i, v in pairs(folder:GetChildren()) do
+            if v:IsA("BillboardGui") and game:GetService("Players")[tostring(v.Name)] then
+                if getgenv().AllEsp then
+                    v.Enabled = true
+                else
+                    v.Enabled = false
+                end
+            end
+        end
+end)
+
+VisualPS:Toggle("Esp Keys", function(val)
+EspKey = val
+if EspKey then
+function checkkey(v)
+  if v.ClassName == "Model" and v.Name == "KeyObtain" and not v:FindFirstChild("KeyObtain_Esp") then
+    local bill = Instance.new("BillboardGui", v)
+    bill.Name = "KeyObtain_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 22
+    textlabel.Text = "[Key]" 
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)    
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    textlabel.TextColor3 = Color3.fromRGB(0,155,155)
+    end
+end
+
+local function setupkey(room)
+            local assets = room:WaitForChild("Assets")
+              
+            assets.DescendantAdded:Connect(function(v)
+                checkkey(v) 
+            end)
+              
+            for i,v in pairs(assets:GetDescendants()) do
+                checkkey(v)
+            end 
+end
+
+for i,rom in pairs(workspace.CurrentRooms:GetDescendants()) do
+if rom:FindFirstChild("Assets") then
+setupkey(rom)
+end
+end
+
+local keytry
+keytry = workspace.CurrentRooms.ChildAdded:Connect(function(room)
+setupkey(room)
+end)
+
+repeat task.wait() until not EspKey
+keytry:Disconnect()
+
+for _,es in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if es.Name == "KeyObtain" then
+for _,esp in pairs(es:GetDescendants()) do
+if esp.Name == "KeyObtain_Esp" then
+esp:Destroy()
+end
+end
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Levers", function(val)
+EspLever = val
+if EspLever then
+function checklever(v)
+if v.Name == "LeverForGate" and not v:FindFirstChild("Lever_Esp") and not v:FindFirstChild("Lever_EspBox") then  
+    local bill = Instance.new("BillboardGui",v)
+    bill.Name = "Lever_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 24.2
+    textlabel.Text = "[Lever]" 
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(24,100,75)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+end
+end
+
+local function setuplever(room)
+            local assets = room:WaitForChild("Assets")
+            
+            assets.DescendantAdded:Connect(function(v)
+                checklever(v) 
+            end)
+                
+            for i,v in pairs(assets:GetDescendants()) do
+                checklever(v)
+            end 
+        end
+
+for i,room in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if room:FindFirstChild("Assets") then
+setuplever(room)
+end
+end
+
+local levertry
+levertry = workspace.CurrentRooms.ChildAdded:Connect(function(room)
+setuplever(room)
+end)
+
+repeat task.wait() until not EspLever
+
+levertry:Disconnect()
+
+for _,esp in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if esp.Name == "LeverForGate" and esp:FindFirstChild("Lever_Esp") then
+esp[("Lever_Esp")]:Destroy()
+end
+end
+
+end
+end)	
+
+VisualPS:Toggle("Esp Books", function(val)
+EspBook = val
+if EspBook then
+function checkbook(v)
+if v.Name == "LiveHintBook" and not v:FindFirstChild("Book_Esp") and not v:FindFirstChild("Book_EspBox") then
+local bill = Instance.new("BillboardGui",v)
+    bill.Name = "Book_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 24.7
+    textlabel.Text = "[Book]" 
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    textlabel.TextColor3 = Color3.fromRGB(155,255,0)
+ 
+end
+end
+
+local function setupbook(room)
+            local assets = room:WaitForChild("Assets")
+            
+            assets.DescendantAdded:Connect(function(v)
+                checkbook(v) 
+            end)
+                
+            for i,v in pairs(assets:GetDescendants()) do
+                checkbook(v)
+            end 
+        end
+
+
+for _,room in pairs(game.Workspace.CurrentRooms:GetChildren()) do
+if room:FindFirstChild("Assets") then
+setupbook(room)
+end
+end
+
+local booktry
+booktry = workspace.CurrentRooms.ChildAdded:Connect(function(room)
+setupbook(room)
+end)
+
+
+repeat task.wait() until not EspBook
+
+booktry:Disconnect()
+
+for _,bookesp in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if bookesp.Name == "Book_Esp" then
+bookesp:Destroy()
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Breakers", function(val)
+EspBreaker = val
+if EspBreaker then
+function checkbreak(v)
+if v.Name == "LiveBreakerPolePickup" and not v:FindFirstChild("Breaker_Esp") then
+local bill = Instance.new("BillboardGui", v)
+    bill.Name = "Breaker_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 25.2
+    textlabel.Text = "[Breaker]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(155,155,55)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+end
+end
+
+for i,v in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if v:FindFirstChild("Assets") then
+checkbreak(v)
+end
+end
+
+local breakertry
+breakertry = workspace.CurrentRooms.ChildAdded:Connect(function(v)
+checkbreak(v)
+end)
+
+repeat task.wait() until not EspBreaker
+
+breakertry:Disconnect()
+
+for _,f in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if f.Name == "Breaker_Esp" then
+f:Destroy()
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Entitys", function(val)
+EspEnt = val
+if EspEnt then
+function checkentity(v)
+if table.find(entitynames,v.Name) or v.Name == "Snare" and not v:FindFirstChild("Entity_Esp") then
+local bill = Instance.new("BillboardGui", v)
+    bill.Name = "Entity_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 21
+    textlabel.Text = "["..v.Name.."]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(255,48,48)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0    
+end
+end
+
+local entitytry
+entitytry = game.Workspace.ChildAdded:Connect(function(v)
+checkentity(v)
+end)
+
+for _,v in pairs(game.Workspace:GetDescendants()) do
+checkentity(v)
+end
+
+repeat task.wait() until not EspEnt
+
+entitytry:Disconnect()
+
+for _,f in pairs(game.Workspace:GetDescendants()) do
+if f.Name == "Entity_Esp" then
+f:Destroy()
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Doors", function(val)
+EspDoor = val
+if EspDoor then
+
+function checkdoor(v)
+local dor = v:WaitForChild("Door"):WaitForChild("Door")
+local bill = Instance.new("BillboardGui", dor)
+    bill.Name = "Door_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = dor
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 26
+    textlabel.Text = "[Door]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(155,155,0)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    
+    local box = Instance.new("BoxHandleAdornment", dor)
+    box.Name = "Door_EspBox"
+    box.Adornee = dor
+    box.Size = dor.Size
+    box.Transparency = 0.75
+    box.Color3 = Color3.fromRGB(155,155,0)
+    box.ZIndex = 0
+    box.AlwaysOnTop = true
+end
+
+doortry = workspace.CurrentRooms.ChildAdded:Connect(function(door)
+checkdoor(door)
+end)
+
+for i,door in pairs(workspace.CurrentRooms:GetChildren()) do
+if door:FindFirstChild("Assets") then
+checkdoor(door)
+end
+end
+
+repeat task.wait() until not EspDoor
+
+doortry:Disconnect()
+
+for _,esp in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if esp.Name == "Door_Esp" then
+esp:Destroy()
+end
+end
+
+for _,espbox in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if espbox.Name == "Door_EspBox" then
+espbox:Destroy()
+end
+end
+end
+end)
+
+VisualPS:Toggle("Esp Lockers", function(val)
+EspSpot = val
+if EspSpot then
+function checkspot(v)
+if v.Name == "Wardrobe" or v.Name == "Rooms_Locker" or v.Name == "Toolshed" and not v:FindFirstChild("Spot_Esp") then
+local bill = Instance.new("BillboardGui", v)
+    bill.Name = "Spot_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 27
+    textlabel.Text = "[Spot]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(139,29,69)	
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    
+    local box = Instance.new("BoxHandleAdornment", v)
+    box.Name = "Spot_EspBox"
+    box.Adornee = v
+    box.Size = v.Main.Size
+    box.Transparency = 0.75
+    box.Color3 = Color3.fromRGB(139,29,69)
+    box.ZIndex = 0
+    box.AlwaysOnTop = true
+end
+end
+
+local function setupspot(room)
+local assets = room:WaitForChild("Assets")
+      task.wait(0.4)
+            assets.DescendantAdded:Connect(function(v)
+                checkspot(v) 
+            end)
+                
+            for i,v in pairs(assets:GetDescendants()) do
+                checkspot(v)
+            end 
+end
+
+for i,v in pairs(game.Workspace.CurrentRooms:GetChildren()) do
+setupspot(v)
+end
+
+local spottry
+spottry = workspace.CurrentRooms.ChildAdded:Connect(function(v)
+setupspot(v)
+end)
+
+repeat task.wait() until not EspSpot
+
+spottry:Disconnect()
+
+for _,f in pairs(game.Workspace:GetDescendants()) do
+if f.Name == "Spot_Esp" then
+f:Destroy()
+end
+end
+
+for _,f in pairs(game.Workspace:GetDescendants()) do
+if f.Name == "Spot_EspBox" then
+f:Destroy()
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Chest", function(val)
+EspChest = val
+if EspChest then
+
+function checkchest(v)
+if v.Name == "ChestBox" and not v:FindFirstChild("Chest_Esp") and not v:FindFirstChild("Chest_EspBox") then
+    local bill = Instance.new("BillboardGui", v)
+    bill.Name = "Chest_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 25.2
+    textlabel.Text = "[Chest]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(147,112,219)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    
+    local box = Instance.new("BoxHandleAdornment", v)
+    box.Name = "Chest_EspBox"
+    box.Adornee = v
+    box.Size = v.Size
+    box.Transparency = 0.75
+    box.Color3 = Color3.fromRGB(147,112,219)
+    box.ZIndex = 0
+    box.AlwaysOnTop = true   
+    
+    elseif v.Name == "ChestBoxLocked" then
+    
+    local bill = Instance.new("BillboardGui", v)
+    bill.Name = "Chest_Esp"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = v
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 29.5
+    textlabel.Text = "[Locked_Chest]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(147,112,219)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+    
+    local box = Instance.new("BoxHandleAdornment", v)
+    box.Name = "Chest_EspBox"
+    box.Adornee = v
+    box.Size = v.Size
+    box.Transparency = 0.75
+    box.Color3 = Color3.fromRGB(147,112,219)
+    box.ZIndex = 0
+    box.AlwaysOnTop = true
+    
+    end
+end
+
+for _,v in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+checkchest(v)
+end
+
+local chesttry
+chesttry = workspace.CurrentRooms.ChildAdded:Connect(function(v)
+checkchest(v)
+end)
+
+repeat task.wait() until not EspChest
+
+chesttry:Disconnect()
+
+for _,f in pairs(game.Workspace.CurrentRooms:GetDescendants()) do
+if f.Name == "Chest_Esp" and f.Name == "Chest_EspBox" then
+f:Destroy()
+end
+end
+
+end
+end)
+
+VisualPS:Toggle("Esp Figure", function(val)
+EspFigure = val
+if EspFigure then
+function checkfigure(v)
+if v:FindFirstChild("FigureSetup") and v.FigureSetup:FindFirstChild("FigureRagdoll") and not v.FigureSetup.FigureRagdoll:FindFirstChild("EspFigure") then
+for h,parts in pairs(v.FigureSetup.FigureRagdoll.Head:GetChildren()) do
+local bill = Instance.new("BillboardGui",parts)
+    bill.Name = "EspFigure"
+    bill.AlwaysOnTop = true
+    bill.Size = UDim2.fromOffset(200,50)
+    bill.ExtentsOffset = Vector3.new(0,0.1,0)
+    bill.Enabled = true
+    bill.Adornee = parts
+
+    local textlabel = Instance.new("TextLabel",bill)
+    textlabel.TextSize = 29.5
+    textlabel.Text = "[Figure]"
+    textlabel.Font = Enum.Font.GothamBold
+    textlabel.BackgroundTransparency = 1
+    textlabel.Size = UDim2.fromScale(1,1)
+    textlabel.TextColor3 = Color3.fromRGB(255,48,48)
+    textlabel.TextStrokeTransparency = 0
+    textlabel.TextYAlignment = Enum.TextYAlignment.Bottom
+    textlabel.ZIndex = 0
+end
+end
+end
+
+local function setupfigure(room)
+      wait(0.4)
+            room.DescendantAdded:Connect(function(v)
+                checkfigure(v) 
+            end)
+                
+            for i,v in pairs(room:GetDescendants()) do
+                checkfigure(v)
+            end 
+end
+
+for i,room in pairs(workspace.CurrentRooms:GetChildren()) do
+setupfigure(room)
+end
+
+local figuretry 
+figuretry= workspace.CurrentRooms.ChildAdded:Connect(function(room)
+wait(0.4)
+setupfigure(room)
+end)
+
+repeat task.wait() until not EspFigure
+
+figuretry:Disconnect()
+
+for i,figureesp in pairs(workspace.CurrentRooms:GetChildren()) do
+if figureesp.Name == "FigureSetup" then
+for d,esp in pairs(figureesp.FigureRagdoll.Head:GetDescendants()) do
+if esp.Name == "EspFigure" then
+esp:Destroy()
+end
+end
+end
+end
+
+end
+end)
+
+ModePS:Toggle("Instant Use", function(val)
+if val then
+    holdconnect = game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(p)
+		fireproximityprompt(p)
+	end)
+else
+holdconnect:Disconnect()
+end
+end)
+
+ModePS:Toggle("Break Screech", function(val)
+getgenv().breakscreech = val
+if getgenv().breakscreech then
+while wait(0.1) do
+pcall(function()
+screechremote.Parent = nil
+end)
+if not getgenv().breakscreech then
+screechremote.Parent = entityinfo
+break
+end
+end
+end
+end)
+
+ModePS:Toggle("Loot Aura", function(val)
+LootAura = val
+if LootAura then
+        local function setup(room)
+            local function check(v)
+                if v:IsA("Model") then
+                    if v.Name == "DrawerContainer" then
+                        local knob = v:WaitForChild("Knobs")
+                        
+                        if knob then
+                            local prompt = knob:WaitForChild("ActivateEventPrompt")
+                            local interactions = prompt:GetAttribute("Interactions")
+                            
+                            if not interactions then
+                                task.spawn(function()
+                                    repeat task.wait(0.1)
+                                        if lp:DistanceFromCharacter(knob.Position) <= 12 then
+                                            fireproximityprompt(prompt)
+                                        end
+                                    until prompt:GetAttribute("Interactions") or not LootAura
+                                end)
+                            end
+                        end
+                    elseif v.Name == "GoldPile" then
+                        local prompt = v:WaitForChild("LootPrompt")
+                        local interactions = prompt:GetAttribute("Interactions")
+                            
+                        if not interactions then
+                            task.spawn(function()
+                                repeat task.wait(0.1)
+                                    if lp:DistanceFromCharacter(v.PrimaryPart.Position) <= 12 then
+                                        fireproximityprompt(prompt) 
+                                    end
+                                until prompt:GetAttribute("Interactions") or not LootAura
+                            end)
+                        end
+                    elseif v.Name:sub(1,8) == "ChestBox" then
+                        local prompt = v:WaitForChild("ActivateEventPrompt")
+                        local interactions = prompt:GetAttribute("Interactions")
+                        
+                        if not interactions then
+                            task.spawn(function()
+                                repeat task.wait(0.1)
+                                    if lp:DistanceFromCharacter(v.PrimaryPart.Position) <= 12 then
+                                        fireproximityprompt(prompt)
+                                    end
+                                until prompt:GetAttribute("Interactions") or not LootAura
+                            end)
+                        end
+                    elseif v.Name == "RolltopContainer" then
+                        local prompt = v:WaitForChild("ActivateEventPrompt")
+                        local interactions = prompt:GetAttribute("Interactions")
+                        
+                        if not interactions then
+                            task.spawn(function()
+                                repeat task.wait(0.1)
+                                    if lp:DistanceFromCharacter(v.PrimaryPart.Position) <= 12 then
+                                        fireproximityprompt(prompt)
+                                    end
+                                until prompt:GetAttribute("Interactions") or not LootAura
+                            end)
+                        end
+                    end 
+                end
+            end
+    
+            local subaddcon
+            subaddcon = room.DescendantAdded:Connect(function(v)
+                check(v) 
+            end)
+            
+            for i,v in pairs(room:GetDescendants()) do
+                check(v)
+            end
+            
+            task.spawn(function()
+                repeat task.wait() until not LootAura
+                subaddcon:Disconnect() 
+            end)
+        end
+        
+        local addconnect
+        addconnect = game.Workspace.CurrentRooms.ChildAdded:Connect(function(room)
+            setup(room)
+        end)
+        
+        for i,room in pairs(game.Workspace.CurrentRooms:GetChildren()) do
+            if room:FindFirstChild("Assets") then
+                setup(room) 
+            end
+        end
+        
+        repeat task.wait() until not LootAura
+        addconnect:Disconnect()
+        end
+end)
+
+ModePS:Label("Room Section")
+
+ModePS:Button("Skip Room", function()
+local room = game.Workspace.CurrentRooms[game:GetService("ReplicatedStorage").GameData.LatestRoom.Value]
+local assets = room:WaitForChild("Assets")
+local HaveKey = nil
+for _,Key in pairs(assets:GetChildren()) do
+if Key.Name == "KeyObtain" then
+HaveKey = Key
+end
+end
+if HaveKey then
+lp.Character.Humanoid:PivotTo(HaveKey.Hitbox:GetPivot())
+wait(0.4)
+fireproximityprompt(HaveKey.ModulePrompt,0)
+wait(0.6)
+lp.Character.Humanoid:PivotTo(room:WaitForChild("Door"):WaitForChild("Door"):GetPivot())
+wait(0.5)
+fireproximityprompt(room:WaitForChild("Door"):WaitForChild("Door").Lock.UnlockPrompt,0)
+room = nil
+else
+lp.Character.Humanoid:PivotTo(room:WaitForChild("Door"):WaitForChild("Door").GetPivot())
+wait(0.5)
+room:WaitForChild("Door"):WaitForChild("Door").ClientOpen:FireServer()
+wait(0.1)
+room = nil
+end
+end)
+
+Remover:Toggle("Delete Gates", function(val)
+    if val then
+        local addconnect
+        addconnect = workspace.CurrentRooms.ChildAdded:Connect(function(room)
+            local gate = room:WaitForChild("Gate",2)
+            
+            if gate then
+                local door = gate:WaitForChild("ThingToOpen",2)
+                
+                if door then
+                    door:Destroy() 
+                end
+            end
+        end)
+ else
+        addconnect:Disconnect()
+    end
+end)
+
+Remover:Toggle("Delete Painting Puzle", function(val)
+if val then
+addconn = game.Workspace.CurrentRooms.ChildAdded:Connect(function(room)
+local assets = room:WaitForChild("Assets")
+local paint = assets:WaitForChild("Paintings")
+if paint then
+local door = paint:WaitForChild("MovingDoor")
+if door then
+door:Destroy()
+end
+end
+end)
+else
+addconn:Disconnect()
+end
+end)
+
+Remover:Toggle("Delete Seek Chase", function(val)
+if val then
+        addconnect = game.Workspace.CurrentRooms.ChildAdded:Connect(function(room)
+            local trigger = room:WaitForChild("TriggerEventCollision",2)
+            
+            if trigger then
+                trigger:Destroy() 
+            end
+        end) 
+  else
+        addconnect:Disconnect()
+    end
+end)
+
+Remover:Toggle("Delete A-0000 Locks", function(val)
+if val then
+        local function check(room)
+            local door = room:WaitForChild("RoomsDoor_Entrance",2)
+            
+            if door then
+                local prompt = door:WaitForChild("Door"):WaitForChild("EnterPrompt")
+                prompt.Enabled = true
+            end 
+        end
+        
+        local addconnect
+        addconnect = game.Workspace.CurrentRooms.ChildAdded:Connect(function(room)
+            check(room)
+        end)
+        
+        for i,v in pairs(game.Workspace.CurrentRooms:GetChildren()) do
+            check(room)
+        end
+else
+        addconnect:Disconnect()
+    end
+end)
+
+Remover:Toggle("Ignore A-90", function(val)
+getgenv().ingorea90 = val
+if getgenv().ingorea90 then    
+if jumpscare then
+jumpscare.Parent = nil
+a90remote.Parent = nil
+end
+repeat task.wait() until not getgenv().ignorea90
+      jumpscare.Parent = lp.PlayerGui.MainUI.Jumpscare
+   a90remote.Parent = entityinfo
+        end
+end)
+
+Notifer:Toggle("Entity Notifer", function(val)
+if val then
+        local addconnect = Workspace.ChildAdded:Connect(function(v)
+            if table.find(entitynames,v.Name) then
+                repeat task.wait() until lp:DistanceFromCharacter(v:GetPivot().Position) < 1000 or not v:IsDescendantOf(Workspace)      
+                if v:IsDescendantOf(Workspace) then
+                    notif(v.Name:gsub("Moving",""):lower().." is coming. Hide Now!")
+                    local notif = Instance.new("Sound",game:GetService("SoundService"))
+notif.SoundId = "rbxassetid://5153734608"
+notif:Play()
+                end
+            end
+        end)  
+ else
+        addconnect:Disconnect()
+    end
+end)
+
+Notifer:Toggle("Auto Code Library", function(val)
+autocode = val
+if autocode then
+        local function deciphercode()
+        local paper = lp.Character:FindFirstChild("LibraryHintPaper")
+        local hints = lp.PlayerGui:WaitForChild("PermUI"):WaitForChild("Hints")
+        
+        local code = {[1]="_",[2]="_",[3]="_",[4]="_",[5]="_"}
+            
+            if paper then
+                for i,v in pairs(paper:WaitForChild("UI"):GetChildren()) do
+                    if v:IsA("ImageLabel") and v.Name ~= "Image" then
+                        for i,img in pairs(hints:GetChildren()) do
+                            if img:IsA("ImageLabel") and img.Visible and v.ImageRectOffset == img.ImageRectOffset then
+                                local num = img:FindFirstChild("TextLabel").Text
+                                
+                                code[tonumber(v.Name)] = num 
+                            end
+                        end
+                    end
+                end 
+            end
+            
+            return code
+        end
+        
+        local addconnect
+        addconnect = lp.Character.ChildAdded:Connect(function(v)
+            if v:IsA("Tool") and v.Name == "LibraryHintPaper" then
+                task.wait()
+                
+                local code = table.concat(deciphercode())
+                
+                if code:find("_") then
+                    notif("Collect every books first!")
+                else
+                    notif("Code is ".. code .."!")
+                end
+            end
+        end)
+        
+        repeat task.wait() until not autocode
+        addconnect:Disconnect()
+    end
+end)
+
+Notifer:Toggle("Eyes Notifer", function(val)
+EyesNotifer = val
+if EyesNotifer then
+EyesAdded = workspace.ChildAdded:Connect(function(eyes)
+if eyes.Name == "Eyes" then
+notif("Eyes Has Spawned! Dont look at them!")
+end
+end)
+repeat task.wait() until not EyesNotifer
+EyesAdded:Disconnect()
+end
+end)
+
+SettingsPS:Button("Copy Discord", function()
+setclipboard("https://discord.com/invite/hFVGPUqq")
+notif("Copied discord link to clipboard!")
+end)
+
+SettingsPS:Button("Credits", function()
+notif("Developers: Playerhack_YT(Gregory909), YANNY | RFX")
+notif("Big Thanks: [Blue Dino], [Soul], [Jrago Scripts], [DANIEL], [Lion Kc Lee], etc for showcasing DarkCheatClient Script!")
+end)
+
+SettingsPS:Button("Play Again", function()
+game:GetService("ReplicatedStorage"):WaitForChild("EntityInfo"):WaitForChild("PlayAgain"):FireServer()
+end)
+
+SettingsPS:Label("Information")
+
+SettingsPS:Label("Username: "..lp.Name)
+
+SettingsPS:Label("UserId: "..lp.UserId)
+
+local device = SettingsPS:Label("Device: nil")
+
+SettingsPS:Label("Interface Settings [Beta]")
+
+SettingsPS:Label("Title Settings")
+
+SettingsPS:Slider("Color X", 0,255,function(val)
+title_color_x = val
+end)
+
+SettingsPS:Slider("Color Y",0,255, function(val)
+title_color_y = val
+end)
+
+SettingsPS:Slider("Color Z", 0,255, function(val)
+title_color_z = val
+end)
+
+SettingsPS:Button("Set Title Color", function()
+game.CoreGui.GloxPloit.MainTitle.TextColor3 = Color3.fromRGB(title_color_x, title_color_y, title_color_z)
+notif("The color for Title has been successfully setted!")
+end)
+
+SettingsPS:Dropdown("Fonts For Title", {"ArialBold", "Cartoon", "Gotham", "GothamBold", "Code", "Fantasy", "Roboto"}, function(val)
+for _,text in pairs(game.CoreGui.GloxPloit:GetChildren()) do
+if val == "ArialBold" then
+text.Font = Enum.Font.ArialBold
+elseif val == "Cartoon" then
+text.Font = Enum.Font.Cartoon
+elseif val == "Gotham" then
+text.Font = Enum.Font.Gotham
+elseif val == "GothamBold" then
+text.Font = Enum.Font.GothamBold
+elseif val == "Code" then
+text.Font = Enum.Font.Code
+elseif val == "Fantasy" then
+text.Font = Enum.Font.Fantasy
+elseif val == "Roboto" then
+text.Font = Enum.Font.Roboto
+end
+end
+notif("The Font for Main Title has been successfully setted!")
+end)
+
+SettingsPS:Label("Stroke Animation")
+
+SettingsPS:Slider("Color [1]", 0, 255, function(val)
+strokecolor1 = val
+end)
+
+SettingsPS:Slider("Color [2]", 0, 255, function(val)
+strokecolor2 = val
+end)
+
+SettingsPS:Slider("Color [3]", 0, 255, function(val)
+strokecolor3 = val
+end)
+
+SettingsPS:Button("Set Stroke Color", function()
+library:ChangeStrokeColor(Color3.fromRGB(strokecolor1, strokecolor2, strokecolor3))
+notif("Color for Strokes has changed!")
+end)
+
+SettingsPS:Toggle("Disable Ui Stroke Anim", function(val)
+if val then
+library:StopGrawing()
+else
+library:StartGrawing()
+end
+end)
+
+SettingsPS:Label("DCC Toggle")
+
+SettingsPS:Slider("Size X", 50,200,function(val)
+toggle_sizx = val
+end)
+
+SettingsPS:Slider("Size Y",50,200,function(val)
+togglr_sizy = val
+end)
+
+SettingsPS:Button("Set Size For DCC Toggle", function()
+game.CoreGui.ToggleUi.HideButton.Size = UDim2.new(0,toggle_sizx, 0, togglr_sizy)
+notif("Size for DCC Toggle has successful setted!")
+end)
+
+Settings:Button("Destroy Gui", function()
+library:DestroyGui(function()
+toggletohide:Destroy()
+folder:Destroy()
+FowSet:Disconnect()
+file:Destroy()
+end)
+end)
+
+local deviceType
+if UserInputService.TouchEnabled then
+    deviceType = "Mobile"
+    device:UpdateLabel("Device: Mobile")
+elseif UserInputService.GamepadEnabled then
+    deviceType = "Console"
+    device:UpdateLabel("Device: Console")
+else
+    deviceType = "PC"
+    device:UpdateLabel("Device: PC")
+end
+
+local toggleguiforclose = Instance.new("ScreenGui")
+toggleguiforclose.Name = "ToggleUi"
+toggleguiforclose.Parent = game.CoreGui
+toggleguiforclose.Enabled = true
+
+local toggletohideui= Instance.new("TextButton")
+toggletohideui.Name = "HideButton"
+toggletohideui.Size = UDim2.new(0, 100, 0, 50)
+toggletohideui.Position = UDim2.new(0.01001973976, 0, 0.343832953, 0)
+toggletohideui.BackgroundColor3 = Color3.fromRGB(28,28,28)
+toggletohideui.Active = true
+toggletohideui.Draggable = true
+toggletohideui.Parent = toggleguiforclose
+toggletohideui.Text = "DCC Toggle"
+toggletohideui.TextSize = 17
+toggletohideui.TextScaled = true
+toggletohideui.TextColor3 = Color3.fromRGB(255,255,255)
+toggletohideui.Font = Enum.Font.GothamBold
+toggletohideui.ZIndex = 0
+
+local uicor = Instance.new("UICorner", toggletohideui)
+uicor.CornerRadius = UDim.new(0, 25)
+
+toggletohideui.MouseButton1Click:Connect(function()
+library:ToggleUi()
+end)
+
+else
+warn("DarkCheatClient Doors Was Already Loaded!")
+end
+else
+error("DarkCheatClient Doesnt Supporting This Game!")
+end
