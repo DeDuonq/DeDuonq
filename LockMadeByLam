@@ -1,10 +1,4 @@
 --[[
-    >rinichi >> did 50% of the work
-    >weda >> did 50% of the work
-
-    >fixed by desktop
-]]
---[[
 if getgenv().azureloaded then
     return
 end
@@ -3212,7 +3206,7 @@ do
         library.colors[slider_inline] = {
             Color = "inline"
         }
-        --
+        local devdevdevdevdev = print("devdevdevdev")
         local slider_frame = utility:Create("Frame", {Vector2.new(1,1), slider_inline}, {
             Size = utility:Size(1, -2, 1, -2, slider_inline),
             Position = utility:Position(0, 1, 0, 1, slider_inline),
@@ -6722,7 +6716,7 @@ miscVisuals:Toggle({Name = "Field Of View", Default = false, Pointer = "fieldofv
         camera.FieldOfView = old__fieldofview
     end
 end})
-miscVisuals:Slider({Name = "Field Of View Amount",min = 70, max = 120, def = 70, suffix = "Â°", decimals = 0.1, pointer = "fieldofviewValue" })
+miscVisuals:Slider({Name = "Field Of View Amount",min = 70, max = 120, def = 70, suffix = "°", decimals = 0.1, pointer = "fieldofviewValue" })
 
 local crosshairToggle = crosshairVisuals:Toggle({ Name = "Enabled", Pointer = "crosshairEnabled", callback = function(state)
     for _, drawing in next, crosshair__drawing do
