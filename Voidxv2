@@ -1,0 +1,362 @@
+--// NO DESYNC CUZ THATS SHIT \\--
+getgenv().VoidxV2 = {
+    Antilock = true, --// If Anti-Lock Is Toggled Or Not \\--
+    AntiType = 2, --// Anti-Lock Type ex: 1 = UnderGround 2 = Sky \\--
+    AntiBind = "B", --// Anti-Lock Toggle Keybind \\--
+    VelocityVisual = true, --// Shows Your Velocity, Just Leave It On \\--
+    Enabled = true, --// If Silent-Aim Is Enabled Or Not \\--
+    Prediction = 0.1240, --// Silent-Aim Prediction, Prediction List In Server \\--
+    Keybind = "C", --// Key To Toggle Silent Aim \\--
+    Resolver = false,
+    WallCheck = true,
+    FovSettings = {
+        FovVisible = false,
+        FovRadius = 72,
+        FovThickness = 3,
+        FovTransparency = 0.7,
+        FovColor = Color3.fromRGB(255, 255, 255),
+        Filled = false,
+        FillTransparency = 0.9,
+        FovShape = "Circle"  -- ["Circle", "Square", "Triangle"] -- Doesnt Work ATM ig
+    },
+    HitPoint = {
+        ShowHitPoint = true,
+        HitPointRadius = 5,
+        HitPointThickness = 2,
+        HitPointColor = Color3.fromRGB(255, 0, 0),
+        HitPointTransparency = 0.15,
+    }
+}
+-- Changelog: Fixed for newest da hood update
+-- Built in Anti Aimviewer.
+-- Automatics doesnt work cus of function.
+
+-- // Services // --
+local veldot = Drawing.new("Circle")
+local G                   = game
+local Run_Service         = G:GetService("RunService")
+local Players             = G:GetService("Players")
+local UserInputService    = G:GetService("UserInputService")
+local Local_Player        = Players.LocalPlayer
+local Mouse               = Local_Player:GetMouse()
+local Current_Camera      = G:GetService("Workspace").CurrentCamera
+local Replicated_Storage  = G:GetService("ReplicatedStorage")
+local StarterGui          = G:GetService("StarterGui")
+local Workspace           = G:GetService("Workspace")
+
+-- // Variables // --
+local Target = nil
+local V2 = Vector2.new
+local Fov = Drawing.new("Circle")
+local holdingMouseButton = false
+local lastToolUse = 0
+local HitPoint = Drawing.new("Circle")
+local FovParts = {}  -- Store the parts for square and triangle FOV
+
+-- // Game Load Check // --
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+-- // Velocity Dot // --
+spawn(function()
+    veldot.Filled = true
+    veldot.Thickness = 1
+    veldot.Transparency = 1
+    veldot.Radius = 5
+    veldot.Color = Color3.fromRGB(170, 120, 210)
+end)
+-- // Clear FOV Parts // --
+local function clearFovParts()
+    for _, part in pairs(FovParts) do
+        part:Remove()
+    end
+    FovParts = {}
+end
+
+-- // Update FOV Function // --
+local function updateFov()
+    local settings = getgenv().VoidxV2.FovSettings
+    clearFovParts()
+
+    if settings.FovShape == "Square" then
+        local halfSize = settings.FovRadius / 2
+        local corners = {
+            V2(Mouse.X - halfSize, Mouse.Y - halfSize),
+            V2(Mouse.X + halfSize, Mouse.Y - halfSize),
+            V2(Mouse.X + halfSize, Mouse.Y + halfSize),
+            V2(Mouse.X - halfSize, Mouse.Y + halfSize)
+        }
+        for i = 1, 4 do
+            local line = Drawing.new("Line")
+            line.Visible = settings.FovVisible
+            line.From = corners[i]
+            line.To = corners[i % 4 + 1]
+            line.Color = settings.FovColor
+            line.Thickness = settings.FovThickness
+            line.Transparency = settings.FovTransparency
+            table.insert(FovParts, line)
+        end
+    elseif settings.FovShape == "Triangle" then
+        local points = {
+            V2(Mouse.X, Mouse.Y - settings.FovRadius),
+            V2(Mouse.X + settings.FovRadius * math.sin(math.rad(60)), Mouse.Y + settings.FovRadius * math.cos(math.rad(60))),
+            V2(Mouse.X - settings.FovRadius * math.sin(math.rad(60)), Mouse.Y + settings.FovRadius * math.cos(math.rad(60)))
+        }
+        for i = 1, 3 do
+            local line = Drawing.new("Line")
+            line.Visible = settings.FovVisible
+            line.From = points[i]
+            line.To = points[i % 3 + 1]
+            line.Color = settings.FovColor
+            line.Thickness = settings.FovThickness
+            line.Transparency = settings.FovTransparency
+            table.insert(FovParts, line)
+        end
+    else  -- Default to Circle
+        Fov.Visible = settings.FovVisible
+        Fov.Radius = settings.FovRadius
+        Fov.Position = V2(Mouse.X, Mouse.Y + (G:GetService("GuiService"):GetGuiInset().Y))
+        Fov.Color = settings.FovColor
+        Fov.Thickness = settings.FovThickness
+        Fov.Transparency = settings.FovTransparency
+        Fov.Filled = settings.Filled
+        if settings.Filled then
+            Fov.Transparency = settings.FillTransparency
+        end
+    end
+end
+
+-- // Notification Function // --
+local function sendNotification(title, text, icon)
+    StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = text,
+        Icon = icon,
+        Duration = 5
+    })
+end
+
+-- // Knock Check // --
+local function Death(Plr)
+    if Plr.Character and Plr.Character:FindFirstChild("BodyEffects") then
+        local bodyEffects = Plr.Character.BodyEffects
+        local ko = bodyEffects:FindFirstChild("K.O") or bodyEffects:FindFirstChild("KO")
+        return ko and ko.Value
+    end
+    return false
+end
+
+-- // Grab Check // --
+local function Grabbed(Plr)
+    return Plr.Character and Plr.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+end
+
+-- // Check if Part in Fov and Visible // --
+local function isPartInFovAndVisible(part)
+    local screenPoint, onScreen = Current_Camera:WorldToScreenPoint(part.Position)
+    local distance = (V2(screenPoint.X, screenPoint.Y) - V2(Mouse.X, Mouse.Y)).Magnitude
+    return onScreen and distance <= getgenv().VoidxV2.FovSettings.FovRadius
+end
+
+-- // Check if Part Visible // --
+local function isPartVisible(part)
+    if not getgenv().VoidxV2.WallCheck then 
+        return true
+    end
+    local origin = Current_Camera.CFrame.Position
+    local direction = (part.Position - origin).Unit * (part.Position - origin).Magnitude
+    local ray = Ray.new(origin, direction)
+    local hit = Workspace:FindPartOnRayWithIgnoreList(ray, {Local_Player.Character, part.Parent})
+    return hit == part or not hit
+end
+
+-- // Get Closest Hit Point on Part // --
+local function GetClosestHitPoint(character)
+    local closestPart = nil
+    local closestPoint = nil
+    local shortestDistance = math.huge
+
+    for _, part in pairs(character:GetChildren()) do
+        if part:IsA("BasePart") and isPartInFovAndVisible(part) and isPartVisible(part) then
+            local screenPoint, onScreen = Current_Camera:WorldToScreenPoint(part.Position)
+            local distance = (V2(screenPoint.X, screenPoint.Y) - V2(Mouse.X, Mouse.Y)).Magnitude
+
+            if distance < shortestDistance then
+                closestPart = part
+                closestPoint = part.Position
+                shortestDistance = distance
+            end
+        end
+    end
+
+    return closestPart, closestPoint
+end
+
+-- // Get Velocity Function // --
+local OldPredictionY = getgenv().VoidxV2.Prediction
+local function GetVelocity(player, part)
+    if player and player.Character then
+        local velocity = player.Character[part].Velocity
+        if velocity.Y < -30 and getgenv().VoidxV2.Resolver then
+            getgenv().VoidxV2.Prediction = 0
+            return velocity
+        elseif velocity.Magnitude > 50 and getgenv().VoidxV2.Resolver then
+            return player.Character:FindFirstChild("Humanoid").MoveDirection * 16
+        else
+            getgenv().VoidxV2.Prediction = OldPredictionY
+            return velocity
+        end
+    end
+    return Vector3.new(0, 0, 0)
+end
+
+-- // Get Closest Player // --
+local function GetClosestPlr()
+    local closestTarget = nil
+    local maxDistance = math.huge
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character and player ~= Local_Player and not Death(player) then  -- KO check using Death function
+            local closestPart, closestPoint = GetClosestHitPoint(player.Character)
+            if closestPart and closestPoint then
+                local screenPoint = Current_Camera:WorldToScreenPoint(closestPoint)
+                local distance = (V2(screenPoint.X, screenPoint.Y) - V2(Mouse.X, Mouse.Y)).Magnitude
+                if distance < maxDistance then
+                    maxDistance = distance
+                    closestTarget = player
+                end
+            end
+        end
+    end
+
+    return closestTarget
+end
+
+
+local function toggleFeature()
+    getgenv().VoidxV2.Enabled = not getgenv().VoidxV2.Enabled
+    local status = getgenv().VoidxV2.Enabled and " Enabled" or " Disabled"
+    sendNotification("VoidxV2 Silent", status, "rbxassetid://17561420493")
+    if not getgenv().VoidxV2.Enabled then
+        Fov.Visible = false
+        HitPoint.Visible = false
+        clearFovParts()
+    end
+end
+
+-- // Convert Keybind to KeyCode // --
+local function getKeyCodeFromString(key)
+    return Enum.KeyCode[key]
+end
+
+-- // Keybind Listener // --
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == getKeyCodeFromString(getgenv().VoidxV2.Keybind) then
+        toggleFeature()
+    elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+        holdingMouseButton = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        holdingMouseButton = false
+    end
+end)
+
+
+Run_Service.RenderStepped:Connect(function()
+    if getgenv().VoidxV2.Enabled then
+        Target = GetClosestPlr()
+        updateFov()
+        if Target and Target.Character then
+            local closestPart, closestPoint = GetClosestHitPoint(Target.Character)
+            if closestPart and closestPoint then
+                local hitPointSettings = getgenv().VoidxV2.HitPoint
+                if hitPointSettings.ShowHitPoint then
+                    HitPoint.Visible = true
+                    local screenPoint = Current_Camera:WorldToViewportPoint(closestPoint)
+                    HitPoint.Position = V2(screenPoint.X, screenPoint.Y)
+                    HitPoint.Color = hitPointSettings.HitPointColor
+                    HitPoint.Radius = hitPointSettings.HitPointRadius
+                    HitPoint.Thickness = hitPointSettings.HitPointThickness
+                    HitPoint.Transparency = hitPointSettings.HitPointTransparency
+                    HitPoint.Filled = true
+                else
+                    HitPoint.Visible = false
+                end
+
+                if holdingMouseButton then
+                    local velocity = GetVelocity(Target, closestPart.Name)
+                    Replicated_Storage.MainEvent:FireServer("UpdateMousePosI", closestPoint + velocity * getgenv().VoidxV2.Prediction)
+                end
+            end
+        else
+            HitPoint.Visible = false
+        end
+    end
+end)
+
+local function HookTool(tool)
+    if tool:IsA("Tool") then
+        tool.Activated:Connect(function()
+            if Target and Target.Character and tick() - lastToolUse > 0.1 then  -- Debounce for 0.1 seconds
+                lastToolUse = tick()
+                local closestPart, closestPoint = GetClosestHitPoint(Target.Character)
+                if closestPart and closestPoint then
+                    local velocity = GetVelocity(Target, closestPart.Name)
+                    Replicated_Storage.MainEvent:FireServer("UpdateMousePosI", closestPoint + velocity * getgenv().VoidxV2.Prediction)
+                end
+            end
+        end)
+    end
+end
+
+local function onCharacterAdded(character)
+    character.ChildAdded:Connect(HookTool)
+    for _, tool in pairs(character:GetChildren()) do
+        HookTool(tool)
+    end
+end
+
+Local_Player.CharacterAdded:Connect(onCharacterAdded)
+if Local_Player.Character then
+    onCharacterAdded(Local_Player.Character)
+end
+
+sendNotification("VoidxV2", "Best Realistic silent", "rbxassetid://17561420493")
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    local pos, onscreen = workspace.CurrentCamera:WorldToViewportPoint(
+        game:GetService("Players").LocalPlayer.Character["HumanoidRootPart"].CFrame.Position +
+            (game:GetService("Players").LocalPlayer.Character["HumanoidRootPart"].AssemblyLinearVelocity *
+                0.15))
+    if VoidxV2.VelocityVisual and onscreen then
+        veldot.Visible = true
+        veldot.Position = Vector2.new(pos.X, pos.Y)
+    else
+        veldot.Visible = false
+    end
+end)
+game:GetService("RunService").Heartbeat:Connect(function()
+    local hrp, hum = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, game:GetService("Players").LocalPlayer.Character.Humanoid
+    local velocity, cframe = hrp.AssemblyLinearVelocity, hrp.CFrame
+
+if VoidxV2.Antilock then
+    if VoidxV2.AntiType == 1 then
+        hrp.AssemblyLinearVelocity = Vector3.new(0, -10000, 0)
+    elseif VoidxV2.AntiType == 2 then
+        hrp.AssemblyLinearVelocity = Vector3.new(0, 10000, 0)
+    end
+        game:GetService("RunService").RenderStepped:Wait()
+        hrp.AssemblyLinearVelocity = velocity
+    end
+end)
+
+game:GetService("UserInputService").InputBegan:Connect(function(Key)
+    if Key.KeyCode == VoidxV2.AntiBind and not game:GetService("UserInputService"):GetFocusedTextBox() then
+        VoidxV2.Antilock = not VoidxV2.Antilock
+    end
+end) 
+wait(1)
+sendNotification("VoidxV2", "Best Anti-Lock", "rbxassetid://17561420493")
